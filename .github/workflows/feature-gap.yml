@@ -1,0 +1,91 @@
+name: Feature Gap Monitoring
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor-features:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml requests urllib3
+      
+      - name: Create data directories
+        run: |
+          mkdir -p data/{graphql,embeddings,reports,issues,dashboard}
+      
+      - name: Run ingestion
+        run: |
+          echo "=== Running ingestion ==="
+          python -m src.feature_monitor.ingestion
+      
+      - name: Run indexing
+        run: |
+          echo "=== Running indexing ==="
+          python -m src.feature_monitor.modules_index
+      
+      - name: Generate embeddings
+        run: |
+          echo "=== Generating embeddings ==="
+          python -m src.feature_monitor.embeddings
+      
+      - name: Evaluate coverage
+        run: |
+          echo "=== Evaluating coverage ==="
+          python -m src.feature_monitor.coverage
+        continue-on-error: true
+      
+      - name: Generate report
+        run: |
+          echo "=== Generating report ==="
+          python -m src.feature_monitor.report
+      
+      - name: Manage issues
+        run: |
+          echo "=== Managing issues ==="
+          python -m src.feature_monitor.issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+      
+      - name: Generate dashboard
+        run: |
+          echo "=== Generating dashboard ==="
+          python -m src.feature_monitor.dashboard
+      
+      - name: Send notifications
+        run: |
+          echo "=== Sending notifications ==="
+          python -m src.feature_monitor.notifications
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        continue-on-error: true
+      
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: feature-gap-results
+          path: |
+            data/**/*.json
+            data/**/*.md
+            data/**/*.graphql
+          retention-days: 30

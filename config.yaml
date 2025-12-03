@@ -1,0 +1,57 @@
+# Feature Monitor Configuration
+
+# Data sources
+sources:
+  changelog:
+    enabled: true
+    url: "https://github.blog/changelog/"
+  roadmap:
+    enabled: true
+    url: "https://github.com/github/roadmap"
+  graphql_schema:
+    enabled: true
+    docs_url: "https://docs.github.com/public/fpt/schema.docs.graphql"
+
+# Issue management
+issue:
+  repo: "rmallorybpc/automatic-barnacle"
+  labels:
+    - "feature-gap"
+    - "automated"
+  assignees: []
+
+# Notifications
+notifications:
+  slack:
+    enabled: true
+    webhook_url_env: "SLACK_WEBHOOK_URL"
+  teams:
+    enabled: true
+    webhook_url_env: "TEAMS_WEBHOOK_URL"
+
+# Embeddings
+embeddings:
+  model: "text-embedding-ada-002"
+  provider: "openai"
+
+# Coverage thresholds
+coverage:
+  min_threshold: 0.7
+  warning_threshold: 0.85
+
+# Reporting
+report:
+  output_dir: "data/reports"
+  formats:
+    - "json"
+    - "markdown"
+
+# Dashboard
+dashboard:
+  output_dir: "data/dashboard"
+  retention_days: 90
+
+# Monthly report
+monthly_report:
+  enabled: true
+  output_dir: "data/reports/monthly"
