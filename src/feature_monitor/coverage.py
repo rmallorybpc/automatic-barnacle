@@ -1,6 +1,7 @@
 """Coverage evaluation for feature monitoring."""
 import os
 import json
+from datetime import datetime
 from typing import List, Dict
 import yaml
 
@@ -157,7 +158,7 @@ class CoverageEvaluator:
             report = {
                 'metrics': coverage_metrics,
                 'evaluation': evaluation,
-                'timestamp': __import__('datetime').datetime.now().isoformat()
+                'timestamp': datetime.now().isoformat()
             }
             
             with open(output_path, 'w') as f:
