@@ -1,11 +1,40 @@
 {
-  "generated_at": "2025-12-11T00:00:00Z",
-  "features": [
-    { "name": "GitHub Pages (Actions-based)", "status": "complete", "area": "Deployment" },
-    { "name": "Feature coverage tracking", "status": "in-progress", "area": "Analytics" }
-  ],
-  "gaps": [
-    { "name": "Missing schema diff for new mutation", "impact": "medium", "area": "API" }
-  ],
-  "notes": "Starter dataset to validate dashboard rendering. Replace with pipeline-generated data."
+  "generated_at": "2025-12-11T22:07:41.232237",
+  "summary": {
+    "total_features": 11
+  },
+  "time_series": {
+    "time_series": [
+      {
+        "date": "2025-12-11",
+        "count": 11,
+        "cumulative": 11
+      }
+    ],
+    "total": 11
+  },
+  "source_breakdown": {
+    "sources": [
+      {
+        "name": "changelog",
+        "count": 1
+      },
+      {
+        "name": "roadmap",
+        "count": 10
+      }
+    ]
+  },
+  "product_area_breakdown": {
+    "product_areas": [
+      {
+        "name": "GitHub",
+        "count": 10
+      },
+      {
+        "name": "Platform",
+        "count": 1
+      }
+    ]
+  }
 }
