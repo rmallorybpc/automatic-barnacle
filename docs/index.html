@@ -9,13 +9,16 @@
     header { margin-bottom: 1rem; }
     .status { margin: 1rem 0; padding: 0.75rem; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; }
     pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
-    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    table { border-collapse: collapse; width: 100%; margin-top: 0.75rem; }
     th, td { border: 1px solid #d0d7de; padding: 0.5rem; text-align: left; }
     th { background: #f0f3f6; }
     section { margin-top: 1.5rem; }
     .error { color: #b42318; }
     .ok { color: #1a7f37; }
     .muted { color: #57606a; }
+    .tag { display:inline-block; padding:0.2rem 0.45rem; border:1px solid #d0d7de; border-radius:999px; font-size:0.85rem; margin-right:0.35rem; background:#f6f8fa; }
+    .steps { background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; }
+    .toggle { font-size:0.9rem; }
   </style>
 </head>
 <body>
@@ -76,6 +79,26 @@
     </table>
   </section>
 
+  <section id="executive" hidden>
+    <h2>Executive Summary</h2>
+    <div id="executiveContent"></div>
+    <div id="gapsSection" hidden>
+      <h3>Gaps</h3>
+      <table id="gapsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Impact</th>
+            <th>Area</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="steps" id="immediateSteps"></div>
+    </div>
+    <p class="toggle"><a href="#" id="toggleRaw">Show raw dashboard.json</a></p>
+  </section>
+
   <section id="raw" hidden>
     <h2>Raw dashboard.json</h2>
     <pre id="rawJson"></pre>
@@ -99,22 +122,69 @@
       tbodyEl.innerHTML = html;
     }
 
+    function formatISO(ts) {
+      if (!ts) return '';
+      // Keep original string; ISO formatting varies; show as-is for accuracy
+      return ts;
+    }
+
+    function buildImmediateSteps(gaps) {
+      if (!Array.isArray(gaps) || gaps.length === 0) {
+        return '<p class="muted">No gaps detected. No immediate actions required.</p>';
+      }
+      const total = gaps.length;
+      const impacts = gaps.reduce((acc, g) => {
+        const level = (g.impact || 'unknown').toLowerCase();
+        acc[level] = (acc[level] || 0) + 1;
+        return acc;
+      }, {});
+      const high = impacts['high'] || 0;
+      const medium = impacts['medium'] || 0;
+      const low = impacts['low'] || 0;
+
+      let bullets = '<ul>';
+      if (high) bullets += `<li>Prioritize ${high} high-impact gap(s): create/assign issues today.</li>`;
+      if (medium) bullets += `<li>Schedule remediation for ${medium} medium-impact gap(s) within the next sprint.</li>`;
+      if (low) bullets += `<li>Track ${low} low-impact gap(s) for opportunistic fixes.</li>`;
+      bullets += '<li>Verify monitoring coverage for affected product areas and sources.</li>';
+      bullets += '</ul>';
+
+      return `
+        <h4>Immediate Steps</h4>
+        <p>Detected ${total} gap(s). Recommended actions:</p>
+        ${bullets}
+      `;
+    }
+
     async function loadDashboard() {
       const statusEl = document.getElementById('status');
+
       const summaryEl = document.getElementById('summary');
       const summaryContentEl = document.getElementById('summaryContent');
+
       const featuresGapsEl = document.getElementById('featuresGaps');
       const featuresGapsContentEl = document.getElementById('featuresGapsContent');
+
       const timeSeriesEl = document.getElementById('timeSeries');
       const timeSeriesBodyEl = document.querySelector('#timeSeriesTable tbody');
+
       const sourceBreakdownEl = document.getElementById('sourceBreakdown');
       const sourceBreakdownBodyEl = document.querySelector('#sourceBreakdownTable tbody');
+
       const productAreaBreakdownEl = document.getElementById('productAreaBreakdown');
       const productAreaBreakdownBodyEl = document.querySelector('#productAreaBreakdownTable tbody');
+
+      const executiveEl = document.getElementById('executive');
+      const executiveContentEl = document.getElementById('executiveContent');
+      const gapsSectionEl = document.getElementById('gapsSection');
+      const gapsBodyEl = document.querySelector('#gapsTable tbody');
+      const immediateStepsEl = document.getElementById('immediateSteps');
+
       const rawEl = document.getElementById('raw');
       const rawJsonEl = document.getElementById('rawJson');
+      const toggleRawEl = document.getElementById('toggleRaw');
 
-      const url = 'reports/dashboard.json'; // relative to docs/
+      const url = 'reports/dashboard.json';
       try {
         const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) {
@@ -123,49 +193,81 @@
         }
         const data = await res.json();
         statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
-        rawEl.hidden = false;
-        rawJsonEl.textContent = JSON.stringify(data, null, 2);
 
-        // Summary: show total_features if present, and generated_at if present
-        const totalFeatures = safeGet(data, 'summary.total_features', null);
+        // RAW JSON is hidden by default; available via toggle
+        rawJsonEl.textContent = JSON.stringify(data, null, 2);
+        toggleRawEl.addEventListener('click', (e) => {
+          e.preventDefault();
+          rawEl.hidden = !rawEl.hidden;
+          toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
+        });
+
+        // Summary
         const generatedAt = safeGet(data, 'generated_at', null);
+        const totalFeatures = safeGet(data, 'summary.total_features', null);
         let summaryHtml = '';
-        if (generatedAt) summaryHtml += `<p><strong>Generated at:</strong> ${generatedAt}</p>`;
+        if (generatedAt) summaryHtml += `<p><strong>Generated at:</strong> ${formatISO(generatedAt)}</p>`;
         if (totalFeatures !== null) summaryHtml += `<p><strong>Total features:</strong> ${totalFeatures}</p>`;
         summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
         summaryEl.hidden = false;
 
-        // Existing behavior: features/gaps if arrays exist
+        // Features/Gaps counts if arrays present
         const features = Array.isArray(data.features) ? data.features : null;
         const gaps = Array.isArray(data.gaps) ? data.gaps : null;
         if (features || gaps) {
           let fgHtml = '';
-          if (features) fgHtml += `<p><strong>Features:</strong> ${features.length}</p>`;
-          if (gaps) fgHtml += `<p><strong>Gaps:</strong> ${gaps.length}</p>`;
+          if (features) fgHtml += `<span class="tag">Features: ${features.length}</span>`;
+          if (gaps) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
           featuresGapsContentEl.innerHTML = fgHtml;
           featuresGapsEl.hidden = false;
         }
 
-        // Time series: data.time_series.time_series array with date, count, cumulative
+        // Executive Summary replaces raw JSON for exec view
+        let execHtml = '';
+        const tsTotal = safeGet(data, 'time_series.total', null);
+        const sources = safeGet(data, 'source_breakdown.sources', []);
+        const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
+
+        if (tsTotal !== null) execHtml += `<p><strong>Total detected items (time series):</strong> ${tsTotal}</p>`;
+        if (Array.isArray(sources) && sources.length) {
+          const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
+          execHtml += `<p><strong>Top source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0})</p>`;
+        }
+        if (Array.isArray(productAreas) && productAreas.length) {
+          const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
+          execHtml += `<p><strong>Top product area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0})</p>`;
+        }
+        executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
+        executiveEl.hidden = false;
+
+        // Gaps detail table & immediate steps when gaps exist
+        if (Array.isArray(gaps) && gaps.length) {
+          renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
+          gapsSectionEl.hidden = false;
+          immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
+        }
+
+        // Time series table
         const tsRows = safeGet(data, 'time_series.time_series', []);
         if (Array.isArray(tsRows) && tsRows.length) {
           renderTableRows(timeSeriesBodyEl, tsRows, ['date', 'count', 'cumulative']);
           timeSeriesEl.hidden = false;
         }
 
-        // Source breakdown: data.source_breakdown.sources array with name, count
-        const srcRows = safeGet(data, 'source_breakdown.sources', []);
-        if (Array.isArray(srcRows) && srcRows.length) {
-          renderTableRows(sourceBreakdownBodyEl, srcRows, ['name', 'count']);
+        // Source breakdown table
+        if (Array.isArray(sources) && sources.length) {
+          renderTableRows(sourceBreakdownBodyEl, sources, ['name', 'count']);
           sourceBreakdownEl.hidden = false;
         }
 
-        // Product area breakdown: data.product_area_breakdown.product_areas array with name, count
-        const paRows = safeGet(data, 'product_area_breakdown.product_areas', []);
-        if (Array.isArray(paRows) && paRows.length) {
-          renderTableRows(productAreaBreakdownBodyEl, paRows, ['name', 'count']);
+        // Product area breakdown table
+        if (Array.isArray(productAreas) && productAreas.length) {
+          renderTableRows(productAreaBreakdownBodyEl, productAreas, ['name', 'count']);
           productAreaBreakdownEl.hidden = false;
         }
+
+        // Raw JSON keeps hidden until toggled
+        document.getElementById('executive').hidden = false;
       } catch (e) {
         statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
       }
