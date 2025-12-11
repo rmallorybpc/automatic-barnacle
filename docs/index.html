@@ -35,6 +35,12 @@
   </section>
 
   <script>
+    // Helper function to escape HTML entities
+    function escapeHtml(text) {
+      const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
     async function loadDashboard() {
       const statusEl = document.getElementById('status');
       const summaryEl = document.getElementById('summary');
@@ -64,8 +70,7 @@
           html += `<p><strong>Gaps:</strong> ${data.gaps.length}</p>`;
         }
         if (!html) {
-          // Sanitize keys by escaping HTML entities
-          const safeKeys = keys.map(k => k.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))).join(', ') || '(none)';
+          const safeKeys = keys.map(escapeHtml).join(', ') || '(none)';
           html = `<p>dashboard.json loaded. Keys: ${safeKeys}</p>`;
         }
         summaryContentEl.innerHTML = html;
@@ -73,9 +78,12 @@
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
       } catch (e) {
         // Use textContent to prevent XSS from error messages
-        statusEl.innerHTML = '<strong class="error">Error loading dashboard.json:</strong> ';
-        const errorText = document.createTextNode(String(e));
-        statusEl.appendChild(errorText);
+        statusEl.textContent = '';
+        const errorLabel = document.createElement('strong');
+        errorLabel.className = 'error';
+        errorLabel.textContent = 'Error loading dashboard.json: ';
+        statusEl.appendChild(errorLabel);
+        statusEl.appendChild(document.createTextNode(String(e)));
       }
     }
 
