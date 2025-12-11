@@ -1,0 +1,11 @@
+{
+  "generated_at": "2025-12-11T00:00:00Z",
+  "features": [
+    { "name": "GitHub Pages (Actions-based)", "status": "complete", "area": "Deployment" },
+    { "name": "Feature coverage tracking", "status": "in-progress", "area": "Analytics" }
+  ],
+  "gaps": [
+    { "name": "Missing schema diff for new mutation", "impact": "medium", "area": "API" }
+  ],
+  "notes": "Starter dataset to validate dashboard rendering. Replace with pipeline-generated data."
+}
