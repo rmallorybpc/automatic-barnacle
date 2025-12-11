@@ -64,13 +64,18 @@
           html += `<p><strong>Gaps:</strong> ${data.gaps.length}</p>`;
         }
         if (!html) {
-          html = `<p>dashboard.json loaded. Keys: ${keys.join(', ') || '(none)'}</p>`;
+          // Sanitize keys by escaping HTML entities
+          const safeKeys = keys.map(k => k.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))).join(', ') || '(none)';
+          html = `<p>dashboard.json loaded. Keys: ${safeKeys}</p>`;
         }
         summaryContentEl.innerHTML = html;
 
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
       } catch (e) {
-        statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
+        // Use textContent to prevent XSS from error messages
+        statusEl.innerHTML = '<strong class="error">Error loading dashboard.json:</strong> ';
+        const errorText = document.createTextNode(String(e));
+        statusEl.appendChild(errorText);
       }
     }
 
