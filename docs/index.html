@@ -12,14 +12,16 @@
     table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
     th, td { border: 1px solid #d0d7de; padding: 0.5rem; text-align: left; }
     th { background: #f0f3f6; }
+    section { margin-top: 1.5rem; }
     .error { color: #b42318; }
     .ok { color: #1a7f37; }
+    .muted { color: #57606a; }
   </style>
 </head>
 <body>
   <header>
     <h1>Automatic Barnacle Dashboard</h1>
-    <p>Static site served from docs/. This page loads reports/dashboard.json when available.</p>
+    <p class="muted">Static site served from docs/. This page loads reports/dashboard.json when available.</p>
   </header>
 
   <div id="status" class="status">Loading dashboard data…</div>
@@ -29,22 +31,86 @@
     <div id="summaryContent"></div>
   </section>
 
+  <section id="featuresGaps" hidden>
+    <h3>Features / Gaps</h3>
+    <div id="featuresGapsContent"></div>
+  </section>
+
+  <section id="timeSeries" hidden>
+    <h2>Time series</h2>
+    <table id="timeSeriesTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Count</th>
+          <th>Cumulative</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="sourceBreakdown" hidden>
+    <h2>Source breakdown</h2>
+    <table id="sourceBreakdownTable">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="productAreaBreakdown" hidden>
+    <h2>Product area breakdown</h2>
+    <table id="productAreaBreakdownTable">
+      <thead>
+        <tr>
+          <th>Product area</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
   <section id="raw" hidden>
     <h2>Raw dashboard.json</h2>
     <pre id="rawJson"></pre>
   </section>
 
   <script>
-    // Helper function to escape HTML entities
-    function escapeHtml(text) {
-      const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
-      return text.replace(/[&<>"']/g, m => map[m]);
+    function safeGet(obj, path, fallback = undefined) {
+      try {
+        return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function renderTableRows(tbodyEl, rows, columns) {
+      tbodyEl.innerHTML = '';
+      if (!Array.isArray(rows) || rows.length === 0) return;
+      const html = rows.map(row => {
+        return '<tr>' + columns.map(col => `<td>${String(safeGet(row, col, ''))}</td>`).join('') + '</tr>';
+      }).join('');
+      tbodyEl.innerHTML = html;
     }
 
     async function loadDashboard() {
       const statusEl = document.getElementById('status');
       const summaryEl = document.getElementById('summary');
       const summaryContentEl = document.getElementById('summaryContent');
+      const featuresGapsEl = document.getElementById('featuresGaps');
+      const featuresGapsContentEl = document.getElementById('featuresGapsContent');
+      const timeSeriesEl = document.getElementById('timeSeries');
+      const timeSeriesBodyEl = document.querySelector('#timeSeriesTable tbody');
+      const sourceBreakdownEl = document.getElementById('sourceBreakdown');
+      const sourceBreakdownBodyEl = document.querySelector('#sourceBreakdownTable tbody');
+      const productAreaBreakdownEl = document.getElementById('productAreaBreakdown');
+      const productAreaBreakdownBodyEl = document.querySelector('#productAreaBreakdownTable tbody');
       const rawEl = document.getElementById('raw');
       const rawJsonEl = document.getElementById('rawJson');
 
@@ -57,33 +123,51 @@
         }
         const data = await res.json();
         statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
-        summaryEl.hidden = false;
         rawEl.hidden = false;
-
-        // Render a simple summary if common keys exist
-        const keys = Object.keys(data || {});
-        let html = '';
-        if (Array.isArray(data.features)) {
-          html += `<p><strong>Features:</strong> ${data.features.length}</p>`;
-        }
-        if (Array.isArray(data.gaps)) {
-          html += `<p><strong>Gaps:</strong> ${data.gaps.length}</p>`;
-        }
-        if (!html) {
-          const safeKeys = keys.map(escapeHtml).join(', ') || '(none)';
-          html = `<p>dashboard.json loaded. Keys: ${safeKeys}</p>`;
-        }
-        summaryContentEl.innerHTML = html;
-
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
+
+        // Summary: show total_features if present, and generated_at if present
+        const totalFeatures = safeGet(data, 'summary.total_features', null);
+        const generatedAt = safeGet(data, 'generated_at', null);
+        let summaryHtml = '';
+        if (generatedAt) summaryHtml += `<p><strong>Generated at:</strong> ${generatedAt}</p>`;
+        if (totalFeatures !== null) summaryHtml += `<p><strong>Total features:</strong> ${totalFeatures}</p>`;
+        summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
+        summaryEl.hidden = false;
+
+        // Existing behavior: features/gaps if arrays exist
+        const features = Array.isArray(data.features) ? data.features : null;
+        const gaps = Array.isArray(data.gaps) ? data.gaps : null;
+        if (features || gaps) {
+          let fgHtml = '';
+          if (features) fgHtml += `<p><strong>Features:</strong> ${features.length}</p>`;
+          if (gaps) fgHtml += `<p><strong>Gaps:</strong> ${gaps.length}</p>`;
+          featuresGapsContentEl.innerHTML = fgHtml;
+          featuresGapsEl.hidden = false;
+        }
+
+        // Time series: data.time_series.time_series array with date, count, cumulative
+        const tsRows = safeGet(data, 'time_series.time_series', []);
+        if (Array.isArray(tsRows) && tsRows.length) {
+          renderTableRows(timeSeriesBodyEl, tsRows, ['date', 'count', 'cumulative']);
+          timeSeriesEl.hidden = false;
+        }
+
+        // Source breakdown: data.source_breakdown.sources array with name, count
+        const srcRows = safeGet(data, 'source_breakdown.sources', []);
+        if (Array.isArray(srcRows) && srcRows.length) {
+          renderTableRows(sourceBreakdownBodyEl, srcRows, ['name', 'count']);
+          sourceBreakdownEl.hidden = false;
+        }
+
+        // Product area breakdown: data.product_area_breakdown.product_areas array with name, count
+        const paRows = safeGet(data, 'product_area_breakdown.product_areas', []);
+        if (Array.isArray(paRows) && paRows.length) {
+          renderTableRows(productAreaBreakdownBodyEl, paRows, ['name', 'count']);
+          productAreaBreakdownEl.hidden = false;
+        }
       } catch (e) {
-        // Use textContent to prevent XSS from error messages
-        statusEl.textContent = '';
-        const errorLabel = document.createElement('strong');
-        errorLabel.className = 'error';
-        errorLabel.textContent = 'Error loading dashboard.json: ';
-        statusEl.appendChild(errorLabel);
-        statusEl.appendChild(document.createTextNode(String(e)));
+        statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
       }
     }
 
