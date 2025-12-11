@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Feature Coverage Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    :root { --bg:#0f172a; --panel:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#60a5fa; --ok:#34d399; --warn:#f59e0b; --bad:#ef4444; }
+    body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+    header { padding:24px 20px; border-bottom:1px solid #1f2937; }
+    h1 { margin:0; font-size:20px; }
+    .meta { color:var(--muted); font-size:13px; margin-top:4px; }
+    .container { max-width:1100px; margin:0 auto; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .full { grid-column:1 / -1; }
+    .card { background:var(--panel); border:1px solid #1f2937; border-radius:10px; padding:16px; }
+    .card h2 { margin:0 0 12px 0; font-size:16px; color:var(--accent); }
+    .stats { display:flex; gap:16px; flex-wrap:wrap; }
+    .stat { flex:1 1 160px; background:#0b1220; border:1px solid #1f2937; border-radius:8px; padding:12px; }
+    .label { font-size:12px; color:var(--muted); }
+    .value { font-size:24px; font-weight:700; margin-top:4px; }
+    .ok .value { color:var(--ok); } .warn .value { color:var(--warn); } .bad .value { color:var(--bad); }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { text-align:left; padding:8px 6px; border-bottom:1px solid #1f2937; }
+    th { color:var(--muted); font-weight:600; }
+    tr:hover td { background:#0b1220; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid #1f2937; background:#0b1220; color:var(--muted); }
+    .footer { color:var(--muted); font-size:12px; margin-top:20px; }
+    .error { background:#3f1d1d; color:#ffe4e6; border:1px solid #7f1d1d; padding:12px; border-radius:8px; margin:20px; }
+    .note { font-size:12px; color:var(--muted); margin-top:8px; }
+    a { color:#93c5fd; text-decoration:none; } a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="max-width:1100px;margin:0 auto;">
+      <h1>GitHub Feature Coverage Dashboard</h1>
+      <div class="meta" id="meta">Loading...</div>
+    </div>
+  </header>
+
+  <div id="error" class="error" style="display:none;"></div>
+
+  <div class="container">
+    <section class="card full">
+      <h2>Summary</h2>
+      <div class="stats" id="stats"></div>
+      <div class="note">This summary reflects the latest evaluation of features vs. Microsoft Learn GitHub modules.</div>
+    </section>
+
+    <section class="card">
+      <h2>Distribution by Product Area</h2>
+      <table id="areas-table">
+        <thead><tr><th>Product Area</th><th>Covered</th><th>Partial</th><th>Missing</th><th>Total</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Top Gaps (High Priority)</h2>
+      <table id="gaps-table">
+        <thead><tr><th>Title</th><th>Area</th><th>Suggested Modules</th><th>Type</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card full">
+      <h2>Aging Gaps</h2>
+      <table id="aging-table">
+        <thead><tr><th>Title</th><th>Status</th><th>Priority</th><th>Age (days)</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="footer">Older gaps may indicate content areas that need prioritization.</div>
+    </section>
+  </div>
+
+  <script>
+    async function loadDashboard() {
+      const url = "reports/dashboard.json"; // path inside docs/
+      try {
+        const resp = await fetch(url, { cache: "no-store" });
+        if (!resp.ok) throw new Error("Failed to fetch reports/dashboard.json: " + resp.status);
+        const data = await resp.json();
+        renderDashboard(data);
+      } catch (e) {
+        const err = document.getElementById("error");
+        err.style.display = "block";
+        err.textContent = e.message + " — Ensure docs/reports/dashboard.json exists.";
+      }
+    }
+
+    function renderDashboard(data) {
+      const meta = document.getElementById("meta");
+      meta.textContent = `Generated at: ${data.metadata?.generated_at || "unknown"} • Total features: ${data.metadata?.total_features ?? "?"}`;
+
+      const stats = document.getElementById("stats");
+      stats.innerHTML = "";
+      const totals = data.totals || {};
+      stats.appendChild(statCard("Covered", totals.covered || 0, "ok"));
+      stats.appendChild(statCard("Partial", totals.partial || 0, "warn"));
+      stats.appendChild(statCard("Missing", totals.missing || 0, "bad"));
+
+      const areaBody = document.querySelector("#areas-table tbody");
+      areaBody.innerHTML = "";
+      const areas = data.by_product_area || {};
+      const areaNames = Object.keys(areas).sort();
+      for (const area of areaNames) {
+        const cnt = areas[area];
+        const covered = cnt.covered || 0;
+        const partial = cnt.partial || 0;
+        const missing = cnt.missing || 0;
+        const total = covered + partial + missing;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${area}</td>
+          <td><span class="pill">${covered}</span></td>
+          <td><span class="pill">${partial}</span></td>
+          <td><span class="pill">${missing}</span></td>
+          <td>${total}</td>
+        `;
+        areaBody.appendChild(tr);
+      }
+
+      const gapsBody = document.querySelector("#gaps-table tbody");
+      gapsBody.innerHTML = "";
+      const topMissing = (data.top_gaps?.missing_high || []).map(x => ({...x, type: "Missing"}));
+      const topPartial = (data.top_gaps?.partial_high || []).map x => ({...x, type: "Partial"});
+      for (const g of [...topMissing, ...topPartial]) {
+        const mods = (g.modules || []).slice(0, 3).map(m => `<span class="pill">${m}</span>`).join(" ");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(g.title)}</td>
+          <td>${escapeHtml(g.area || "")}</td>
+          <td>${mods || "<span class='pill'>None</span>"}</td>
+          <td>${g.type}</td>
+        `;
+        gapsBody.appendChild(tr);
+      }
+
+      const agingBody = document.querySelector("#aging-table tbody");
+      agingBody.innerHTML = "";
+      for (const a of (data.aging_gaps || [])) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(a.title)}</td>
+          <td>${a.status}</td>
+          <td>${a.priority}</td>
+          <td>${a.age_days ?? ""}</td>
+        `;
+        agingBody.appendChild(tr);
+      }
+    }
+
+    function statCard(label, value, style) {
+      const div = document.createElement("div");
+      div.className = "stat " + style;
+      div.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div>`;
+      return div;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"'`=\/]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#47;','`':'&#96;','=':'&#61;'}[s]));
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
