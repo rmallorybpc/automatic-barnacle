@@ -2,6 +2,8 @@
 
 GitHub Learn content review and feature monitoring system.
 
+<!-- Read me update -->
+
 ## Overview
 
 This repository implements an automated monitoring stack for tracking GitHub product updates, features, and API changes. It ingests data from multiple sources, generates analytics, creates GitHub issues for feature gaps, and sends notifications to team channels.
