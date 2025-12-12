@@ -275,9 +275,57 @@
         // Summary
         const generatedAt = safeGet(data, 'generated_at', null);
         const totalFeatures = safeGet(data, 'summary.total_features', null);
-        let summaryHtml = '';
+        const tsTotal = safeGet(data, 'time_series.total', null);
+        const sources = safeGet(data, 'source_breakdown.sources', []);
+        const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
+        
+        let summaryHtml = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
+        summaryHtml += '<h3 style="margin-top:0;">Executive Summary</h3>';
+        
+        // Key metrics
+        summaryHtml += '<p style="margin-bottom:0.5rem;"><strong>Overview:</strong> This dashboard provides real-time monitoring of feature coverage and documentation gaps across Microsoft products and services.</p>';
+        
+        if (generatedAt) summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Report Date:</strong> ${formatISO(generatedAt)}</p>`;
+        
+        if (totalFeatures !== null || tsTotal !== null) {
+          const displayTotal = totalFeatures !== null ? totalFeatures : tsTotal;
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Total Tracked Features:</strong> ${displayTotal} items currently monitored across all sources and product areas</p>`;
+        }
+        
+        // Source coverage
+        if (Array.isArray(sources) && sources.length) {
+          const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Primary Source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0} items) - represents the largest contributor to tracked features</p>`;
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Coverage Breadth:</strong> ${sources.length} distinct source(s) monitored</p>`;
+        }
+        
+        // Product area insights
+        if (Array.isArray(productAreas) && productAreas.length) {
+          const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Focus Area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0} items) - highest concentration of tracked features</p>`;
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Product Coverage:</strong> ${productAreas.length} product area(s) under active monitoring</p>`;
+        }
+        
+        // Gap analysis
+        const gapCount = gaps.length;
+        if (gapCount > 0) {
+          const highImpact = gaps.filter(g => (g.impact || '').toLowerCase() === 'high').length;
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong class="error">Action Required:</strong> ${gapCount} gap(s) identified`;
+          if (highImpact > 0) summaryHtml += ` (${highImpact} high-impact)`;
+          summaryHtml += ` requiring immediate attention</p>`;
+        } else {
+          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong class="ok">Status:</strong> No critical gaps detected - feature coverage is comprehensive</p>`;
+        }
+        
+        // Strategic recommendation
+        summaryHtml += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>Recommendation:</strong> Review the gaps section below for prioritized action items. Monitor learn alignment to ensure documentation resources match feature distribution.</em></p>';
+        
+        summaryHtml += '</div>';
+        
+        // Basic metrics (kept for compatibility)
         if (generatedAt) summaryHtml += `<p><strong>Generated at:</strong> ${formatISO(generatedAt)}</p>`;
         if (totalFeatures !== null) summaryHtml += `<p><strong>Total features:</strong> ${totalFeatures}</p>`;
+        
         summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
         summaryEl.hidden = false;
 
