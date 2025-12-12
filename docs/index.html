@@ -148,44 +148,62 @@
     }
 
     function computeLearnAlignment(data, map) {
-      const categories = map.category_order || [];
+      const categories = (map && map.category_order) || [];
       const src = safeGet(data, 'source_breakdown.sources', []);
       const pa = safeGet(data, 'product_area_breakdown.product_areas', []);
-      const srcMap = map.source_to_category || {};
-      const paMap = map.product_area_to_category || {};
+      const srcMap = (map && map.source_to_category) || {};
+      const paMap = (map && map.product_area_to_category) || {};
       const totals = {};
 
-      // Tally by source category
       if (Array.isArray(src)) {
         src.forEach(s => {
-          const cat = srcMap[(s.name || '').toLowerCase()] || 'Foundational Knowledge';
+          const key = (s.name || '').toLowerCase();
+          const cat = srcMap[key] || 'Foundational Knowledge';
           totals[cat] = (totals[cat] || 0) + (s.count || 0);
         });
       }
-      // Tally by product area category
       if (Array.isArray(pa)) {
         pa.forEach(p => {
-          const cat = paMap[(p.name || '').toLowerCase()] || 'Foundational Knowledge';
+          const key = (p.name || '').toLowerCase();
+          const cat = paMap[key] || 'Foundational Knowledge';
           totals[cat] = (totals[cat] || 0) + (p.count || 0);
         });
       }
 
-      // Build sorted cards
       const result = categories.map(cat => ({
         name: cat,
         count: totals[cat] || 0,
-        link: (map.category_links || {})[cat] || null
+        link: (map && map.category_links && map.category_links[cat]) || null
       }));
-      // Include any categories not in order
       Object.keys(totals).forEach(k => {
         if (!categories.includes(k)) result.push({ name: k, count: totals[k], link: null });
       });
-      // Sort by order, then by count desc
       return result.sort((a, b) => {
         const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
         if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
         return (b.count || 0) - (a.count || 0);
       });
+    }
+
+    function renderSourceBreakdownWithLinks(tbodyEl, sources, map) {
+      tbodyEl.innerHTML = '';
+      if (!Array.isArray(sources) || !sources.length) return;
+
+      const srcMap = (map && map.source_to_category) || {};
+      const links = (map && map.category_links) || {};
+
+      const rowsHtml = sources.map(s => {
+        const name = s.name || '';
+        const count = s.count || 0;
+        const cat = srcMap[name.toLowerCase()];
+        const href = cat ? links[cat] : null;
+        const countCell = href
+          ? `<a href="${href}" target="_blank" rel="noopener" title="Open recommended learning path for ${cat}">${count}</a>`
+          : String(count);
+        return `<tr><td>${name}</td><td>${countCell}</td></tr>`;
+      }).join('');
+
+      tbodyEl.innerHTML = rowsHtml;
     }
 
     async function loadDashboard() {
@@ -231,7 +249,6 @@
         }
         statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
 
-        // RAW JSON toggle for debugging
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
         if (toggleRawEl) {
           toggleRawEl.addEventListener('click', (e) => {
@@ -261,7 +278,7 @@
           featuresGapsEl.hidden = false;
         }
 
-        // Executive summary (top stats)
+        // Executive summary
         const tsTotal = safeGet(data, 'time_series.total', null);
         const sources = safeGet(data, 'source_breakdown.sources', []);
         const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
@@ -292,9 +309,9 @@
           timeSeriesEl.hidden = false;
         }
 
-        // Source breakdown table
+        // Source breakdown table (counts link to Learn paths when available)
         if (Array.isArray(sources) && sources.length) {
-          renderTableRows(sourceBreakdownBodyEl, sources, ['name', 'count']);
+          renderSourceBreakdownWithLinks(sourceBreakdownBodyEl, sources, map);
           sourceBreakdownEl.hidden = false;
         }
 
@@ -304,7 +321,7 @@
           productAreaBreakdownEl.hidden = false;
         }
 
-        // Learn Alignment cards (if mapping loaded)
+        // Learn Alignment cards
         if (map) {
           const cards = computeLearnAlignment(data, map);
           learnGridEl.innerHTML = cards.map(c => `
