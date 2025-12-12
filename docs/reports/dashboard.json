@@ -1,12 +1,12 @@
 {
-  "generated_at": "2025-12-11T22:07:53.021616",
+  "generated_at": "2025-12-12T20:02:42.758127",
   "summary": {
     "total_features": 11
   },
   "time_series": {
     "time_series": [
       {
-        "date": "2025-12-11",
+        "date": "2025-12-12",
         "count": 11,
         "cumulative": 11
       }
@@ -36,5 +36,95 @@
         "count": 1
       }
     ]
-  }
+  },
+  "features": [
+    {
+      "id": "changelog_sample_20251212",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2025-12-12T20:02:41.165575"
+    },
+    {
+      "id": "roadmap_1191",
+      "title": "Parallel Steps in GitHub Actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1191",
+      "date_discovered": "2025-12-12T20:02:41.741625"
+    },
+    {
+      "id": "roadmap_1190",
+      "title": "Support over 300 jobs & filtering in the Actions UI",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1190",
+      "date_discovered": "2025-12-12T20:02:41.741646"
+    },
+    {
+      "id": "roadmap_1189",
+      "title": "Support new conditional operator in GitHub actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1189",
+      "date_discovered": "2025-12-12T20:02:41.741654"
+    },
+    {
+      "id": "roadmap_1188",
+      "title": "Return runID from workflow_dispatch",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1188",
+      "date_discovered": "2025-12-12T20:02:41.741659"
+    },
+    {
+      "id": "roadmap_1187",
+      "title": "Actions supports timezones for scheduled workflows",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1187",
+      "date_discovered": "2025-12-12T20:02:41.741665"
+    },
+    {
+      "id": "roadmap_1186",
+      "title": "MCP registry and allowlist controls for Copilot in JetBrains, Eclipse, and Xcode [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1186",
+      "date_discovered": "2025-12-12T20:02:41.741670"
+    },
+    {
+      "id": "roadmap_1185",
+      "title": "Actions: New 1 vCPU standard hosted runner [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1185",
+      "date_discovered": "2025-12-12T20:02:41.741674"
+    },
+    {
+      "id": "roadmap_1184",
+      "title": "Unaffiliated users for GitHub Enterprise Cloud [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1184",
+      "date_discovered": "2025-12-12T20:02:41.741678"
+    },
+    {
+      "id": "roadmap_1183",
+      "title": "Extended metadata checks for secret scanning [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1183",
+      "date_discovered": "2025-12-12T20:02:41.741682"
+    },
+    {
+      "id": "roadmap_1182",
+      "title": "Assign code scanning alerts to Copilot for automated fixes [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1182",
+      "date_discovered": "2025-12-12T20:02:41.741686"
+    }
+  ]
 }
