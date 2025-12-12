@@ -269,11 +269,11 @@
 
         // Features/Gaps tags
         const features = Array.isArray(data.features) ? data.features : null;
-        const gaps = Array.isArray(data.gaps) ? data.gaps : null;
-        if (features || gaps) {
+        const gaps = Array.isArray(data.gaps) ? data.gaps : [];
+        if (features || gaps.length > 0) {
           let fgHtml = '';
           if (features) fgHtml += `<span class="tag">Features: ${features.length}</span>`;
-          if (gaps) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
+          if (gaps.length > 0) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
           featuresGapsContentEl.innerHTML = fgHtml;
           featuresGapsEl.hidden = false;
         }
@@ -296,11 +296,13 @@
         executiveEl.hidden = false;
 
         // Gaps details + immediate steps
-        if (Array.isArray(gaps) && gaps.length) {
+        gapsSectionEl.hidden = false;
+        if (gaps.length > 0) {
           renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
-          gapsSectionEl.hidden = false;
-          immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
+        } else {
+          gapsBodyEl.innerHTML = '<tr><td colspan="3" class="muted">No gaps to display</td></tr>';
         }
+        immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
 
         // Time series table
         const tsRows = safeGet(data, 'time_series.time_series', []);
