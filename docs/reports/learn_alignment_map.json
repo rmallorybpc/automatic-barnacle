@@ -1,0 +1,43 @@
+{
+  "source_to_category": {
+    "changelog": "Foundational Knowledge",
+    "roadmap": "Project & Lifecycle Management",
+    "actions": "Automation and CI/CD",
+    "pipelines": "Automation and CI/CD",
+    "security": "Security and Advanced Security",
+    "codeql": "Security and Advanced Security",
+    "dependabot": "Security and Advanced Security",
+    "copilot": "AI-Powered Development",
+    "ai": "AI-Powered Development",
+    "admin": "Administration and Governance",
+    "enterprise": "Administration and Governance",
+    "certification": "Certification Preparation"
+  },
+  "product_area_to_category": {
+    "GitHub": "Foundational Knowledge",
+    "Platform": "Administration and Governance",
+    "API": "Project & Lifecycle Management",
+    "Actions": "Automation and CI/CD",
+    "Security": "Security and Advanced Security",
+    "Copilot": "AI-Powered Development",
+    "Enterprise": "Administration and Governance"
+  },
+  "category_order": [
+    "Foundational Knowledge",
+    "Project & Lifecycle Management",
+    "Automation and CI/CD",
+    "Security and Advanced Security",
+    "AI-Powered Development",
+    "Administration and Governance",
+    "Certification Preparation"
+  ],
+  "category_links": {
+    "Foundational Knowledge": "https://learn.microsoft.com/en-us/training/paths/github-foundations/",
+    "Project & Lifecycle Management": "https://learn.microsoft.com/en-us/training/paths/manage-project-lifecycle-github/",
+    "Automation and CI/CD": "https://learn.microsoft.com/en-us/training/github/",
+    "Security and Advanced Security": "https://learn.microsoft.com/en-us/training/github/",
+    "AI-Powered Development": "https://learn.microsoft.com/en-us/training/github/",
+    "Administration and Governance": "https://learn.microsoft.com/en-us/training/paths/github-administration-products/",
+    "Certification Preparation": "https://partner.microsoft.com/en-us/asset/collection/github-featured-training"
+  }
+}
