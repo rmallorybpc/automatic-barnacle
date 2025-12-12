@@ -143,6 +143,17 @@ class DashboardGenerator:
             Dashboard data dictionary
         """
         logger.info("Generating dashboard data")
+
+        def _feature_summary(f: Feature) -> Dict:
+            # Keep the published dashboard payload small and stable.
+            return {
+                'id': f.id,
+                'title': f.title,
+                'source_type': f.source_type,
+                'product_area': f.product_area,
+                'source_url': f.source_url,
+                'date_discovered': f.date_discovered,
+            }
         
         dashboard_data = {
             'generated_at': datetime.now().isoformat(),
@@ -151,7 +162,8 @@ class DashboardGenerator:
             },
             'time_series': self.generate_time_series_data(features),
             'source_breakdown': self.generate_source_breakdown(features),
-            'product_area_breakdown': self.generate_product_area_breakdown(features)
+            'product_area_breakdown': self.generate_product_area_breakdown(features),
+            'features': [_feature_summary(f) for f in features],
         }
         
         return dashboard_data

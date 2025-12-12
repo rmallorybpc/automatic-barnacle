@@ -10,7 +10,7 @@ jobs:
   monitor-features:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       issues: write
     
     steps:
@@ -30,6 +30,7 @@ jobs:
       - name: Create data directories
         run: |
           mkdir -p data/{graphql,embeddings,reports,issues,dashboard}
+          mkdir -p docs/reports
       
       - name: Run ingestion
         run: |
@@ -69,6 +70,26 @@ jobs:
         run: |
           echo "=== Generating dashboard ==="
           python -m src.feature_monitor.dashboard
+
+      - name: Publish dashboard to docs
+        run: |
+          set -euxo pipefail
+          if [ ! -f data/dashboard/dashboard_latest.json ]; then
+            echo "ERROR: data/dashboard/dashboard_latest.json not found; dashboard step did not produce expected output." >&2
+            exit 1
+          fi
+          cp data/dashboard/dashboard_latest.json docs/reports/dashboard.json
+
+      - name: Commit and push updated dashboard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euxo pipefail
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/reports/dashboard.json
+          git commit -m "Publish dashboard.json" || echo "No changes to commit"
+          git push
       
       - name: Send notifications
         run: |
