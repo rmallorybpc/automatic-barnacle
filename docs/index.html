@@ -132,13 +132,27 @@
         return '<p class="muted">No gaps detected. No immediate actions required.</p>';
       }
       const total = gaps.length;
-      const impacts = gaps.reduce((acc, g) => { const level = (g.impact || 'unknown').toLowerCase(); acc[level] = (acc[level] || 0) + 1; return acc; }, {});
-      const bullets = [
-        impacts.high ? `Prioritize ${impacts.high} high-impact gap(s): create/assign issues today.` : '',
-        impacts.medium ? `Schedule remediation for ${impacts.medium} medium-impact gap(s) within the next sprint.` : '',
-        impacts.low ? `Track ${impacts.low} low-impact gap(s) for opportunistic fixes.` : ''
-      ].filter(Boolean);
-      return `<h4>Immediate Steps</h4><p>Detected ${total} gap(s). Recommended actions:</p><ul>${bullets.map(b => `<li>${b}</li>`).join('')}<li>Verify monitoring coverage for affected product areas and sources.</li></ul>`;
+      const impacts = gaps.reduce((acc, g) => {
+        const level = (g.impact || 'unknown').toLowerCase();
+        acc[level] = (acc[level] || 0) + 1;
+        return acc;
+      }, {});
+      const high = impacts.high || 0;
+      const medium = impacts.medium || 0;
+      const low = impacts.low || 0;
+
+      let bullets = '<ul>';
+      if (high) bullets += `<li>Prioritize ${high} high-impact gap(s): create/assign issues today.</li>`;
+      if (medium) bullets += `<li>Schedule remediation for ${medium} medium-impact gap(s) within the next sprint.</li>`;
+      if (low) bullets += `<li>Track ${low} low-impact gap(s) for opportunistic fixes.</li>`;
+      bullets += '<li>Verify monitoring coverage for affected product areas and sources.</li>';
+      bullets += '</ul>';
+
+      return `
+        <h4>Immediate Steps</h4>
+        <p>Detected ${total} gap(s). Recommended actions:</p>
+        ${bullets}
+      `;
     }
 
     async function loadJSON(path) {
@@ -269,11 +283,11 @@
 
         // Features/Gaps tags
         const features = Array.isArray(data.features) ? data.features : null;
-        const gaps = Array.isArray(data.gaps) ? data.gaps : null;
-        if (features || gaps) {
+        const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
+        if (features || gaps.length) {
           let fgHtml = '';
           if (features) fgHtml += `<span class="tag">Features: ${features.length}</span>`;
-          if (gaps) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
+          if (gaps.length) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
           featuresGapsContentEl.innerHTML = fgHtml;
           featuresGapsEl.hidden = false;
         }
@@ -295,12 +309,14 @@
         executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
         executiveEl.hidden = false;
 
-        // Gaps details + immediate steps
-        if (Array.isArray(gaps) && gaps.length) {
+        // Gaps section: always visible with empty state
+        gapsSectionEl.hidden = false;
+        if (gaps.length > 0) {
           renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
-          gapsSectionEl.hidden = false;
-          immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
+        } else {
+          gapsBodyEl.innerHTML = '<tr><td colspan="3" class="muted">No gaps to display</td></tr>';
         }
+        immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
 
         // Time series table
         const tsRows = safeGet(data, 'time_series.time_series', []);
