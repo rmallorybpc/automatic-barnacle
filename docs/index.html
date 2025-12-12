@@ -19,6 +19,10 @@
     .tag { display:inline-block; padding:0.2rem 0.45rem; border:1px solid #d0d7de; border-radius:999px; font-size:0.85rem; margin-right:0.35rem; background:#f6f8fa; }
     .steps { background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; }
     .toggle { font-size:0.9rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .card { border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; background:#fff; }
+    .card h3 { margin-top:0; }
+    .small { font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -37,6 +41,12 @@
   <section id="featuresGaps" hidden>
     <h3>Features / Gaps</h3>
     <div id="featuresGapsContent"></div>
+  </section>
+
+  <section id="learnAlignment" hidden>
+    <h2>Learn Alignment</h2>
+    <p class="muted small">Grouped by Microsoft Learn categories based on sources and product areas. Use links to recommended learning paths.</p>
+    <div id="learnGrid" class="grid"></div>
   </section>
 
   <section id="timeSeries" hidden>
@@ -106,54 +116,76 @@
 
   <script>
     function safeGet(obj, path, fallback = undefined) {
-      try {
-        return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback;
-      } catch {
-        return fallback;
-      }
+      try { return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback; }
+      catch { return fallback; }
     }
-
     function renderTableRows(tbodyEl, rows, columns) {
       tbodyEl.innerHTML = '';
       if (!Array.isArray(rows) || rows.length === 0) return;
-      const html = rows.map(row => {
-        return '<tr>' + columns.map(col => `<td>${String(safeGet(row, col, ''))}</td>`).join('') + '</tr>';
-      }).join('');
+      const html = rows.map(row => '<tr>' + columns.map(col => `<td>${String(safeGet(row, col, ''))}</td>`).join('') + '</tr>').join('');
       tbodyEl.innerHTML = html;
     }
-
-    function formatISO(ts) {
-      if (!ts) return '';
-      // Keep original string; ISO formatting varies; show as-is for accuracy
-      return ts;
-    }
+    function formatISO(ts) { return ts || ''; }
 
     function buildImmediateSteps(gaps) {
       if (!Array.isArray(gaps) || gaps.length === 0) {
         return '<p class="muted">No gaps detected. No immediate actions required.</p>';
       }
       const total = gaps.length;
-      const impacts = gaps.reduce((acc, g) => {
-        const level = (g.impact || 'unknown').toLowerCase();
-        acc[level] = (acc[level] || 0) + 1;
-        return acc;
-      }, {});
-      const high = impacts['high'] || 0;
-      const medium = impacts['medium'] || 0;
-      const low = impacts['low'] || 0;
+      const impacts = gaps.reduce((acc, g) => { const level = (g.impact || 'unknown').toLowerCase(); acc[level] = (acc[level] || 0) + 1; return acc; }, {});
+      const bullets = [
+        impacts.high ? `Prioritize ${impacts.high} high-impact gap(s): create/assign issues today.` : '',
+        impacts.medium ? `Schedule remediation for ${impacts.medium} medium-impact gap(s) within the next sprint.` : '',
+        impacts.low ? `Track ${impacts.low} low-impact gap(s) for opportunistic fixes.` : ''
+      ].filter(Boolean);
+      return `<h4>Immediate Steps</h4><p>Detected ${total} gap(s). Recommended actions:</p><ul>${bullets.map(b => `<li>${b}</li>`).join('')}<li>Verify monitoring coverage for affected product areas and sources.</li></ul>`;
+    }
 
-      let bullets = '<ul>';
-      if (high) bullets += `<li>Prioritize ${high} high-impact gap(s): create/assign issues today.</li>`;
-      if (medium) bullets += `<li>Schedule remediation for ${medium} medium-impact gap(s) within the next sprint.</li>`;
-      if (low) bullets += `<li>Track ${low} low-impact gap(s) for opportunistic fixes.</li>`;
-      bullets += '<li>Verify monitoring coverage for affected product areas and sources.</li>';
-      bullets += '</ul>';
+    async function loadJSON(path) {
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) return null;
+      return res.json();
+    }
 
-      return `
-        <h4>Immediate Steps</h4>
-        <p>Detected ${total} gap(s). Recommended actions:</p>
-        ${bullets}
-      `;
+    function computeLearnAlignment(data, map) {
+      const categories = map.category_order || [];
+      const src = safeGet(data, 'source_breakdown.sources', []);
+      const pa = safeGet(data, 'product_area_breakdown.product_areas', []);
+      const srcMap = map.source_to_category || {};
+      const paMap = map.product_area_to_category || {};
+      const totals = {};
+
+      // Tally by source category
+      if (Array.isArray(src)) {
+        src.forEach(s => {
+          const cat = srcMap[(s.name || '').toLowerCase()] || 'Foundational Knowledge';
+          totals[cat] = (totals[cat] || 0) + (s.count || 0);
+        });
+      }
+      // Tally by product area category
+      if (Array.isArray(pa)) {
+        pa.forEach(p => {
+          const cat = paMap[(p.name || '').toLowerCase()] || 'Foundational Knowledge';
+          totals[cat] = (totals[cat] || 0) + (p.count || 0);
+        });
+      }
+
+      // Build sorted cards
+      const result = categories.map(cat => ({
+        name: cat,
+        count: totals[cat] || 0,
+        link: (map.category_links || {})[cat] || null
+      }));
+      // Include any categories not in order
+      Object.keys(totals).forEach(k => {
+        if (!categories.includes(k)) result.push({ name: k, count: totals[k], link: null });
+      });
+      // Sort by order, then by count desc
+      return result.sort((a, b) => {
+        const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
+        if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
+        return (b.count || 0) - (a.count || 0);
+      });
     }
 
     async function loadDashboard() {
@@ -180,27 +212,34 @@
       const gapsBodyEl = document.querySelector('#gapsTable tbody');
       const immediateStepsEl = document.getElementById('immediateSteps');
 
+      const learnAlignmentEl = document.getElementById('learnAlignment');
+      const learnGridEl = document.getElementById('learnGrid');
+
       const rawEl = document.getElementById('raw');
       const rawJsonEl = document.getElementById('rawJson');
       const toggleRawEl = document.getElementById('toggleRaw');
 
-      const url = 'reports/dashboard.json';
       try {
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) {
+        const [data, map] = await Promise.all([
+          loadJSON('reports/dashboard.json'),
+          loadJSON('reports/learn_alignment_map.json')
+        ]);
+
+        if (!data) {
           statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
           return;
         }
-        const data = await res.json();
         statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
 
-        // RAW JSON is hidden by default; available via toggle
+        // RAW JSON toggle for debugging
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
-        toggleRawEl.addEventListener('click', (e) => {
-          e.preventDefault();
-          rawEl.hidden = !rawEl.hidden;
-          toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
-        });
+        if (toggleRawEl) {
+          toggleRawEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            rawEl.hidden = !rawEl.hidden;
+            toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
+          });
+        }
 
         // Summary
         const generatedAt = safeGet(data, 'generated_at', null);
@@ -211,7 +250,7 @@
         summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
         summaryEl.hidden = false;
 
-        // Features/Gaps counts if arrays present
+        // Features/Gaps tags
         const features = Array.isArray(data.features) ? data.features : null;
         const gaps = Array.isArray(data.gaps) ? data.gaps : null;
         if (features || gaps) {
@@ -222,12 +261,11 @@
           featuresGapsEl.hidden = false;
         }
 
-        // Executive Summary replaces raw JSON for exec view
-        let execHtml = '';
+        // Executive summary (top stats)
         const tsTotal = safeGet(data, 'time_series.total', null);
         const sources = safeGet(data, 'source_breakdown.sources', []);
         const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
-
+        let execHtml = '';
         if (tsTotal !== null) execHtml += `<p><strong>Total detected items (time series):</strong> ${tsTotal}</p>`;
         if (Array.isArray(sources) && sources.length) {
           const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
@@ -240,7 +278,7 @@
         executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
         executiveEl.hidden = false;
 
-        // Gaps detail table & immediate steps when gaps exist
+        // Gaps details + immediate steps
         if (Array.isArray(gaps) && gaps.length) {
           renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
           gapsSectionEl.hidden = false;
@@ -266,8 +304,18 @@
           productAreaBreakdownEl.hidden = false;
         }
 
-        // Raw JSON keeps hidden until toggled
-        document.getElementById('executive').hidden = false;
+        // Learn Alignment cards (if mapping loaded)
+        if (map) {
+          const cards = computeLearnAlignment(data, map);
+          learnGridEl.innerHTML = cards.map(c => `
+            <div class="card">
+              <h3>${c.name}</h3>
+              <p><strong>Items:</strong> ${c.count}</p>
+              ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
+            </div>
+          `).join('');
+          learnAlignmentEl.hidden = false;
+        }
       } catch (e) {
         statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
       }
