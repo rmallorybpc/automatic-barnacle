@@ -39,6 +39,11 @@
 
   <div id="status" class="status">Loading dashboard data…</div>
 
+  <section id="kpis" hidden>
+    <h2>At-a-glance</h2>
+    <div id="kpiGrid" class="grid"></div>
+  </section>
+
   <section id="summary" hidden>
     <h2>Summary</h2>
     <div id="summaryContent"></div>
@@ -147,6 +152,73 @@
       tbodyEl.innerHTML = html;
     }
     function formatISO(ts) { return ts || ''; }
+
+    function parseDateSafe(value) {
+      if (!value) return null;
+      const d = new Date(value);
+      return Number.isFinite(d.getTime()) ? d : null;
+    }
+
+    function startOfDay(d) {
+      const out = new Date(d);
+      out.setHours(0, 0, 0, 0);
+      return out;
+    }
+
+    function daysAgo(d, days) {
+      const out = new Date(d);
+      out.setDate(out.getDate() - days);
+      return out;
+    }
+
+    function countItemsInWindow(items, { now, days, dateKeys }) {
+      if (!Array.isArray(items) || !items.length) return 0;
+      const end = now;
+      const start = daysAgo(end, days);
+      let count = 0;
+      for (const item of items) {
+        let dt = null;
+        for (const k of dateKeys) {
+          dt = parseDateSafe(item && item[k]);
+          if (dt) break;
+        }
+        if (!dt) continue;
+        if (dt >= start && dt <= end) count += 1;
+      }
+      return count;
+    }
+
+    function formatDelta(delta) {
+      if (delta === null || delta === undefined) return 'n/a';
+      if (delta === 0) return '0';
+      return (delta > 0 ? `+${delta}` : String(delta));
+    }
+
+    function statusFromSignals({ highGaps, totalGaps, stale }) {
+      if (stale) return { label: 'Needs attention', className: 'error', reason: 'Data is stale' };
+      if ((highGaps || 0) > 0) return { label: 'At risk', className: 'error', reason: 'High-impact gaps present' };
+      if ((totalGaps || 0) > 0) return { label: 'Watch', className: '', reason: 'Gaps present' };
+      return { label: 'On track', className: 'ok', reason: 'No gaps detected' };
+    }
+
+    function renderKpiCards(kpiGridEl, cards) {
+      if (!kpiGridEl) return;
+      kpiGridEl.innerHTML = (Array.isArray(cards) ? cards : []).map(c => {
+        const title = escapeHtml(c.title || '');
+        const value = escapeHtml(c.value || '');
+        const subtitle = c.subtitle ? `<p class="muted small" style="margin:0.25rem 0 0;">${escapeHtml(c.subtitle)}</p>` : '';
+        const extra = c.extraHtml ? `<div class="small" style="margin-top:0.5rem;">${c.extraHtml}</div>` : '';
+        const valueClass = c.valueClassName ? ` ${c.valueClassName}` : '';
+        return `
+          <div class="card">
+            <h3>${title}</h3>
+            <p style="margin:0;"><strong class="${valueClass.trim()}">${value}</strong></p>
+            ${subtitle}
+            ${extra}
+          </div>
+        `;
+      }).join('');
+    }
 
     function buildImmediateSteps(gaps) {
       if (!Array.isArray(gaps) || gaps.length === 0) {
@@ -367,6 +439,9 @@
       if (refreshBtn) refreshBtn.disabled = true;
       if (lastRefreshEl) lastRefreshEl.textContent = '';
 
+      const kpisEl = document.getElementById('kpis');
+      const kpiGridEl = document.getElementById('kpiGrid');
+
       const summaryEl = document.getElementById('summary');
       const summaryContentEl = document.getElementById('summaryContent');
 
@@ -428,6 +503,85 @@
         const sources = safeGet(data, 'source_breakdown.sources', []);
         const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
         const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
+
+        // KPI strip (exec-friendly)
+        const now = new Date();
+        const hasFeaturesPayload = Array.isArray(data.features);
+        const features = hasFeaturesPayload ? data.features : null;
+
+        // Feature window counts (7d / 30d) + deltas vs prior window
+        // If dashboard.json doesn't include data.features, show n/a (not 0).
+        const new7 = hasFeaturesPayload
+          ? countItemsInWindow(features, { now, days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
+          : null;
+        const prev7 = hasFeaturesPayload
+          ? countItemsInWindow(features, { now: daysAgo(now, 7), days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
+          : null;
+        const delta7 = (Number.isFinite(new7) && Number.isFinite(prev7)) ? (new7 - prev7) : null;
+
+        const new30 = hasFeaturesPayload
+          ? countItemsInWindow(features, { now, days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
+          : null;
+        const prev30 = hasFeaturesPayload
+          ? countItemsInWindow(features, { now: daysAgo(now, 30), days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
+          : null;
+        const delta30 = (Number.isFinite(new30) && Number.isFinite(prev30)) ? (new30 - prev30) : null;
+
+        // Gap counts (no delta unless timestamps exist)
+        const gapCounts = gaps.reduce((acc, g) => {
+          const level = String((g && g.impact) || 'unknown').toLowerCase();
+          acc[level] = (acc[level] || 0) + 1;
+          return acc;
+        }, {});
+        const highGaps = gapCounts.high || 0;
+        const medGaps = gapCounts.medium || 0;
+        const lowGaps = gapCounts.low || 0;
+        const totalGaps = gaps.length;
+
+        // Data freshness + overall status
+        const genDate = parseDateSafe(generatedAt);
+        const freshnessHours = genDate ? Math.max(0, (now.getTime() - genDate.getTime()) / 36e5) : null;
+        const stale = freshnessHours !== null ? freshnessHours > 72 : false; // 3 days
+        const status = statusFromSignals({ highGaps, totalGaps, stale });
+
+        const freshnessText = (freshnessHours === null)
+          ? 'Unknown'
+          : (freshnessHours < 48
+              ? `${Math.round(freshnessHours)}h ago`
+              : `${Math.round(freshnessHours / 24)}d ago`);
+
+        const cards = [
+          {
+            title: 'New items (7d)',
+            value: hasFeaturesPayload ? `${new7} (Δ ${formatDelta(delta7)})` : 'n/a',
+            subtitle: hasFeaturesPayload ? 'Change vs previous 7 days' : 'Requires data.features in dashboard.json',
+          },
+          {
+            title: 'New items (30d)',
+            value: hasFeaturesPayload ? `${new30} (Δ ${formatDelta(delta30)})` : 'n/a',
+            subtitle: hasFeaturesPayload ? 'Change vs previous 30 days' : 'Requires data.features in dashboard.json',
+          },
+          {
+            title: 'Gaps (H / M / L)',
+            value: `${highGaps} / ${medGaps} / ${lowGaps}`,
+            subtitle: `Total gaps: ${totalGaps}`,
+            valueClassName: highGaps > 0 ? 'error' : (totalGaps > 0 ? '' : 'ok'),
+          },
+          {
+            title: 'Data freshness',
+            value: freshnessText,
+            subtitle: generatedAt ? `Generated at: ${formatISO(generatedAt)}` : 'generated_at not provided',
+            valueClassName: stale ? 'error' : 'ok',
+          },
+          {
+            title: 'Overall status',
+            value: status.label,
+            subtitle: status.reason,
+            valueClassName: status.className,
+          }
+        ];
+        renderKpiCards(kpiGridEl, cards);
+        if (kpisEl) kpisEl.hidden = false;
         
         let summaryHtml = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
         summaryHtml += '<h3 style="margin-top:0;">Executive Summary</h3>';
@@ -480,10 +634,10 @@
         summaryEl.hidden = false;
 
         // Features/Gaps tags
-        const features = Array.isArray(data.features) ? data.features : null;
-        if (features || gaps.length) {
+        const featuresForTags = Array.isArray(data.features) ? data.features : null;
+        if (featuresForTags || gaps.length) {
           let fgHtml = '';
-          if (features) fgHtml += `<span class="tag">Features: ${features.length}</span>`;
+          if (featuresForTags) fgHtml += `<span class="tag">Features: ${featuresForTags.length}</span>`;
           if (gaps.length) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
           featuresGapsContentEl.innerHTML = fgHtml;
           featuresGapsEl.hidden = false;
