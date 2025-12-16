@@ -127,6 +127,20 @@
   </section>
 
   <script>
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(s) {
+      // Keep attributes safe; HTML escaping is sufficient for our simple href usage.
+      return escapeHtml(s);
+    }
+
     function safeGet(obj, path, fallback = undefined) {
       try { return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback; }
       catch { return fallback; }
@@ -212,14 +226,15 @@
           const srcKey = String((f && f.source_type) || '').toLowerCase();
           const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
           if (!byCat[cat]) byCat[cat] = [];
-          byCat[cat].push(title);
+          const url = (f && f.source_url) ? String(f.source_url) : null;
+          byCat[cat].push({ title, url });
         });
 
         // Deduplicate + stable ordering
         Object.keys(byCat).forEach(cat => {
           const seen = new Set();
           byCat[cat] = byCat[cat].filter(t => {
-            const key = t.toLowerCase();
+            const key = String(t && t.title ? t.title : t).toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
@@ -262,14 +277,15 @@
           const srcKey = String((f && f.source_type) || '').toLowerCase();
           const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
           if (!byCat[cat]) byCat[cat] = [];
-          byCat[cat].push(title);
+          const url = (f && f.source_url) ? String(f.source_url) : null;
+          byCat[cat].push({ title, url });
         });
 
         // Deduplicate + stable ordering
         Object.keys(byCat).forEach(cat => {
           const seen = new Set();
           byCat[cat] = byCat[cat].filter(t => {
-            const key = t.toLowerCase();
+            const key = String(t && t.title ? t.title : t).toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
@@ -540,7 +556,14 @@
               <h3>${c.name}</h3>
               <p><strong>Items:</strong> ${c.count}</p>
               ${Array.isArray(c.items)
-                ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(t => `<li>${String(t)}</li>`).join('')}</ul>`
+                ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
+                    const title = (item && typeof item === 'object') ? item.title : item;
+                    const href = (item && typeof item === 'object') ? item.url : null;
+                    const safeTitle = escapeHtml(title);
+                    return href
+                      ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
+                      : `<li>${safeTitle}</li>`;
+                  }).join('')}</ul>`
                 : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
               ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
             </div>
@@ -557,7 +580,14 @@
                   <h3>${c.name}</h3>
                   <p><strong>Items:</strong> ${c.count}</p>
                   ${Array.isArray(c.items)
-                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(t => `<li>${String(t)}</li>`).join('')}</ul>`
+                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
+                        const title = (item && typeof item === 'object') ? item.title : item;
+                        const href = (item && typeof item === 'object') ? item.url : null;
+                        const safeTitle = escapeHtml(title);
+                        return href
+                          ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
+                          : `<li>${safeTitle}</li>`;
+                      }).join('')}</ul>`
                     : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
                   ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
                 </div>
