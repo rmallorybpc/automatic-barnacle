@@ -23,12 +23,18 @@
     .card { border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; background:#fff; }
     .card h3 { margin-top:0; }
     .small { font-size: 0.9rem; }
+    .btn { display:inline-block; padding:0.4rem 0.65rem; border:1px solid #d0d7de; border-radius:6px; background:#f6f8fa; color:#24292f; cursor:pointer; font-size:0.9rem; }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; }
   </style>
 </head>
 <body>
   <header>
     <h1>Automatic Barnacle Dashboard</h1>
     <p class="muted">Static site served from docs/. This page loads reports/dashboard.json when available.</p>
+    <p>
+      <button id="refreshBtn" class="btn" type="button">Refresh dashboard</button>
+      <span id="lastRefresh" class="muted small" style="margin-left:0.5rem;"></span>
+    </p>
   </header>
 
   <div id="status" class="status">Loading dashboard data…</div>
@@ -164,8 +170,14 @@
       `;
     }
 
-    async function loadJSON(path) {
-      const res = await fetch(path, { cache: 'no-store' });
+    function withCacheBust(url) {
+      const sep = url.includes('?') ? '&' : '?';
+      return `${url}${sep}t=${Date.now()}`;
+    }
+
+    async function loadJSON(path, { cacheBust = false } = {}) {
+      const url = cacheBust ? withCacheBust(path) : path;
+      const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) return null;
       return res.json();
     }
@@ -273,8 +285,23 @@
       tbodyEl.innerHTML = rowsHtml;
     }
 
-    async function loadDashboard() {
+    function formatLocalTime(d) {
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', second: '2-digit'
+        }).format(d);
+      } catch {
+        return d.toISOString();
+      }
+    }
+
+    async function loadDashboard({ cacheBust = false } = {}) {
       const statusEl = document.getElementById('status');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const lastRefreshEl = document.getElementById('lastRefresh');
+      if (refreshBtn) refreshBtn.disabled = true;
+      if (lastRefreshEl) lastRefreshEl.textContent = '';
 
       const summaryEl = document.getElementById('summary');
       const summaryContentEl = document.getElementById('summaryContent');
@@ -306,23 +333,25 @@
 
       try {
         const [data, map] = await Promise.all([
-          loadJSON('reports/dashboard.json'),
-          loadJSON('reports/learn_alignment_map.json')
+          loadJSON('reports/dashboard.json', { cacheBust }),
+          loadJSON('reports/learn_alignment_map.json', { cacheBust })
         ]);
 
         if (!data) {
           statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
+          if (refreshBtn) refreshBtn.disabled = false;
           return;
         }
         statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
+        if (lastRefreshEl) lastRefreshEl.textContent = `Last refreshed: ${formatLocalTime(new Date())}`;
 
         rawJsonEl.textContent = JSON.stringify(data, null, 2);
         if (toggleRawEl) {
-          toggleRawEl.addEventListener('click', (e) => {
+          toggleRawEl.onclick = (e) => {
             e.preventDefault();
             rawEl.hidden = !rawEl.hidden;
             toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
-          });
+          };
         }
 
         // Summary
@@ -450,10 +479,22 @@
           `).join('');
           learnAlignmentEl.hidden = false;
         }
+
+        if (refreshBtn) refreshBtn.disabled = false;
       } catch (e) {
         statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) refreshBtn.disabled = false;
       }
     }
+
+    (function wireRefresh() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (!refreshBtn) return;
+      refreshBtn.addEventListener('click', () => {
+        loadDashboard({ cacheBust: true });
+      });
+    })();
 
     loadDashboard();
   </script>
