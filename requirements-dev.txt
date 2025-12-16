@@ -1,0 +1,2 @@
+# Dev-only dependencies
+livereload>=2.7.0

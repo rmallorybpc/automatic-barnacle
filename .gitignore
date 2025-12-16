@@ -27,11 +27,14 @@ env/
 .venv
 
 # IDE
-.vscode/
+.vscode/*
 .idea/
 *.swp
 *.swo
 *~
+
+# Allow committing shared workspace tasks
+!.vscode/tasks.json
 
 # Data artifacts (not committed to repo)
 data/

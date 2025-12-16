@@ -311,6 +311,15 @@ Local preview of the dashboard:
   - Python: `python3 -m http.server 8000` → visit `http://localhost:8000/docs/`
   - Node: `npx http-server .` → visit `http://localhost:PORT/docs/`
 
+Live preview (auto-reload on changes to `docs/index.html` and `docs/reports/*.json`):
+
+```bash
+pip install -r requirements-dev.txt
+python scripts/serve_dashboard.py
+```
+
+You can also run the VS Code task: `Dashboard: Live Preview`.
+
 Populate `docs/reports/dashboard.json` to preview the data rendering.
 
 ---
