@@ -88,7 +88,12 @@ class FeatureIngestion:
         logger.info(f"Fetching roadmap from {url}")
         
         # For GitHub roadmap, we'd use the API
-        api_url = "https://api.github.com/repos/github/roadmap/issues?state=all&per_page=10"
+        per_page = int(self.sources.get('roadmap', {}).get('per_page', 50) or 50)
+        per_page = max(1, min(per_page, 100))
+        api_url = (
+            "https://api.github.com/repos/github/roadmap/issues"
+            f"?state=all&per_page={per_page}&sort=updated&direction=desc"
+        )
         response = safe_request(api_url, logger=logger)
         
         if not response:
