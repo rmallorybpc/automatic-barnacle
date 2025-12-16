@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-16T09:22:34.358664",
+  "generated_at": "2025-12-16T17:10:08.030747",
   "summary": {
     "total_features": 11
   },
@@ -44,7 +44,55 @@
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2025-12-16T09:22:32.241479"
+      "date_discovered": "2025-12-16T17:10:06.136620"
+    },
+    {
+      "id": "roadmap_1197",
+      "title": "GitHub Actions new pricing - Self-hosted runner price increase",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1197",
+      "date_discovered": "2025-12-16T17:10:06.591783"
+    },
+    {
+      "id": "roadmap_1196",
+      "title": "GitHub Actions new pricing - Hosted runner price drop",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1196",
+      "date_discovered": "2025-12-16T17:10:06.591813"
+    },
+    {
+      "id": "roadmap_1195",
+      "title": "Multi-Label Support for Actions Runner Controller (ARC)",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1195",
+      "date_discovered": "2025-12-16T17:10:06.591819"
+    },
+    {
+      "id": "roadmap_1194",
+      "title": "Actions Runner Controller Release 0.14.0",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1194",
+      "date_discovered": "2025-12-16T17:10:06.591825"
+    },
+    {
+      "id": "roadmap_1193",
+      "title": "GitHub Actions Data stream",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1193",
+      "date_discovered": "2025-12-16T17:10:06.591830"
+    },
+    {
+      "id": "roadmap_1192",
+      "title": "Scale Set Client",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1192",
+      "date_discovered": "2025-12-16T17:10:06.591835"
     },
     {
       "id": "roadmap_1191",
@@ -52,7 +100,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1191",
-      "date_discovered": "2025-12-16T09:22:32.672809"
+      "date_discovered": "2025-12-16T17:10:06.591842"
     },
     {
       "id": "roadmap_1190",
@@ -60,7 +108,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1190",
-      "date_discovered": "2025-12-16T09:22:32.672819"
+      "date_discovered": "2025-12-16T17:10:06.591850"
     },
     {
       "id": "roadmap_1189",
@@ -68,7 +116,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1189",
-      "date_discovered": "2025-12-16T09:22:32.672824"
+      "date_discovered": "2025-12-16T17:10:06.591855"
     },
     {
       "id": "roadmap_1188",
@@ -76,55 +124,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1188",
-      "date_discovered": "2025-12-16T09:22:32.672835"
-    },
-    {
-      "id": "roadmap_1187",
-      "title": "Actions supports timezones for scheduled workflows",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1187",
-      "date_discovered": "2025-12-16T09:22:32.672845"
-    },
-    {
-      "id": "roadmap_1186",
-      "title": "MCP registry and allowlist controls for Copilot in JetBrains, Eclipse, and Xcode [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1186",
-      "date_discovered": "2025-12-16T09:22:32.672851"
-    },
-    {
-      "id": "roadmap_1185",
-      "title": "Actions: New 1 vCPU standard hosted runner [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1185",
-      "date_discovered": "2025-12-16T09:22:32.672858"
-    },
-    {
-      "id": "roadmap_1184",
-      "title": "Unaffiliated users for GitHub Enterprise Cloud [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1184",
-      "date_discovered": "2025-12-16T09:22:32.672867"
-    },
-    {
-      "id": "roadmap_1183",
-      "title": "Extended metadata checks for secret scanning [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1183",
-      "date_discovered": "2025-12-16T09:22:32.672873"
-    },
-    {
-      "id": "roadmap_1182",
-      "title": "Assign code scanning alerts to Copilot for automated fixes [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1182",
-      "date_discovered": "2025-12-16T09:22:32.672878"
+      "date_discovered": "2025-12-16T17:10:06.591859"
     }
   ]
 }
