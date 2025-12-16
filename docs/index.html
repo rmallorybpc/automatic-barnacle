@@ -55,6 +55,12 @@
     <div id="learnGrid" class="grid"></div>
   </section>
 
+  <section id="learnAlignmentPublicPreview" hidden>
+    <h2>Learn Alignment - Public Preview</h2>
+    <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
+    <div id="learnGridPublicPreview" class="grid"></div>
+  </section>
+
   <section id="timeSeries" hidden>
     <h2>Time series</h2>
     <table id="timeSeriesTable">
@@ -180,6 +186,64 @@
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) return null;
       return res.json();
+    }
+
+    function isPublicPreviewTitle(title) {
+      if (!title) return false;
+      // Match both "[Public Preview]" and "[Preview]" (case-insensitive, tolerant of spaces)
+      return /\[\s*(?:public\s+)?preview\s*\]/i.test(String(title));
+    }
+
+    function computeLearnAlignmentFiltered(data, map, includeItemFn) {
+      const categories = (map && map.category_order) || [];
+      const links = (map && map.category_links) || {};
+      const srcMap = normalizeKeyedMap(map && map.source_to_category);
+      const paMap = normalizeKeyedMap(map && map.product_area_to_category);
+
+      const features = Array.isArray(data && data.features) ? data.features : null;
+      if (features) {
+        const byCat = {};
+        features.forEach(f => {
+          const title = (f && f.title) ? String(f.title) : '';
+          if (!title) return;
+          if (typeof includeItemFn === 'function' && !includeItemFn(title, f)) return;
+
+          const paKey = String((f && f.product_area) || '').toLowerCase();
+          const srcKey = String((f && f.source_type) || '').toLowerCase();
+          const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
+          if (!byCat[cat]) byCat[cat] = [];
+          byCat[cat].push(title);
+        });
+
+        // Deduplicate + stable ordering
+        Object.keys(byCat).forEach(cat => {
+          const seen = new Set();
+          byCat[cat] = byCat[cat].filter(t => {
+            const key = t.toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+        });
+
+        const result = categories.map(cat => ({
+          name: cat,
+          count: (byCat[cat] || []).length,
+          items: (byCat[cat] || []),
+          link: links[cat] || null
+        }));
+        Object.keys(byCat).forEach(k => {
+          if (!categories.includes(k)) result.push({ name: k, count: byCat[k].length, items: byCat[k], link: links[k] || null });
+        });
+        return result.sort((a, b) => {
+          const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
+          if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
+          return (b.count || 0) - (a.count || 0);
+        });
+      }
+
+      // Back-compat: if features aren't included in dashboard.json, we can't split by title.
+      return null;
     }
 
     function computeLearnAlignment(data, map) {
@@ -327,6 +391,9 @@
       const learnAlignmentEl = document.getElementById('learnAlignment');
       const learnGridEl = document.getElementById('learnGrid');
 
+      const learnAlignmentPublicPreviewEl = document.getElementById('learnAlignmentPublicPreview');
+      const learnGridPublicPreviewEl = document.getElementById('learnGridPublicPreview');
+
       const rawEl = document.getElementById('raw');
       const rawJsonEl = document.getElementById('rawJson');
       const toggleRawEl = document.getElementById('toggleRaw');
@@ -466,8 +533,9 @@
 
         // Learn Alignment cards
         if (map) {
-          const cards = computeLearnAlignment(data, map);
-          learnGridEl.innerHTML = cards.map(c => `
+          const nonPreviewCards = computeLearnAlignmentFiltered(data, map, (title) => !isPublicPreviewTitle(title))
+            || computeLearnAlignment(data, map);
+          learnGridEl.innerHTML = nonPreviewCards.map(c => `
             <div class="card">
               <h3>${c.name}</h3>
               <p><strong>Items:</strong> ${c.count}</p>
@@ -478,6 +546,29 @@
             </div>
           `).join('');
           learnAlignmentEl.hidden = false;
+
+          const previewCards = computeLearnAlignmentFiltered(data, map, (title) => isPublicPreviewTitle(title));
+          if (previewCards) {
+            const anyPreviewItems = previewCards.some(c => (c.count || 0) > 0);
+            learnGridPublicPreviewEl.innerHTML = previewCards
+              .filter(c => (c.count || 0) > 0)
+              .map(c => `
+                <div class="card">
+                  <h3>${c.name}</h3>
+                  <p><strong>Items:</strong> ${c.count}</p>
+                  ${Array.isArray(c.items)
+                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(t => `<li>${String(t)}</li>`).join('')}</ul>`
+                    : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
+                  ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
+                </div>
+              `).join('');
+
+            learnAlignmentPublicPreviewEl.hidden = !anyPreviewItems;
+          } else {
+            // If dashboard.json doesn't include features titles, we can't split by '[Public Preview]'.
+            learnGridPublicPreviewEl.innerHTML = '<p class="muted small">Public Preview split requires item titles in the dashboard payload (data.features). Run the pipeline to regenerate docs/reports/dashboard.json.</p>';
+            learnAlignmentPublicPreviewEl.hidden = false;
+          }
         }
 
         if (refreshBtn) refreshBtn.disabled = false;
