@@ -86,22 +86,38 @@ class ContentChecks:
     """Runs configured content checks."""
 
     def __init__(self, config_path: str = "config.yaml"):
-        with open(config_path, "r", encoding="utf-8") as f:
-            self.config = yaml.safe_load(f) or {}
-        self.checks = (self.config.get("content_checks") or {})
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                self.config = yaml.safe_load(f) or {}
+        except FileNotFoundError as exc:
+            logger.error("ContentChecks configuration file not found: %s", config_path)
+            raise FileNotFoundError(
+                f"ContentChecks configuration file not found: {config_path}"
+            ) from exc
+        except (OSError, yaml.YAMLError) as exc:
+            logger.error("Failed to load ContentChecks configuration from %s: %s", config_path, exc)
+            raise RuntimeError(
+                f"Failed to load ContentChecks configuration from {config_path}"
+            ) from exc
+        self.checks = self.config.get("content_checks") or {}
 
     def run_all(self) -> List[ContentCheckResult]:
         results: List[ContentCheckResult] = []
 
-        for key, cfg in (self.checks or {}).items():
-            if not (cfg or {}).get("enabled", False):
+        for key, cfg in self.checks.items():
+            # Skip if config is malformed or disabled
+            if not cfg or not isinstance(cfg, dict):
+                logger.warning("Skipping content check %s: invalid configuration", key)
                 continue
-            url = (cfg or {}).get("url")
+            if not cfg.get("enabled", False):
+                continue
+            
+            url = cfg.get("url")
             if not url:
                 results.append(
                     ContentCheckResult(
                         key=key,
-                        name=(cfg or {}).get("display_name") or key,
+                        name=cfg.get("display_name") or key,
                         url="",
                         ok=False,
                         status_code=None,
@@ -115,8 +131,8 @@ class ContentChecks:
                 )
                 continue
 
-            contains = (cfg or {}).get("contains")
-            display_name = (cfg or {}).get("display_name") or key
+            contains = cfg.get("contains")
+            display_name = cfg.get("display_name") or key
             results.append(self._run_one(key=key, name=display_name, url=url, contains=contains))
 
         return results
@@ -168,7 +184,7 @@ class ContentChecks:
             changed = (prev_fp is not None) and (prev_fp != fp)
 
             # Persist state only on a successful check.
-            safe_write_file(
+            success = safe_write_file(
                 state_path,
                 json.dumps(
                     {
@@ -184,6 +200,9 @@ class ContentChecks:
                 ),
                 logger,
             )
+            
+            if not success:
+                logger.warning("Failed to persist state for check %s", key)
 
             return ContentCheckResult(
                 key=key,
