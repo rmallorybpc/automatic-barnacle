@@ -46,6 +46,8 @@ content_checks:
     enabled: true
     display_name: "GitHub September roundup"
     url: "https://resources.github.com/enterprise-content-roundup/september/"
+    # Note: This URL includes a hardcoded month reference. Update the key, display_name,
+    # and URL when monitoring a different month's content roundup.
 
 # Issue management
 issue:
