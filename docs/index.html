@@ -44,11 +44,6 @@
     <div id="summaryContent"></div>
   </section>
 
-  <section id="kpis" hidden>
-    <h2>At-a-glance</h2>
-    <div id="kpiGrid" class="grid"></div>
-  </section>
-
   <section id="featuresGaps" hidden>
     <h3>Features / Gaps</h3>
     <div id="featuresGapsContent"></div>
@@ -176,34 +171,6 @@
       return out;
     }
 
-    function learnLinkSuffixFromUrl(href) {
-      if (!href) return '';
-      try {
-        const u = new URL(String(href));
-        const host = String(u.hostname || '').toLowerCase();
-        if (host === 'github.blog' || host.endsWith('.github.blog')) return ' [blog]';
-
-        if (host === 'github.com' || host.endsWith('.github.com')) {
-          const parts = String(u.pathname || '').split('/').filter(Boolean);
-          // Expected: /{owner}/{repo}/...
-          if (parts.length >= 2 && parts[1]) return ` [${parts[1]} - repo]`;
-        }
-      } catch {
-        // ignore invalid URLs
-      }
-      return '';
-    }
-
-    function decorateLearnLinkText(title, href) {
-      const base = String(title || '');
-      if (!href) return base;
-      // Avoid double-tagging.
-      if (/\[\s*blog\s*\]\s*$/i.test(base)) return base;
-      if (/\[[^\]]+\s*-\s*repo\]\s*$/i.test(base)) return base;
-      const suffix = learnLinkSuffixFromUrl(href);
-      return suffix ? `${base}${suffix}` : base;
-    }
-
     function renderTableRows(tbodyEl, rows, columns) {
       tbodyEl.innerHTML = '';
       if (!Array.isArray(rows) || rows.length === 0) return;
@@ -211,73 +178,6 @@
       tbodyEl.innerHTML = html;
     }
     function formatISO(ts) { return ts || ''; }
-
-    function parseDateSafe(value) {
-      if (!value) return null;
-      const d = new Date(value);
-      return Number.isFinite(d.getTime()) ? d : null;
-    }
-
-    function startOfDay(d) {
-      const out = new Date(d);
-      out.setHours(0, 0, 0, 0);
-      return out;
-    }
-
-    function daysAgo(d, days) {
-      const out = new Date(d);
-      out.setDate(out.getDate() - days);
-      return out;
-    }
-
-    function countItemsInWindow(items, { now, days, dateKeys }) {
-      if (!Array.isArray(items) || !items.length) return 0;
-      const end = now;
-      const start = daysAgo(end, days);
-      let count = 0;
-      for (const item of items) {
-        let dt = null;
-        for (const k of dateKeys) {
-          dt = parseDateSafe(item && item[k]);
-          if (dt) break;
-        }
-        if (!dt) continue;
-        if (dt >= start && dt <= end) count += 1;
-      }
-      return count;
-    }
-
-    function formatDelta(delta) {
-      if (delta === null || delta === undefined) return 'n/a';
-      if (delta === 0) return '0';
-      return (delta > 0 ? `+${delta}` : String(delta));
-    }
-
-    function statusFromSignals({ highGaps, totalGaps, stale }) {
-      if (stale) return { label: 'Needs attention', className: 'error', reason: 'Data is stale' };
-      if ((highGaps || 0) > 0) return { label: 'At risk', className: 'error', reason: 'High-impact gaps present' };
-      if ((totalGaps || 0) > 0) return { label: 'Watch', className: '', reason: 'Gaps present' };
-      return { label: 'On track', className: 'ok', reason: 'No gaps detected' };
-    }
-
-    function renderKpiCards(kpiGridEl, cards) {
-      if (!kpiGridEl) return;
-      kpiGridEl.innerHTML = (Array.isArray(cards) ? cards : []).map(c => {
-        const title = escapeHtml(c.title || '');
-        const value = escapeHtml(c.value || '');
-        const subtitle = c.subtitle ? `<p class="muted small" style="margin:0.25rem 0 0;">${escapeHtml(c.subtitle)}</p>` : '';
-        const extra = c.extraHtml ? `<div class="small" style="margin-top:0.5rem;">${c.extraHtml}</div>` : '';
-        const valueClass = c.valueClassName ? ` ${c.valueClassName}` : '';
-        return `
-          <div class="card">
-            <h3>${title}</h3>
-            <p style="margin:0;"><strong class="${valueClass.trim()}">${value}</strong></p>
-            ${subtitle}
-            ${extra}
-          </div>
-        `;
-      }).join('');
-    }
 
     function buildImmediateSteps(gaps) {
       if (!Array.isArray(gaps) || gaps.length === 0) {
@@ -314,15 +214,9 @@
 
     async function loadJSON(path, { cacheBust = false } = {}) {
       const url = cacheBust ? withCacheBust(path) : path;
-      try {
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) {
-          return { __load_error: { kind: 'http', status: res.status, url } };
-        }
-        return res.json();
-      } catch (e) {
-        return { __load_error: { kind: 'network', message: String(e), url } };
-      }
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return null;
+      return res.json();
     }
 
     function isPublicPreviewTitle(title) {
@@ -349,15 +243,14 @@
           const srcKey = String((f && f.source_type) || '').toLowerCase();
           const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
           if (!byCat[cat]) byCat[cat] = [];
-          const url = (f && f.source_url) ? String(f.source_url) : null;
-          byCat[cat].push({ title, url });
+          byCat[cat].push(title);
         });
 
         // Deduplicate + stable ordering
         Object.keys(byCat).forEach(cat => {
           const seen = new Set();
           byCat[cat] = byCat[cat].filter(t => {
-            const key = String(t && t.title ? t.title : t).toLowerCase();
+            const key = String(t).toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
@@ -400,15 +293,14 @@
           const srcKey = String((f && f.source_type) || '').toLowerCase();
           const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
           if (!byCat[cat]) byCat[cat] = [];
-          const url = (f && f.source_url) ? String(f.source_url) : null;
-          byCat[cat].push({ title, url });
+          byCat[cat].push(title);
         });
 
         // Deduplicate + stable ordering
         Object.keys(byCat).forEach(cat => {
           const seen = new Set();
           byCat[cat] = byCat[cat].filter(t => {
-            const key = String(t && t.title ? t.title : t).toLowerCase();
+            const key = String(t).toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
@@ -549,9 +441,6 @@
       if (refreshBtn) refreshBtn.disabled = true;
       if (lastRefreshEl) lastRefreshEl.textContent = '';
 
-      const kpisEl = document.getElementById('kpis');
-      const kpiGridEl = document.getElementById('kpiGrid');
-
       const summaryEl = document.getElementById('summary');
       const summaryContentEl = document.getElementById('summaryContent');
 
@@ -587,20 +476,10 @@
       const toggleRawEl = document.getElementById('toggleRaw');
 
       try {
-        const data = await loadJSON('reports/dashboard.json', { cacheBust });
-        const mapRaw = await loadJSON('reports/learn_alignment_map.json', { cacheBust });
-        const map = (mapRaw && mapRaw.__load_error) ? null : mapRaw;
-
-        if (data && data.__load_error) {
-          const err = data.__load_error;
-          if (err.kind === 'http') {
-            statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong> (HTTP ${err.status}). Expected: <code>${escapeHtml(err.url)}</code>`;
-          } else {
-            statusEl.innerHTML = `<strong class="error">Error loading dashboard.json</strong> (network). ${escapeHtml(err.message || '')}<br/><span class="muted small">URL: ${escapeHtml(err.url || '')}</span>`;
-          }
-          if (refreshBtn) refreshBtn.disabled = false;
-          return;
-        }
+        const [data, map] = await Promise.all([
+          loadJSON('reports/dashboard.json', { cacheBust }),
+          loadJSON('reports/learn_alignment_map.json', { cacheBust })
+        ]);
 
         if (!data) {
           statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
@@ -627,85 +506,6 @@
         const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
         const contentChecks = safeGet(data, 'content_checks', []);
         const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
-
-        // KPI strip (exec-friendly)
-        const now = new Date();
-        const hasFeaturesPayload = Array.isArray(data.features);
-        const features = hasFeaturesPayload ? data.features : null;
-
-        // Feature window counts (7d / 30d) + deltas vs prior window
-        // If dashboard.json doesn't include data.features, show n/a (not 0).
-        const new7 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now, days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const prev7 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now: daysAgo(now, 7), days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const delta7 = (Number.isFinite(new7) && Number.isFinite(prev7)) ? (new7 - prev7) : null;
-
-        const new30 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now, days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const prev30 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now: daysAgo(now, 30), days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const delta30 = (Number.isFinite(new30) && Number.isFinite(prev30)) ? (new30 - prev30) : null;
-
-        // Gap counts (no delta unless timestamps exist)
-        const gapCounts = gaps.reduce((acc, g) => {
-          const level = String((g && g.impact) || 'unknown').toLowerCase();
-          acc[level] = (acc[level] || 0) + 1;
-          return acc;
-        }, {});
-        const highGaps = gapCounts.high || 0;
-        const medGaps = gapCounts.medium || 0;
-        const lowGaps = gapCounts.low || 0;
-        const totalGaps = gaps.length;
-
-        // Data freshness + overall status
-        const genDate = parseDateSafe(generatedAt);
-        const freshnessHours = genDate ? Math.max(0, (now.getTime() - genDate.getTime()) / 36e5) : null;
-        const stale = freshnessHours !== null ? freshnessHours > 72 : false; // 3 days
-        const status = statusFromSignals({ highGaps, totalGaps, stale });
-
-        const freshnessText = (freshnessHours === null)
-          ? 'Unknown'
-          : (freshnessHours < 48
-              ? `${Math.round(freshnessHours)}h ago`
-              : `${Math.round(freshnessHours / 24)}d ago`);
-
-        const cards = [
-          {
-            title: 'New items (7d)',
-            value: hasFeaturesPayload ? `${new7} (Δ ${formatDelta(delta7)})` : 'n/a',
-            subtitle: hasFeaturesPayload ? 'Change vs previous 7 days' : 'Requires data.features in dashboard.json',
-          },
-          {
-            title: 'New items (30d)',
-            value: hasFeaturesPayload ? `${new30} (Δ ${formatDelta(delta30)})` : 'n/a',
-            subtitle: hasFeaturesPayload ? 'Change vs previous 30 days' : 'Requires data.features in dashboard.json',
-          },
-          {
-            title: 'Gaps (H / M / L)',
-            value: `${highGaps} / ${medGaps} / ${lowGaps}`,
-            subtitle: `Total gaps: ${totalGaps}`,
-            valueClassName: highGaps > 0 ? 'error' : (totalGaps > 0 ? '' : 'ok'),
-          },
-          {
-            title: 'Data freshness',
-            value: freshnessText,
-            subtitle: generatedAt ? `Generated at: ${formatISO(generatedAt)}` : 'generated_at not provided',
-            valueClassName: stale ? 'error' : 'ok',
-          },
-          {
-            title: 'Overall status',
-            value: status.label,
-            subtitle: status.reason,
-            valueClassName: status.className,
-          }
-        ];
-        renderKpiCards(kpiGridEl, cards);
-        if (kpisEl) kpisEl.hidden = false;
         
         let summaryHtml = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
         summaryHtml += '<h3 style="margin-top:0;">Executive Summary</h3>';
@@ -824,14 +624,7 @@
               <h3>${c.name}</h3>
               <p><strong>Items:</strong> ${c.count}</p>
               ${Array.isArray(c.items)
-                ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
-                    const title = (item && typeof item === 'object') ? item.title : item;
-                    const href = (item && typeof item === 'object') ? item.url : null;
-                      const safeTitle = escapeHtml(decorateLearnLinkText(title, href));
-                    return href
-                      ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
-                      : `<li>${safeTitle}</li>`;
-                  }).join('')}</ul>`
+                ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(t => `<li>${escapeHtml(String(t))}</li>`).join('')}</ul>`
                 : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
               ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
             </div>
@@ -848,14 +641,7 @@
                   <h3>${c.name}</h3>
                   <p><strong>Items:</strong> ${c.count}</p>
                   ${Array.isArray(c.items)
-                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
-                        const title = (item && typeof item === 'object') ? item.title : item;
-                        const href = (item && typeof item === 'object') ? item.url : null;
-                        const safeTitle = escapeHtml(decorateLearnLinkText(title, href));
-                        return href
-                          ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
-                          : `<li>${safeTitle}</li>`;
-                      }).join('')}</ul>`
+                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(t => `<li>${escapeHtml(String(t))}</li>`).join('')}</ul>`
                     : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
                   ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
                 </div>
