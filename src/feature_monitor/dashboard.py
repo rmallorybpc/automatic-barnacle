@@ -7,6 +7,7 @@ import yaml
 
 from .models import Feature
 from .utils import setup_logging, validate_file_exists
+from .content_checks import ContentChecks
 
 
 logger = setup_logging(__name__)
@@ -155,6 +156,12 @@ class DashboardGenerator:
                 'date_discovered': f.date_discovered,
             }
         
+        content_checks = []
+        try:
+            content_checks = [r.to_dict() for r in ContentChecks().run_all()]
+        except Exception as e:
+            logger.warning(f"Content checks failed: {e}")
+
         dashboard_data = {
             'generated_at': datetime.now().isoformat(),
             'summary': {
@@ -164,6 +171,7 @@ class DashboardGenerator:
             'source_breakdown': self.generate_source_breakdown(features),
             'product_area_breakdown': self.generate_product_area_breakdown(features),
             'features': [_feature_summary(f) for f in features],
+            'content_checks': content_checks,
         }
         
         return dashboard_data

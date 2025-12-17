@@ -5,12 +5,21 @@ sources:
   changelog:
     enabled: true
     url: "https://github.blog/changelog/"
+  # Homepage content check is tracked separately under `content_checks`.
   roadmap:
     enabled: true
     url: "https://github.com/github/roadmap"
   graphql_schema:
     enabled: true
     docs_url: "https://docs.github.com/public/fpt/schema.docs.graphql"
+
+# Lightweight content checks (availability + change detection)
+content_checks:
+  github_blog:
+    enabled: true
+    url: "https://github.blog/"
+    # Optional substring to assert the response is the expected page.
+    contains: "GitHub"
 
 # Issue management
 issue:

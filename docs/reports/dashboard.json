@@ -37,6 +37,20 @@
       }
     ]
   },
+  "content_checks": [
+    {
+      "name": "github_blog",
+      "url": "https://github.blog/",
+      "ok": true,
+      "status_code": 200,
+      "checked_at": "2025-12-17T00:00:00Z",
+      "changed": null,
+      "fingerprint": null,
+      "etag": null,
+      "last_modified": null,
+      "error": null
+    }
+  ],
   "features": [
     {
       "id": "changelog_sample_20251216",

@@ -106,6 +106,22 @@
     </table>
   </section>
 
+  <section id="contentChecks" hidden>
+    <h2>Content checks</h2>
+    <table id="contentChecksTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>URL</th>
+          <th>Status</th>
+          <th>Changed</th>
+          <th>Checked at</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
   <section id="executive" hidden>
     <h2>Executive Summary</h2>
     <div id="executiveContent"></div>
@@ -269,9 +285,15 @@
 
     async function loadJSON(path, { cacheBust = false } = {}) {
       const url = cacheBust ? withCacheBust(path) : path;
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) return null;
-      return res.json();
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) {
+          return { __load_error: { kind: 'http', status: res.status, url } };
+        }
+        return res.json();
+      } catch (e) {
+        return { __load_error: { kind: 'network', message: String(e), url } };
+      }
     }
 
     function isPublicPreviewTitle(title) {
@@ -437,6 +459,37 @@
       tbodyEl.innerHTML = rowsHtml;
     }
 
+    function renderContentChecks(tbodyEl, checks) {
+      tbodyEl.innerHTML = '';
+      if (!Array.isArray(checks) || !checks.length) return;
+
+      const rowsHtml = checks.map(c => {
+        const name = escapeHtml((c && c.name) ? String(c.name) : '');
+        const url = (c && c.url) ? String(c.url) : '';
+        const ok = !!(c && c.ok);
+        const statusCode = (c && (c.status_code !== undefined && c.status_code !== null)) ? String(c.status_code) : '';
+        const statusText = ok ? `OK${statusCode ? ' (' + statusCode + ')' : ''}` : `ERROR${statusCode ? ' (' + statusCode + ')' : ''}`;
+        const statusClass = ok ? 'ok' : 'error';
+
+        const changed = (c && c.changed !== undefined && c.changed !== null) ? (c.changed ? 'yes' : 'no') : 'n/a';
+        const checkedAt = escapeHtml((c && c.checked_at) ? String(c.checked_at) : '');
+
+        const urlCell = url
+          ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(url)}</a>`
+          : '';
+
+        return `<tr>`
+          + `<td>${name}</td>`
+          + `<td>${urlCell}</td>`
+          + `<td class="${statusClass}">${escapeHtml(statusText)}</td>`
+          + `<td>${escapeHtml(changed)}</td>`
+          + `<td>${checkedAt}</td>`
+          + `</tr>`;
+      }).join('');
+
+      tbodyEl.innerHTML = rowsHtml;
+    }
+
     function formatLocalTime(d) {
       try {
         return new Intl.DateTimeFormat(undefined, {
@@ -473,6 +526,9 @@
       const productAreaBreakdownEl = document.getElementById('productAreaBreakdown');
       const productAreaBreakdownBodyEl = document.querySelector('#productAreaBreakdownTable tbody');
 
+      const contentChecksEl = document.getElementById('contentChecks');
+      const contentChecksBodyEl = document.querySelector('#contentChecksTable tbody');
+
       const executiveEl = document.getElementById('executive');
       const executiveContentEl = document.getElementById('executiveContent');
       const gapsSectionEl = document.getElementById('gapsSection');
@@ -490,10 +546,20 @@
       const toggleRawEl = document.getElementById('toggleRaw');
 
       try {
-        const [data, map] = await Promise.all([
-          loadJSON('reports/dashboard.json', { cacheBust }),
-          loadJSON('reports/learn_alignment_map.json', { cacheBust })
-        ]);
+        const data = await loadJSON('reports/dashboard.json', { cacheBust });
+        const mapRaw = await loadJSON('reports/learn_alignment_map.json', { cacheBust });
+        const map = (mapRaw && mapRaw.__load_error) ? null : mapRaw;
+
+        if (data && data.__load_error) {
+          const err = data.__load_error;
+          if (err.kind === 'http') {
+            statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong> (HTTP ${err.status}). Expected: <code>${escapeHtml(err.url)}</code>`;
+          } else {
+            statusEl.innerHTML = `<strong class="error">Error loading dashboard.json</strong> (network). ${escapeHtml(err.message || '')}<br/><span class="muted small">URL: ${escapeHtml(err.url || '')}</span>`;
+          }
+          if (refreshBtn) refreshBtn.disabled = false;
+          return;
+        }
 
         if (!data) {
           statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
@@ -518,6 +584,7 @@
         const tsTotal = safeGet(data, 'time_series.total', null);
         const sources = safeGet(data, 'source_breakdown.sources', []);
         const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
+        const contentChecks = safeGet(data, 'content_checks', []);
         const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
 
         // KPI strip (exec-friendly)
@@ -699,6 +766,12 @@
         if (Array.isArray(productAreas) && productAreas.length) {
           renderTableRows(productAreaBreakdownBodyEl, productAreas, ['name', 'count']);
           productAreaBreakdownEl.hidden = false;
+        }
+
+        // Content checks table
+        if (Array.isArray(contentChecks) && contentChecks.length) {
+          renderContentChecks(contentChecksBodyEl, contentChecks);
+          contentChecksEl.hidden = false;
         }
 
         // Learn Alignment cards
