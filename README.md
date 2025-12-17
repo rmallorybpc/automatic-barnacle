@@ -37,8 +37,6 @@ Automatic Barnacle is an automated monitoring and reporting stack for tracking G
   - Environment variables
 - Workflows
   - Run Now (Manual Trigger)
-  - Feature Gap Monitoring (Scheduled)
-  - Monthly Issues Report (Scheduled)
   - Pages deployment (Actions-based)
 - Repository structure
 - Local development
@@ -86,15 +84,13 @@ If you prefer not to commit `dashboard.json`, your workflow can place the file i
 
 ## Architecture
 
-### Components
-
 1. Ingestion (`src/feature_monitor/ingestion.py`)
    - Fetches GitHub changelog entries
    - Pulls roadmap items from github/roadmap
    - Integrates GraphQL schema changes
    - Outputs: `data/features.json`
 
-2. GraphQL Schema Diff (`src/feature_monitor/graphql_diff.py`)
+  python scripts/serve_dashboard.py --host 0.0.0.0 --port 8000  # falls back to the next free port if needed
    - Downloads current GraphQL schema
    - Compares with previous snapshot
    - Detects new types, fields, and mutations
