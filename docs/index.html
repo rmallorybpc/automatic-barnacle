@@ -39,14 +39,14 @@
 
   <div id="status" class="status">Loading dashboard data…</div>
 
-  <section id="kpis" hidden>
-    <h2>At-a-glance</h2>
-    <div id="kpiGrid" class="grid"></div>
-  </section>
-
   <section id="summary" hidden>
     <h2>Summary</h2>
     <div id="summaryContent"></div>
+  </section>
+
+  <section id="kpis" hidden>
+    <h2>At-a-glance</h2>
+    <div id="kpiGrid" class="grid"></div>
   </section>
 
   <section id="featuresGaps" hidden>
@@ -175,6 +175,35 @@
       });
       return out;
     }
+
+    function learnLinkSuffixFromUrl(href) {
+      if (!href) return '';
+      try {
+        const u = new URL(String(href));
+        const host = String(u.hostname || '').toLowerCase();
+        if (host === 'github.blog' || host.endsWith('.github.blog')) return ' [blog]';
+
+        if (host === 'github.com' || host.endsWith('.github.com')) {
+          const parts = String(u.pathname || '').split('/').filter(Boolean);
+          // Expected: /{owner}/{repo}/...
+          if (parts.length >= 2 && parts[1]) return ` [${parts[1]} - repo]`;
+        }
+      } catch {
+        // ignore invalid URLs
+      }
+      return '';
+    }
+
+    function decorateLearnLinkText(title, href) {
+      const base = String(title || '');
+      if (!href) return base;
+      // Avoid double-tagging.
+      if (/\[\s*blog\s*\]\s*$/i.test(base)) return base;
+      if (/\[[^\]]+\s*-\s*repo\]\s*$/i.test(base)) return base;
+      const suffix = learnLinkSuffixFromUrl(href);
+      return suffix ? `${base}${suffix}` : base;
+    }
+
     function renderTableRows(tbodyEl, rows, columns) {
       tbodyEl.innerHTML = '';
       if (!Array.isArray(rows) || rows.length === 0) return;
@@ -463,8 +492,20 @@
       tbodyEl.innerHTML = '';
       if (!Array.isArray(checks) || !checks.length) return;
 
+      const contentCheckNameMap = {
+        'github_blog': 'GitHub blog',
+        'github_blog_product_news': 'GitHub product news',
+        'github_blog_changelog': 'GitHub changelog',
+        'github_newsroom_press_releases': 'GitHub press releases',
+        'github_roadmap_homepage': 'GitHub roadmap',
+        'github_resources_enterprise_content_roundup_september': 'GitHub September roundup'
+      };
+
       const rowsHtml = checks.map(c => {
-        const name = escapeHtml((c && c.name) ? String(c.name) : '');
+        const rawName = (c && c.name) ? String(c.name) : '';
+        const rawKey = (c && c.key) ? String(c.key) : '';
+        const friendly = rawName || contentCheckNameMap[rawKey] || contentCheckNameMap[rawName] || rawKey;
+        const name = escapeHtml(friendly || '');
         const url = (c && c.url) ? String(c.url) : '';
         const ok = !!(c && c.ok);
         const statusCode = (c && (c.status_code !== undefined && c.status_code !== null)) ? String(c.status_code) : '';
@@ -786,7 +827,7 @@
                 ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
                     const title = (item && typeof item === 'object') ? item.title : item;
                     const href = (item && typeof item === 'object') ? item.url : null;
-                    const safeTitle = escapeHtml(title);
+                      const safeTitle = escapeHtml(decorateLearnLinkText(title, href));
                     return href
                       ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
                       : `<li>${safeTitle}</li>`;
@@ -810,7 +851,7 @@
                     ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
                         const title = (item && typeof item === 'object') ? item.title : item;
                         const href = (item && typeof item === 'object') ? item.url : null;
-                        const safeTitle = escapeHtml(title);
+                        const safeTitle = escapeHtml(decorateLearnLinkText(title, href));
                         return href
                           ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
                           : `<li>${safeTitle}</li>`;

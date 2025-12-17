@@ -54,6 +54,7 @@ def _load_state(path: str) -> Dict[str, Any]:
 
 @dataclass(frozen=True)
 class ContentCheckResult:
+    key: str
     name: str
     url: str
     ok: bool
@@ -67,6 +68,7 @@ class ContentCheckResult:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            "key": self.key,
             "name": self.name,
             "url": self.url,
             "ok": self.ok,
@@ -91,14 +93,15 @@ class ContentChecks:
     def run_all(self) -> List[ContentCheckResult]:
         results: List[ContentCheckResult] = []
 
-        for name, cfg in (self.checks or {}).items():
+        for key, cfg in (self.checks or {}).items():
             if not (cfg or {}).get("enabled", False):
                 continue
             url = (cfg or {}).get("url")
             if not url:
                 results.append(
                     ContentCheckResult(
-                        name=name,
+                        key=key,
+                        name=(cfg or {}).get("display_name") or key,
                         url="",
                         ok=False,
                         status_code=None,
@@ -113,13 +116,14 @@ class ContentChecks:
                 continue
 
             contains = (cfg or {}).get("contains")
-            results.append(self._run_one(name=name, url=url, contains=contains))
+            display_name = (cfg or {}).get("display_name") or key
+            results.append(self._run_one(key=key, name=display_name, url=url, contains=contains))
 
         return results
 
-    def _run_one(self, name: str, url: str, contains: Optional[str]) -> ContentCheckResult:
+    def _run_one(self, key: str, name: str, url: str, contains: Optional[str]) -> ContentCheckResult:
         checked_at = datetime.now().isoformat()
-        state_path = _state_path(name)
+        state_path = _state_path(key)
         prev = _load_state(state_path)
         prev_fp = prev.get("fingerprint")
 
@@ -127,6 +131,7 @@ class ContentChecks:
             resp = safe_request(url, logger=logger, headers={"User-Agent": "automatic-barnacle/1.0"})
             if not resp:
                 return ContentCheckResult(
+                    key=key,
                     name=name,
                     url=url,
                     ok=False,
@@ -145,6 +150,7 @@ class ContentChecks:
                 normalized = _normalize_text_for_fingerprint(text)
                 fp = _sha256(normalized)
                 return ContentCheckResult(
+                    key=key,
                     name=name,
                     url=url,
                     ok=False,
@@ -180,6 +186,7 @@ class ContentChecks:
             )
 
             return ContentCheckResult(
+                key=key,
                 name=name,
                 url=url,
                 ok=True,
@@ -193,6 +200,7 @@ class ContentChecks:
             )
         except Exception as e:
             return ContentCheckResult(
+                key=key,
                 name=name,
                 url=url,
                 ok=False,

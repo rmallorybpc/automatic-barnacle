@@ -17,9 +17,35 @@ sources:
 content_checks:
   github_blog:
     enabled: true
+    display_name: "GitHub blog"
     url: "https://github.blog/"
     # Optional substring to assert the response is the expected page.
     contains: "GitHub"
+
+  github_blog_product_news:
+    enabled: true
+    display_name: "GitHub product news"
+    url: "https://github.blog/news-insights/product-news/"
+
+  github_blog_changelog:
+    enabled: true
+    display_name: "GitHub changelog"
+    url: "https://github.blog/changelog/"
+
+  github_newsroom_press_releases:
+    enabled: true
+    display_name: "GitHub press releases"
+    url: "https://github.com/newsroom/press-releases"
+
+  github_roadmap_homepage:
+    enabled: true
+    display_name: "GitHub roadmap"
+    url: "https://github.com/github/roadmap"
+
+  github_resources_enterprise_content_roundup_september:
+    enabled: true
+    display_name: "GitHub September roundup"
+    url: "https://resources.github.com/enterprise-content-roundup/september/"
 
 # Issue management
 issue:
