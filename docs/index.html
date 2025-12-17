@@ -123,10 +123,9 @@
     </section>
 
     <section id="executive" hidden>
-      <h2>Executive Summary</h2>
       <div id="executiveContent"></div>
       <div id="gapsSection" hidden>
-        <h3>Gaps</h3>
+        <h2>Gaps</h2>
         <table id="gapsTable">
           <thead>
             <tr>
@@ -876,18 +875,11 @@
             featuresTagEl.hidden = false;
           }
 
-          // Executive summary
-          let execHtml = '';
-          if (tsTotal !== null) execHtml += `<p><strong>Total detected items (time series):</strong> ${tsTotal}</p>`;
-          if (Array.isArray(sources) && sources.length) {
-            const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
-            execHtml += `<p><strong>Top source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0})</p>`;
+          // (Removed) Executive Summary metrics block in the bottom section
+          if (executiveContentEl) {
+            executiveContentEl.innerHTML = '';
+            executiveContentEl.hidden = true;
           }
-          if (Array.isArray(productAreas) && productAreas.length) {
-            const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
-            execHtml += `<p><strong>Top product area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0})</p>`;
-          }
-          executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
           executiveEl.hidden = false;
 
           // Gaps section: always visible with empty state
@@ -895,7 +887,7 @@
           if (gaps.length > 0) {
             renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
           } else {
-            gapsBodyEl.innerHTML = '<tr><td colspan="3" class="muted">No gaps to display</td></tr>';
+            gapsBodyEl.innerHTML = '';
           }
           immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
 
