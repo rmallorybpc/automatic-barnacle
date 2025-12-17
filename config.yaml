@@ -51,6 +51,29 @@ dashboard:
   output_dir: "data/dashboard"
   retention_days: 90
 
+# Content checks
+# These are lightweight HTTP checks (URL fetch + fingerprint) whose latest results
+# can be surfaced on the dashboard.
+content_checks:
+  - key: "github_blog"
+    name: "GitHub blog"
+    url: "https://github.blog/"
+  - key: "github_blog_product_news"
+    name: "GitHub product news"
+    url: "https://github.blog/product-news/"
+  - key: "github_blog_changelog"
+    name: "GitHub changelog"
+    url: "https://github.blog/changelog/"
+  - key: "github_newsroom_press_releases"
+    name: "GitHub press releases"
+    url: "https://github.com/newsroom/press-releases"
+  - key: "github_roadmap_homepage"
+    name: "GitHub roadmap"
+    url: "https://github.com/github/roadmap"
+  - key: "github_resources_enterprise_content_roundup_september"
+    name: "GitHub September roundup"
+    url: "https://resources.github.com/enterprise-content-roundup-september"
+
 # Monthly report
 monthly_report:
   enabled: true

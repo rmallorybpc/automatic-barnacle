@@ -28,6 +28,51 @@ class DashboardGenerator:
         """Load features from file."""
         if not validate_file_exists(features_path, logger):
             return []
+
+    def load_content_checks(self) -> List[Dict]:
+        """Load latest content check results (if configured and present on disk)."""
+        checks_cfg = self.config.get("content_checks")
+        if not isinstance(checks_cfg, list) or not checks_cfg:
+            return []
+
+        results: List[Dict] = []
+        for item in checks_cfg:
+            if not isinstance(item, dict):
+                continue
+            key = str(item.get("key") or item.get("name") or "").strip()
+            name = str(item.get("name") or key).strip()
+            url = str(item.get("url") or "").strip()
+            if not key:
+                continue
+
+            path = os.path.join("data", "content_checks", f"{key}.json")
+            record: Dict = {}
+            if os.path.exists(path):
+                try:
+                    with open(path, "r", encoding="utf-8") as f:
+                        record = json.load(f) or {}
+                except Exception as e:
+                    logger.warning(f"Failed to read content check {path}: {e}")
+
+            status_code = record.get("status_code")
+            ok = record.get("ok")
+            if ok is None:
+                try:
+                    ok = (status_code is not None) and (200 <= int(status_code) < 400)
+                except Exception:
+                    ok = False
+
+            results.append({
+                "key": record.get("key") or key,
+                "name": record.get("name") or name,
+                "url": record.get("url") or url,
+                "checked_at": record.get("checked_at"),
+                "status_code": status_code,
+                "ok": bool(ok),
+                "changed": record.get("changed"),
+            })
+
+        return results
         
         try:
             with open(features_path, 'r') as f:
@@ -164,6 +209,7 @@ class DashboardGenerator:
             'source_breakdown': self.generate_source_breakdown(features),
             'product_area_breakdown': self.generate_product_area_breakdown(features),
             'features': [_feature_summary(f) for f in features],
+            'content_checks': self.load_content_checks(),
         }
         
         return dashboard_data

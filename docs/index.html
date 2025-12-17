@@ -1,777 +1,1054 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>Automatic Barnacle Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 2rem; }
-    header { margin-bottom: 1rem; }
-    .status { margin: 1rem 0; padding: 0.75rem; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; }
-    pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
-    table { border-collapse: collapse; width: 100%; margin-top: 0.75rem; }
-    th, td { border: 1px solid #d0d7de; padding: 0.5rem; text-align: left; }
-    th { background: #f0f3f6; }
-    section { margin-top: 1.5rem; }
-    .error { color: #b42318; }
-    .ok { color: #1a7f37; }
-    .muted { color: #57606a; }
-    .tag { display:inline-block; padding:0.2rem 0.45rem; border:1px solid #d0d7de; border-radius:999px; font-size:0.85rem; margin-right:0.35rem; background:#f6f8fa; }
-    .steps { background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; }
-    .toggle { font-size:0.9rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .card { border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; background:#fff; }
-    .card h3 { margin-top:0; }
-    .small { font-size: 0.9rem; }
-    .btn { display:inline-block; padding:0.4rem 0.65rem; border:1px solid #d0d7de; border-radius:6px; background:#f6f8fa; color:#24292f; cursor:pointer; font-size:0.9rem; }
-    .btn:disabled { opacity:0.6; cursor:not-allowed; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Automatic Barnacle Dashboard</h1>
-    <p class="muted">Static site served from docs/. This page loads reports/dashboard.json when available.</p>
-    <p>
-      <button id="refreshBtn" class="btn" type="button">Refresh dashboard</button>
-      <span id="lastRefresh" class="muted small" style="margin-left:0.5rem;"></span>
-    </p>
-  </header>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Automatic Barnacle Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 2rem; }
+      header { margin-bottom: 1rem; }
+      .status { margin: 1rem 0; padding: 0.75rem; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; }
+      pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
+      table { border-collapse: collapse; width: 100%; margin-top: 0.75rem; }
+      th, td { border: 1px solid #d0d7de; padding: 0.5rem; text-align: left; }
+      th { background: #f0f3f6; }
+      section { margin-top: 1.5rem; }
+      .error { color: #b42318; }
+      .ok { color: #1a7f37; }
+      .muted { color: #57606a; }
+      .tag { display:inline-block; padding:0.2rem 0.45rem; border:1px solid #d0d7de; border-radius:999px; font-size:0.85rem; margin-right:0.35rem; background:#f6f8fa; }
+      .steps { background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; }
+      .toggle { font-size:0.9rem; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+      .card { border:1px solid #d0d7de; border-radius:6px; padding:0.75rem; background:#fff; }
+      .card h3 { margin-top:0; }
+      .small { font-size: 0.9rem; }
+      .btn { display:inline-block; padding:0.4rem 0.65rem; border:1px solid #d0d7de; border-radius:6px; background:#f6f8fa; color:#24292f; cursor:pointer; font-size:0.9rem; }
+      .btn:disabled { opacity:0.6; cursor:not-allowed; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Automatic Barnacle Dashboard</h1>
+      <p class="muted">Static site served from docs/. This page loads reports/dashboard.json when available.</p>
+      <p>
+        <button id="refreshBtn" class="btn" type="button">Refresh dashboard</button>
+        <span id="lastRefresh" class="muted small" style="margin-left:0.5rem;"></span>
+        <span id="status" class="muted small" style="margin-left:0.5rem;">Loading dashboard data…</span>
+      </p>
+    </header>
 
-  <div id="status" class="status">Loading dashboard data…</div>
+    <section id="summary" hidden>
+      <h2 style="display:flex; align-items:center; gap:0.5rem;">
+        <span>Executive Summary</span>
+      </h2>
+      <div id="summaryContent"></div>
+    </section>
 
-  <section id="kpis" hidden>
-    <h2>At-a-glance</h2>
-    <div id="kpiGrid" class="grid"></div>
-  </section>
+    <section id="kpis" hidden>
+      <h2>At-a-glance</h2>
+      <div id="kpiGrid" class="grid"></div>
+    </section>
 
-  <section id="summary" hidden>
-    <h2>Summary</h2>
-    <div id="summaryContent"></div>
-  </section>
+    <section id="learnAlignment" hidden>
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.25rem;">
+        <span id="featuresTag" class="tag" hidden></span>
+        <span id="contentChecksTags" hidden></span>
+      </div>
+      <h2>Learn Alignment</h2>
+      <p class="muted small">Grouped by Microsoft Learn categories based on sources and product areas. Use links to recommended learning paths.</p>
+      <div id="learnGrid" class="grid"></div>
+    </section>
 
-  <section id="featuresGaps" hidden>
-    <h3>Features / Gaps</h3>
-    <div id="featuresGapsContent"></div>
-  </section>
+    <section id="learnAlignmentPublicPreview" hidden>
+      <h2>Learn Alignment - Public Preview</h2>
+      <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
+      <div id="learnGridPublicPreview" class="grid"></div>
+    </section>
 
-  <section id="learnAlignment" hidden>
-    <h2>Learn Alignment</h2>
-    <p class="muted small">Grouped by Microsoft Learn categories based on sources and product areas. Use links to recommended learning paths.</p>
-    <div id="learnGrid" class="grid"></div>
-  </section>
-
-  <section id="learnAlignmentPublicPreview" hidden>
-    <h2>Learn Alignment - Public Preview</h2>
-    <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
-    <div id="learnGridPublicPreview" class="grid"></div>
-  </section>
-
-  <section id="timeSeries" hidden>
-    <h2>Time series</h2>
-    <table id="timeSeriesTable">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Count</th>
-          <th>Cumulative</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <section id="sourceBreakdown" hidden>
-    <h2>Source breakdown</h2>
-    <table id="sourceBreakdownTable">
-      <thead>
-        <tr>
-          <th>Source</th>
-          <th>Count</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <section id="productAreaBreakdown" hidden>
-    <h2>Product area breakdown</h2>
-    <table id="productAreaBreakdownTable">
-      <thead>
-        <tr>
-          <th>Product area</th>
-          <th>Count</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <section id="executive" hidden>
-    <h2>Executive Summary</h2>
-    <div id="executiveContent"></div>
-    <div id="gapsSection" hidden>
-      <h3>Gaps</h3>
-      <table id="gapsTable">
+    <section id="timeSeries" hidden>
+      <h2>Time series</h2>
+      <table id="timeSeriesTable">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Impact</th>
-            <th>Area</th>
+            <th>Date</th>
+            <th>Count</th>
+            <th>Cumulative</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
-      <div class="steps" id="immediateSteps"></div>
-    </div>
-    <p class="toggle"><a href="#" id="toggleRaw">Show raw dashboard.json</a></p>
-  </section>
+    </section>
 
-  <section id="raw" hidden>
-    <h2>Raw dashboard.json</h2>
-    <pre id="rawJson"></pre>
-  </section>
+    <section id="sourceBreakdown" hidden>
+      <h2>Source breakdown</h2>
+      <table id="sourceBreakdownTable">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <script>
-    function escapeHtml(s) {
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+    <section id="productAreaBreakdown" hidden>
+      <h2>Product area breakdown</h2>
+      <table id="productAreaBreakdownTable">
+        <thead>
+          <tr>
+            <th>Product area</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-    function escapeAttr(s) {
-      // Keep attributes safe; HTML escaping is sufficient for our simple href usage.
-      return escapeHtml(s);
-    }
+    <section id="contentChecks" hidden>
+      <h2>Content checks</h2>
+      <table id="contentChecksTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Status</th>
+            <th>Changed</th>
+            <th>Checked at</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-    function safeGet(obj, path, fallback = undefined) {
-      try { return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback; }
-      catch { return fallback; }
-    }
+    <section id="executive" hidden>
+      <h2>Executive Summary</h2>
+      <div id="executiveContent"></div>
+      <div id="gapsSection" hidden>
+        <h3>Gaps</h3>
+        <table id="gapsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Impact</th>
+              <th>Area</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="steps" id="immediateSteps"></div>
+      </div>
+      <p class="toggle"><a href="#" id="toggleRaw">Show raw dashboard.json</a></p>
+    </section>
 
-    function normalizeKeyedMap(obj) {
-      const out = {};
-      if (!obj || typeof obj !== 'object') return out;
-      Object.keys(obj).forEach(k => {
-        out[String(k).toLowerCase()] = obj[k];
-      });
-      return out;
-    }
-    function renderTableRows(tbodyEl, rows, columns) {
-      tbodyEl.innerHTML = '';
-      if (!Array.isArray(rows) || rows.length === 0) return;
-      const html = rows.map(row => '<tr>' + columns.map(col => `<td>${String(safeGet(row, col, ''))}</td>`).join('') + '</tr>').join('');
-      tbodyEl.innerHTML = html;
-    }
-    function formatISO(ts) { return ts || ''; }
+    <section id="raw" hidden>
+      <h2>Raw dashboard.json</h2>
+      <pre id="rawJson"></pre>
+    </section>
 
-    function parseDateSafe(value) {
-      if (!value) return null;
-      const d = new Date(value);
-      return Number.isFinite(d.getTime()) ? d : null;
-    }
+    <script>
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
 
-    function startOfDay(d) {
-      const out = new Date(d);
-      out.setHours(0, 0, 0, 0);
-      return out;
-    }
+      function escapeAttr(s) {
+        // Keep attributes safe; HTML escaping is sufficient for our simple href usage.
+        return escapeHtml(s);
+      }
 
-    function daysAgo(d, days) {
-      const out = new Date(d);
-      out.setDate(out.getDate() - days);
-      return out;
-    }
+      function getLearnAlignmentLinkSuffix(href) {
+        if (!href) return '';
+        try {
+          const u = new URL(String(href), window.location.href);
+          const host = (u.hostname || '').toLowerCase();
 
-    function countItemsInWindow(items, { now, days, dateKeys }) {
-      if (!Array.isArray(items) || !items.length) return 0;
-      const end = now;
-      const start = daysAgo(end, days);
-      let count = 0;
-      for (const item of items) {
-        let dt = null;
-        for (const k of dateKeys) {
-          dt = parseDateSafe(item && item[k]);
-          if (dt) break;
+          // Blog sources
+          if (host === 'github.blog' || host.endsWith('.github.blog')) return ' [blog]';
+
+          // Repo sources (e.g., https://github.com/{owner}/{repo}/...)
+          if (host === 'github.com') {
+            const parts = (u.pathname || '').split('/').filter(Boolean);
+            if (parts.length >= 2) {
+              const repo = parts[1];
+              return ` [${repo} - repo]`;
+            }
+          }
+        } catch {
+          // ignore
         }
-        if (!dt) continue;
-        if (dt >= start && dt <= end) count += 1;
-      }
-      return count;
-    }
-
-    function formatDelta(delta) {
-      if (delta === null || delta === undefined) return 'n/a';
-      if (delta === 0) return '0';
-      return (delta > 0 ? `+${delta}` : String(delta));
-    }
-
-    function statusFromSignals({ highGaps, totalGaps, stale }) {
-      if (stale) return { label: 'Needs attention', className: 'error', reason: 'Data is stale' };
-      if ((highGaps || 0) > 0) return { label: 'At risk', className: 'error', reason: 'High-impact gaps present' };
-      if ((totalGaps || 0) > 0) return { label: 'Watch', className: '', reason: 'Gaps present' };
-      return { label: 'On track', className: 'ok', reason: 'No gaps detected' };
-    }
-
-    function renderKpiCards(kpiGridEl, cards) {
-      if (!kpiGridEl) return;
-      kpiGridEl.innerHTML = (Array.isArray(cards) ? cards : []).map(c => {
-        const title = escapeHtml(c.title || '');
-        const value = escapeHtml(c.value || '');
-        const subtitle = c.subtitle ? `<p class="muted small" style="margin:0.25rem 0 0;">${escapeHtml(c.subtitle)}</p>` : '';
-        const extra = c.extraHtml ? `<div class="small" style="margin-top:0.5rem;">${c.extraHtml}</div>` : '';
-        const valueClass = c.valueClassName ? ` ${c.valueClassName}` : '';
-        return `
-          <div class="card">
-            <h3>${title}</h3>
-            <p style="margin:0;"><strong class="${valueClass.trim()}">${value}</strong></p>
-            ${subtitle}
-            ${extra}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function buildImmediateSteps(gaps) {
-      if (!Array.isArray(gaps) || gaps.length === 0) {
-        return '<p class="muted">No gaps detected. No immediate actions required.</p>';
-      }
-      const total = gaps.length;
-      const impacts = gaps.reduce((acc, g) => {
-        const level = (g.impact || 'unknown').toLowerCase();
-        acc[level] = (acc[level] || 0) + 1;
-        return acc;
-      }, {});
-      const high = impacts.high || 0;
-      const medium = impacts.medium || 0;
-      const low = impacts.low || 0;
-
-      let bullets = '<ul>';
-      if (high) bullets += `<li>Prioritize ${high} high-impact gap(s): create/assign issues today.</li>`;
-      if (medium) bullets += `<li>Schedule remediation for ${medium} medium-impact gap(s) within the next sprint.</li>`;
-      if (low) bullets += `<li>Track ${low} low-impact gap(s) for opportunistic fixes.</li>`;
-      bullets += '<li>Verify monitoring coverage for affected product areas and sources.</li>';
-      bullets += '</ul>';
-
-      return `
-        <h4>Immediate Steps</h4>
-        <p>Detected ${total} gap(s). Recommended actions:</p>
-        ${bullets}
-      `;
-    }
-
-    function withCacheBust(url) {
-      const sep = url.includes('?') ? '&' : '?';
-      return `${url}${sep}t=${Date.now()}`;
-    }
-
-    async function loadJSON(path, { cacheBust = false } = {}) {
-      const url = cacheBust ? withCacheBust(path) : path;
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) return null;
-      return res.json();
-    }
-
-    function isPublicPreviewTitle(title) {
-      if (!title) return false;
-      // Match both "[Public Preview]" and "[Preview]" (case-insensitive, tolerant of spaces)
-      return /\[\s*(?:public\s+)?preview\s*\]/i.test(String(title));
-    }
-
-    function computeLearnAlignmentFiltered(data, map, includeItemFn) {
-      const categories = (map && map.category_order) || [];
-      const links = (map && map.category_links) || {};
-      const srcMap = normalizeKeyedMap(map && map.source_to_category);
-      const paMap = normalizeKeyedMap(map && map.product_area_to_category);
-
-      const features = Array.isArray(data && data.features) ? data.features : null;
-      if (features) {
-        const byCat = {};
-        features.forEach(f => {
-          const title = (f && f.title) ? String(f.title) : '';
-          if (!title) return;
-          if (typeof includeItemFn === 'function' && !includeItemFn(title, f)) return;
-
-          const paKey = String((f && f.product_area) || '').toLowerCase();
-          const srcKey = String((f && f.source_type) || '').toLowerCase();
-          const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
-          if (!byCat[cat]) byCat[cat] = [];
-          const url = (f && f.source_url) ? String(f.source_url) : null;
-          byCat[cat].push({ title, url });
-        });
-
-        // Deduplicate + stable ordering
-        Object.keys(byCat).forEach(cat => {
-          const seen = new Set();
-          byCat[cat] = byCat[cat].filter(t => {
-            const key = String(t && t.title ? t.title : t).toLowerCase();
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-          });
-        });
-
-        const result = categories.map(cat => ({
-          name: cat,
-          count: (byCat[cat] || []).length,
-          items: (byCat[cat] || []),
-          link: links[cat] || null
-        }));
-        Object.keys(byCat).forEach(k => {
-          if (!categories.includes(k)) result.push({ name: k, count: byCat[k].length, items: byCat[k], link: links[k] || null });
-        });
-        return result.sort((a, b) => {
-          const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
-          if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
-          return (b.count || 0) - (a.count || 0);
-        });
+        return '';
       }
 
-      // Back-compat: if features aren't included in dashboard.json, we can't split by title.
-      return null;
-    }
+      const EXEC_SUMMARY_CARD_COLORS = {
+        Overview: '#DDE9F0',
+        'Total Features': '#D1E6FB',
+        'Primary Source': '#DCE9FB',
+        'Coverage Breadth': '#D1E6FB',
+        'Focus Area': '#D1E6FB',
+        'Product Coverage': '#DCE9FB',
+        Status: '#DDE9F0',
+      };
 
-    function computeLearnAlignment(data, map) {
-      const categories = (map && map.category_order) || [];
-      const links = (map && map.category_links) || {};
-      const srcMap = normalizeKeyedMap(map && map.source_to_category);
-      const paMap = normalizeKeyedMap(map && map.product_area_to_category);
+      function buildExecutiveSummaryHtml(summaryCards) {
+        let html = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
 
-      const features = Array.isArray(data && data.features) ? data.features : null;
-      if (features) {
-        const byCat = {};
-        features.forEach(f => {
-          const title = (f && f.title) ? String(f.title) : '';
-          if (!title) return;
-          const paKey = String((f && f.product_area) || '').toLowerCase();
-          const srcKey = String((f && f.source_type) || '').toLowerCase();
-          const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
-          if (!byCat[cat]) byCat[cat] = [];
-          const url = (f && f.source_url) ? String(f.source_url) : null;
-          byCat[cat].push({ title, url });
-        });
+        html += '<div class="grid">';
+        html += (Array.isArray(summaryCards) ? summaryCards : []).map(c => {
+          const title = escapeHtml(c.title);
+          const value = escapeHtml(c.value);
+          const bg = EXEC_SUMMARY_CARD_COLORS[c.title] || '#fff';
+          return `
+            <div class="card" style="background:${escapeAttr(bg)};">
+              <h3>${title}</h3>
+              <p class="small" style="margin:0;">${value}</p>
+            </div>
+          `;
+        }).join('');
+        html += '</div>';
 
-        // Deduplicate + stable ordering
-        Object.keys(byCat).forEach(cat => {
-          const seen = new Set();
-          byCat[cat] = byCat[cat].filter(t => {
-            const key = String(t && t.title ? t.title : t).toLowerCase();
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-          });
-        });
-
-        const result = categories.map(cat => ({
-          name: cat,
-          count: (byCat[cat] || []).length,
-          items: (byCat[cat] || []),
-          link: links[cat] || null
-        }));
-        Object.keys(byCat).forEach(k => {
-          if (!categories.includes(k)) result.push({ name: k, count: byCat[k].length, items: byCat[k], link: links[k] || null });
-        });
-        return result.sort((a, b) => {
-          const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
-          if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
-          return (b.count || 0) - (a.count || 0);
-        });
+        // Strategic recommendation (retain existing italics + highlighting)
+        html += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>Recommendation:</strong> Review the gaps section below for prioritized action items. Monitor learn alignment to ensure documentation resources match feature distribution.</em></p>';
+        html += '</div>';
+        return html;
       }
 
-      // Back-compat: if features aren't included in dashboard.json, fall back to counts only
-      const src = safeGet(data, 'source_breakdown.sources', []);
-      const pa = safeGet(data, 'product_area_breakdown.product_areas', []);
-      const totals = {};
-
-      if (Array.isArray(src)) {
-        src.forEach(s => {
-          const key = (s.name || '').toLowerCase();
-          const cat = srcMap[key] || 'Foundational Knowledge';
-          totals[cat] = (totals[cat] || 0) + (s.count || 0);
-        });
-      }
-      if (Array.isArray(pa)) {
-        pa.forEach(p => {
-          const key = (p.name || '').toLowerCase();
-          const cat = paMap[key] || 'Foundational Knowledge';
-          totals[cat] = (totals[cat] || 0) + (p.count || 0);
-        });
+      function countFeaturesMatchingContentCheck(features, contentCheckUrl) {
+        // NOTE: Deprecated. This approach can double-count when multiple content checks share a host
+        // (e.g., github.blog/ and github.blog/changelog/). Kept for backwards compatibility.
+        return 0;
       }
 
-      const result = categories.map(cat => ({
-        name: cat,
-        count: totals[cat] || 0,
-        items: null,
-        link: links[cat] || null
-      }));
-      Object.keys(totals).forEach(k => {
-        if (!categories.includes(k)) result.push({ name: k, count: totals[k], items: null, link: links[k] || null });
-      });
-      return result.sort((a, b) => {
-        const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
-        if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
-        return (b.count || 0) - (a.count || 0);
-      });
-    }
-
-    function renderSourceBreakdownWithLinks(tbodyEl, sources, map) {
-      tbodyEl.innerHTML = '';
-      if (!Array.isArray(sources) || !sources.length) return;
-
-      const srcMap = (map && map.source_to_category) || {};
-      const links = (map && map.category_links) || {};
-
-      const rowsHtml = sources.map(s => {
-        const name = s.name || '';
-        const count = s.count || 0;
-        const cat = srcMap[name.toLowerCase()];
-        const href = cat ? links[cat] : null;
-        const countCell = href
-          ? `<a href="${href}" target="_blank" rel="noopener" title="Open recommended learning path for ${cat}">${count}</a>`
-          : String(count);
-        return `<tr><td>${name}</td><td>${countCell}</td></tr>`;
-      }).join('');
-
-      tbodyEl.innerHTML = rowsHtml;
-    }
-
-    function formatLocalTime(d) {
-      try {
-        return new Intl.DateTimeFormat(undefined, {
-          year: 'numeric', month: '2-digit', day: '2-digit',
-          hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }).format(d);
-      } catch {
-        return d.toISOString();
-      }
-    }
-
-    async function loadDashboard({ cacheBust = false } = {}) {
-      const statusEl = document.getElementById('status');
-      const refreshBtn = document.getElementById('refreshBtn');
-      const lastRefreshEl = document.getElementById('lastRefresh');
-      if (refreshBtn) refreshBtn.disabled = true;
-      if (lastRefreshEl) lastRefreshEl.textContent = '';
-
-      const kpisEl = document.getElementById('kpis');
-      const kpiGridEl = document.getElementById('kpiGrid');
-
-      const summaryEl = document.getElementById('summary');
-      const summaryContentEl = document.getElementById('summaryContent');
-
-      const featuresGapsEl = document.getElementById('featuresGaps');
-      const featuresGapsContentEl = document.getElementById('featuresGapsContent');
-
-      const timeSeriesEl = document.getElementById('timeSeries');
-      const timeSeriesBodyEl = document.querySelector('#timeSeriesTable tbody');
-
-      const sourceBreakdownEl = document.getElementById('sourceBreakdown');
-      const sourceBreakdownBodyEl = document.querySelector('#sourceBreakdownTable tbody');
-
-      const productAreaBreakdownEl = document.getElementById('productAreaBreakdown');
-      const productAreaBreakdownBodyEl = document.querySelector('#productAreaBreakdownTable tbody');
-
-      const executiveEl = document.getElementById('executive');
-      const executiveContentEl = document.getElementById('executiveContent');
-      const gapsSectionEl = document.getElementById('gapsSection');
-      const gapsBodyEl = document.querySelector('#gapsTable tbody');
-      const immediateStepsEl = document.getElementById('immediateSteps');
-
-      const learnAlignmentEl = document.getElementById('learnAlignment');
-      const learnGridEl = document.getElementById('learnGrid');
-
-      const learnAlignmentPublicPreviewEl = document.getElementById('learnAlignmentPublicPreview');
-      const learnGridPublicPreviewEl = document.getElementById('learnGridPublicPreview');
-
-      const rawEl = document.getElementById('raw');
-      const rawJsonEl = document.getElementById('rawJson');
-      const toggleRawEl = document.getElementById('toggleRaw');
-
-      try {
-        const [data, map] = await Promise.all([
-          loadJSON('reports/dashboard.json', { cacheBust }),
-          loadJSON('reports/learn_alignment_map.json', { cacheBust })
-        ]);
-
-        if (!data) {
-          statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
-          if (refreshBtn) refreshBtn.disabled = false;
-          return;
-        }
-        statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
-        if (lastRefreshEl) lastRefreshEl.textContent = `Last refreshed: ${formatLocalTime(new Date())}`;
-
-        rawJsonEl.textContent = JSON.stringify(data, null, 2);
-        if (toggleRawEl) {
-          toggleRawEl.onclick = (e) => {
-            e.preventDefault();
-            rawEl.hidden = !rawEl.hidden;
-            toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
+      function parseContentCheckUrl(url) {
+        if (!url) return null;
+        try {
+          const u = new URL(String(url), window.location.href);
+          return {
+            href: u.href,
+            origin: u.origin,
+            host: (u.hostname || '').toLowerCase(),
+            pathname: u.pathname || '/',
+            pathParts: (u.pathname || '').split('/').filter(Boolean),
           };
+        } catch {
+          return null;
+        }
+      }
+
+      function allocateFeaturesToContentChecks(features, checks) {
+        const counts = new Array(Array.isArray(checks) ? checks.length : 0).fill(0);
+        if (!Array.isArray(features) || features.length === 0 || !Array.isArray(checks) || checks.length === 0) {
+          return { counts, matchedTotal: 0, unmatchedTotal: Array.isArray(features) ? features.length : 0 };
         }
 
-        // Summary
-        const generatedAt = safeGet(data, 'generated_at', null);
-        const totalFeatures = safeGet(data, 'summary.total_features', null);
-        const tsTotal = safeGet(data, 'time_series.total', null);
-        const sources = safeGet(data, 'source_breakdown.sources', []);
-        const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
-        const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
+        let matchedTotal = 0;
+        let unmatchedTotal = 0;
 
-        // KPI strip (exec-friendly)
-        const now = new Date();
-        const hasFeaturesPayload = Array.isArray(data.features);
-        const features = hasFeaturesPayload ? data.features : null;
+        for (const f of features) {
+          const href = f && (f.source_url || f.url);
+          if (!href) { unmatchedTotal += 1; continue; }
 
-        // Feature window counts (7d / 30d) + deltas vs prior window
-        // If dashboard.json doesn't include data.features, show n/a (not 0).
-        const new7 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now, days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const prev7 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now: daysAgo(now, 7), days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const delta7 = (Number.isFinite(new7) && Number.isFinite(prev7)) ? (new7 - prev7) : null;
+          let u;
+          try {
+            u = new URL(String(href), window.location.href);
+          } catch {
+            unmatchedTotal += 1;
+            continue;
+          }
 
-        const new30 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now, days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const prev30 = hasFeaturesPayload
-          ? countItemsInWindow(features, { now: daysAgo(now, 30), days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
-          : null;
-        const delta30 = (Number.isFinite(new30) && Number.isFinite(prev30)) ? (new30 - prev30) : null;
+          const host = (u.hostname || '').toLowerCase();
+          const path = u.pathname || '/';
 
-        // Gap counts (no delta unless timestamps exist)
-        const gapCounts = gaps.reduce((acc, g) => {
-          const level = String((g && g.impact) || 'unknown').toLowerCase();
+          let bestIdx = -1;
+          let bestScore = -1;
+
+          for (let i = 0; i < checks.length; i += 1) {
+            const pu = checks[i] && checks[i].parsed;
+            if (!pu) continue;
+
+            // Blog: match by host + path prefix; choose most specific (longest path)
+            if ((pu.host === 'github.blog' || pu.host.endsWith('.github.blog'))
+              && (host === 'github.blog' || host.endsWith('.github.blog'))
+              && path.startsWith(pu.pathname)) {
+              const score = pu.pathname.length;
+              if (score > bestScore) { bestScore = score; bestIdx = i; }
+              continue;
+            }
+
+            // GitHub repo: https://github.com/{owner}/{repo} prefix match
+            if (pu.host === 'github.com' && host === 'github.com' && pu.pathParts.length >= 2) {
+              const repoPrefix = `/${pu.pathParts[0]}/${pu.pathParts[1]}`;
+              if (path.startsWith(repoPrefix)) {
+                const score = repoPrefix.length;
+                if (score > bestScore) { bestScore = score; bestIdx = i; }
+              }
+              continue;
+            }
+
+            // Generic: same host + path prefix
+            if (pu.host === host && path.startsWith(pu.pathname)) {
+              const score = pu.pathname.length;
+              if (score > bestScore) { bestScore = score; bestIdx = i; }
+            }
+          }
+
+          if (bestIdx >= 0) {
+            counts[bestIdx] += 1;
+            matchedTotal += 1;
+          } else {
+            unmatchedTotal += 1;
+          }
+        }
+
+        return { counts, matchedTotal, unmatchedTotal };
+      }
+
+      function safeGet(obj, path, fallback = undefined) {
+        try { return path.split('.').reduce((o, k) => (o && k in o ? o[k] : undefined), obj) ?? fallback; }
+        catch { return fallback; }
+      }
+
+      function normalizeKeyedMap(obj) {
+        const out = {};
+        if (!obj || typeof obj !== 'object') return out;
+        Object.keys(obj).forEach(k => {
+          out[String(k).toLowerCase()] = obj[k];
+        });
+        return out;
+      }
+
+      function renderTableRows(tbodyEl, rows, columns) {
+        tbodyEl.innerHTML = '';
+        if (!Array.isArray(rows) || rows.length === 0) return;
+        const html = rows.map(row => '<tr>' + columns.map(col => `<td>${String(safeGet(row, col, ''))}</td>`).join('') + '</tr>').join('');
+        tbodyEl.innerHTML = html;
+      }
+      function formatISO(ts) { return ts || ''; }
+
+      function parseDateSafe(value) {
+        if (!value) return null;
+        const d = new Date(value);
+        return Number.isFinite(d.getTime()) ? d : null;
+      }
+
+      function startOfDay(d) {
+        const out = new Date(d);
+        out.setHours(0, 0, 0, 0);
+        return out;
+      }
+
+      function daysAgo(d, days) {
+        const out = new Date(d);
+        out.setDate(out.getDate() - days);
+        return out;
+      }
+
+      function countItemsInWindow(items, { now, days, dateKeys }) {
+        if (!Array.isArray(items) || !items.length) return 0;
+        const end = now;
+        const start = daysAgo(end, days);
+        let count = 0;
+        for (const item of items) {
+          let dt = null;
+          for (const k of dateKeys) {
+            dt = parseDateSafe(item && item[k]);
+            if (dt) break;
+          }
+          if (!dt) continue;
+          if (dt >= start && dt <= end) count += 1;
+        }
+        return count;
+      }
+
+      function formatDelta(delta) {
+        if (delta === null || delta === undefined) return 'n/a';
+        if (delta === 0) return '0';
+        return (delta > 0 ? `+${delta}` : String(delta));
+      }
+
+      function statusFromSignals({ highGaps, totalGaps, stale }) {
+        if (stale) return { label: 'Needs attention', className: 'error', reason: 'Data is stale' };
+        if ((highGaps || 0) > 0) return { label: 'At risk', className: 'error', reason: 'High-impact gaps present' };
+        if ((totalGaps || 0) > 0) return { label: 'Watch', className: '', reason: 'Gaps present' };
+        return { label: 'On track', className: 'ok', reason: 'No gaps detected' };
+      }
+
+      function renderKpiCards(kpiGridEl, cards) {
+        if (!kpiGridEl) return;
+        kpiGridEl.innerHTML = (Array.isArray(cards) ? cards : []).map(c => {
+          const title = escapeHtml(c.title || '');
+          const value = escapeHtml(c.value || '');
+          const subtitle = c.subtitle ? `<p class="muted small" style="margin:0.25rem 0 0;">${escapeHtml(c.subtitle)}</p>` : '';
+          const extra = c.extraHtml ? `<div class="small" style="margin-top:0.5rem;">${c.extraHtml}</div>` : '';
+          const valueClass = c.valueClassName ? ` ${c.valueClassName}` : '';
+          return `
+            <div class="card">
+              <h3>${title}</h3>
+              <p style="margin:0;"><strong class="${valueClass.trim()}">${value}</strong></p>
+              ${subtitle}
+              ${extra}
+            </div>
+          `;
+        }).join('');
+      }
+
+      function buildImmediateSteps(gaps) {
+        if (!Array.isArray(gaps) || gaps.length === 0) {
+          return '<p class="muted">No gaps detected. No immediate actions required.</p>';
+        }
+        const total = gaps.length;
+        const impacts = gaps.reduce((acc, g) => {
+          const level = (g.impact || 'unknown').toLowerCase();
           acc[level] = (acc[level] || 0) + 1;
           return acc;
         }, {});
-        const highGaps = gapCounts.high || 0;
-        const medGaps = gapCounts.medium || 0;
-        const lowGaps = gapCounts.low || 0;
-        const totalGaps = gaps.length;
+        const high = impacts.high || 0;
+        const medium = impacts.medium || 0;
+        const low = impacts.low || 0;
 
-        // Data freshness + overall status
-        const genDate = parseDateSafe(generatedAt);
-        const freshnessHours = genDate ? Math.max(0, (now.getTime() - genDate.getTime()) / 36e5) : null;
-        const stale = freshnessHours !== null ? freshnessHours > 72 : false; // 3 days
-        const status = statusFromSignals({ highGaps, totalGaps, stale });
+        let bullets = '<ul>';
+        if (high) bullets += `<li>Prioritize ${high} high-impact gap(s): create/assign issues today.</li>`;
+        if (medium) bullets += `<li>Schedule remediation for ${medium} medium-impact gap(s) within the next sprint.</li>`;
+        if (low) bullets += `<li>Track ${low} low-impact gap(s) for opportunistic fixes.</li>`;
+        bullets += '<li>Verify monitoring coverage for affected product areas and sources.</li>';
+        bullets += '</ul>';
 
-        const freshnessText = (freshnessHours === null)
-          ? 'Unknown'
-          : (freshnessHours < 48
-              ? `${Math.round(freshnessHours)}h ago`
-              : `${Math.round(freshnessHours / 24)}d ago`);
-
-        const cards = [
-          {
-            title: 'New items (7d)',
-            value: hasFeaturesPayload ? `${new7} (Δ ${formatDelta(delta7)})` : 'n/a',
-            subtitle: hasFeaturesPayload ? 'Change vs previous 7 days' : 'Requires data.features in dashboard.json',
-          },
-          {
-            title: 'New items (30d)',
-            value: hasFeaturesPayload ? `${new30} (Δ ${formatDelta(delta30)})` : 'n/a',
-            subtitle: hasFeaturesPayload ? 'Change vs previous 30 days' : 'Requires data.features in dashboard.json',
-          },
-          {
-            title: 'Gaps (H / M / L)',
-            value: `${highGaps} / ${medGaps} / ${lowGaps}`,
-            subtitle: `Total gaps: ${totalGaps}`,
-            valueClassName: highGaps > 0 ? 'error' : (totalGaps > 0 ? '' : 'ok'),
-          },
-          {
-            title: 'Data freshness',
-            value: freshnessText,
-            subtitle: generatedAt ? `Generated at: ${formatISO(generatedAt)}` : 'generated_at not provided',
-            valueClassName: stale ? 'error' : 'ok',
-          },
-          {
-            title: 'Overall status',
-            value: status.label,
-            subtitle: status.reason,
-            valueClassName: status.className,
-          }
-        ];
-        renderKpiCards(kpiGridEl, cards);
-        if (kpisEl) kpisEl.hidden = false;
-        
-        let summaryHtml = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
-        summaryHtml += '<h3 style="margin-top:0;">Executive Summary</h3>';
-        
-        // Key metrics
-        summaryHtml += '<p style="margin-bottom:0.5rem;"><strong>Overview:</strong> This dashboard provides real-time monitoring of feature coverage and documentation gaps across Microsoft products and services.</p>';
-        
-        if (generatedAt) summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Report Date:</strong> ${formatISO(generatedAt)}</p>`;
-        
-        if (totalFeatures !== null || tsTotal !== null) {
-          const displayTotal = totalFeatures !== null ? totalFeatures : tsTotal;
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Total Tracked Features:</strong> ${displayTotal} items currently monitored across all sources and product areas</p>`;
-        }
-        
-        // Source coverage
-        if (Array.isArray(sources) && sources.length) {
-          const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Primary Source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0} items) - represents the largest contributor to tracked features</p>`;
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Coverage Breadth:</strong> ${sources.length} distinct source(s) monitored</p>`;
-        }
-        
-        // Product area insights
-        if (Array.isArray(productAreas) && productAreas.length) {
-          const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Focus Area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0} items) - highest concentration of tracked features</p>`;
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong>Product Coverage:</strong> ${productAreas.length} product area(s) under active monitoring</p>`;
-        }
-        
-        // Gap analysis
-        const gapCount = gaps.length;
-        if (gapCount > 0) {
-          const highImpact = gaps.filter(g => (g.impact || '').toLowerCase() === 'high').length;
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong class="error">Action Required:</strong> ${gapCount} gap(s) identified`;
-          if (highImpact > 0) summaryHtml += ` (${highImpact} high-impact)`;
-          summaryHtml += ` requiring immediate attention</p>`;
-        } else {
-          summaryHtml += `<p style="margin-bottom:0.5rem;"><strong class="ok">Status:</strong> No critical gaps detected - feature coverage is comprehensive</p>`;
-        }
-        
-        // Strategic recommendation
-        summaryHtml += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>Recommendation:</strong> Review the gaps section below for prioritized action items. Monitor learn alignment to ensure documentation resources match feature distribution.</em></p>';
-        
-        summaryHtml += '</div>';
-        
-        // Basic metrics (kept for compatibility)
-        if (generatedAt) summaryHtml += `<p><strong>Generated at:</strong> ${formatISO(generatedAt)}</p>`;
-        if (totalFeatures !== null) summaryHtml += `<p><strong>Total features:</strong> ${totalFeatures}</p>`;
-        
-        summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
-        summaryEl.hidden = false;
-
-        // Features/Gaps tags
-        const featuresForTags = Array.isArray(data.features) ? data.features : null;
-        if (featuresForTags || gaps.length) {
-          let fgHtml = '';
-          if (featuresForTags) fgHtml += `<span class="tag">Features: ${featuresForTags.length}</span>`;
-          if (gaps.length) fgHtml += `<span class="tag">Gaps: ${gaps.length}</span>`;
-          featuresGapsContentEl.innerHTML = fgHtml;
-          featuresGapsEl.hidden = false;
-        }
-
-        // Executive summary
-        let execHtml = '';
-        if (tsTotal !== null) execHtml += `<p><strong>Total detected items (time series):</strong> ${tsTotal}</p>`;
-        if (Array.isArray(sources) && sources.length) {
-          const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
-          execHtml += `<p><strong>Top source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0})</p>`;
-        }
-        if (Array.isArray(productAreas) && productAreas.length) {
-          const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
-          execHtml += `<p><strong>Top product area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0})</p>`;
-        }
-        executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
-        executiveEl.hidden = false;
-
-        // Gaps section: always visible with empty state
-        gapsSectionEl.hidden = false;
-        if (gaps.length > 0) {
-          renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
-        } else {
-          gapsBodyEl.innerHTML = '<tr><td colspan="3" class="muted">No gaps to display</td></tr>';
-        }
-        immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
-
-        // Time series table
-        const tsRows = safeGet(data, 'time_series.time_series', []);
-        if (Array.isArray(tsRows) && tsRows.length) {
-          renderTableRows(timeSeriesBodyEl, tsRows, ['date', 'count', 'cumulative']);
-          timeSeriesEl.hidden = false;
-        }
-
-        // Source breakdown table (counts link to Learn paths when available)
-        if (Array.isArray(sources) && sources.length) {
-          renderSourceBreakdownWithLinks(sourceBreakdownBodyEl, sources, map);
-          sourceBreakdownEl.hidden = false;
-        }
-
-        // Product area breakdown table
-        if (Array.isArray(productAreas) && productAreas.length) {
-          renderTableRows(productAreaBreakdownBodyEl, productAreas, ['name', 'count']);
-          productAreaBreakdownEl.hidden = false;
-        }
-
-        // Learn Alignment cards
-        if (map) {
-          const nonPreviewCards = computeLearnAlignmentFiltered(data, map, (title) => !isPublicPreviewTitle(title))
-            || computeLearnAlignment(data, map);
-          learnGridEl.innerHTML = nonPreviewCards.map(c => `
-            <div class="card">
-              <h3>${c.name}</h3>
-              <p><strong>Items:</strong> ${c.count}</p>
-              ${Array.isArray(c.items)
-                ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
-                    const title = (item && typeof item === 'object') ? item.title : item;
-                    const href = (item && typeof item === 'object') ? item.url : null;
-                    const safeTitle = escapeHtml(title);
-                    return href
-                      ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
-                      : `<li>${safeTitle}</li>`;
-                  }).join('')}</ul>`
-                : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
-              ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
-            </div>
-          `).join('');
-          learnAlignmentEl.hidden = false;
-
-          const previewCards = computeLearnAlignmentFiltered(data, map, (title) => isPublicPreviewTitle(title));
-          if (previewCards) {
-            const anyPreviewItems = previewCards.some(c => (c.count || 0) > 0);
-            learnGridPublicPreviewEl.innerHTML = previewCards
-              .filter(c => (c.count || 0) > 0)
-              .map(c => `
-                <div class="card">
-                  <h3>${c.name}</h3>
-                  <p><strong>Items:</strong> ${c.count}</p>
-                  ${Array.isArray(c.items)
-                    ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
-                        const title = (item && typeof item === 'object') ? item.title : item;
-                        const href = (item && typeof item === 'object') ? item.url : null;
-                        const safeTitle = escapeHtml(title);
-                        return href
-                          ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}</a></li>`
-                          : `<li>${safeTitle}</li>`;
-                      }).join('')}</ul>`
-                    : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
-                  ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
-                </div>
-              `).join('');
-
-            learnAlignmentPublicPreviewEl.hidden = !anyPreviewItems;
-          } else {
-            // If dashboard.json doesn't include features titles, we can't split by '[Public Preview]'.
-            learnGridPublicPreviewEl.innerHTML = '<p class="muted small">Public Preview split requires item titles in the dashboard payload (data.features). Run the pipeline to regenerate docs/reports/dashboard.json.</p>';
-            learnAlignmentPublicPreviewEl.hidden = false;
-          }
-        }
-
-        if (refreshBtn) refreshBtn.disabled = false;
-      } catch (e) {
-        statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
-        const refreshBtn = document.getElementById('refreshBtn');
-        if (refreshBtn) refreshBtn.disabled = false;
+        return `
+          <h4>Immediate Steps</h4>
+          <p>Detected ${total} gap(s). Recommended actions:</p>
+          ${bullets}
+        `;
       }
-    }
 
-    (function wireRefresh() {
-      const refreshBtn = document.getElementById('refreshBtn');
-      if (!refreshBtn) return;
-      refreshBtn.addEventListener('click', () => {
-        loadDashboard({ cacheBust: true });
-      });
-    })();
+      function withCacheBust(url) {
+        const sep = url.includes('?') ? '&' : '?';
+        return `${url}${sep}t=${Date.now()}`;
+      }
 
-    loadDashboard();
-  </script>
-</body>
-</html>
+      async function loadJSON(path, { cacheBust = false } = {}) {
+        const url = cacheBust ? withCacheBust(path) : path;
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) return null;
+        return res.json();
+      }
+
+      function isPublicPreviewTitle(title) {
+        if (!title) return false;
+        // Match both "[Public Preview]" and "[Preview]" (case-insensitive, tolerant of spaces)
+        return /\[\s*(?:public\s+)?preview\s*\]/i.test(String(title));
+      }
+
+      function computeLearnAlignmentFiltered(data, map, includeItemFn) {
+        const categories = (map && map.category_order) || [];
+        const links = (map && map.category_links) || {};
+        const srcMap = normalizeKeyedMap(map && map.source_to_category);
+        const paMap = normalizeKeyedMap(map && map.product_area_to_category);
+
+        const features = Array.isArray(data && data.features) ? data.features : null;
+        if (features) {
+          const byCat = {};
+          features.forEach(f => {
+            const title = (f && f.title) ? String(f.title) : '';
+            if (!title) return;
+            if (typeof includeItemFn === 'function' && !includeItemFn(title, f)) return;
+
+            const paKey = String((f && f.product_area) || '').toLowerCase();
+            const srcKey = String((f && f.source_type) || '').toLowerCase();
+            const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
+            if (!byCat[cat]) byCat[cat] = [];
+            const url = (f && f.source_url) ? String(f.source_url) : null;
+            byCat[cat].push({ title, url });
+          });
+
+          // Deduplicate + stable ordering
+          Object.keys(byCat).forEach(cat => {
+            const seen = new Set();
+            byCat[cat] = byCat[cat].filter(t => {
+              const key = String(t && t.title ? t.title : t).toLowerCase();
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            });
+          });
+
+          const result = categories.map(cat => ({
+            name: cat,
+            count: (byCat[cat] || []).length,
+            items: (byCat[cat] || []),
+            link: links[cat] || null
+          }));
+          Object.keys(byCat).forEach(k => {
+            if (!categories.includes(k)) result.push({ name: k, count: byCat[k].length, items: byCat[k], link: links[k] || null });
+          });
+          return result.sort((a, b) => {
+            const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
+            if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
+            return (b.count || 0) - (a.count || 0);
+          });
+        }
+
+        // Back-compat: if features aren't included in dashboard.json, we can't split by title.
+        return null;
+      }
+
+      function computeLearnAlignment(data, map) {
+        const categories = (map && map.category_order) || [];
+        const links = (map && map.category_links) || {};
+        const srcMap = normalizeKeyedMap(map && map.source_to_category);
+        const paMap = normalizeKeyedMap(map && map.product_area_to_category);
+
+        const features = Array.isArray(data && data.features) ? data.features : null;
+        if (features) {
+          const byCat = {};
+          features.forEach(f => {
+            const title = (f && f.title) ? String(f.title) : '';
+            if (!title) return;
+            const paKey = String((f && f.product_area) || '').toLowerCase();
+            const srcKey = String((f && f.source_type) || '').toLowerCase();
+            const cat = paMap[paKey] || srcMap[srcKey] || 'Foundational Knowledge';
+            if (!byCat[cat]) byCat[cat] = [];
+            const url = (f && f.source_url) ? String(f.source_url) : null;
+            byCat[cat].push({ title, url });
+          });
+
+          // Deduplicate + stable ordering
+          Object.keys(byCat).forEach(cat => {
+            const seen = new Set();
+            byCat[cat] = byCat[cat].filter(t => {
+              const key = String(t && t.title ? t.title : t).toLowerCase();
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            });
+          });
+
+          const result = categories.map(cat => ({
+            name: cat,
+            count: (byCat[cat] || []).length,
+            items: (byCat[cat] || []),
+            link: links[cat] || null
+          }));
+          Object.keys(byCat).forEach(k => {
+            if (!categories.includes(k)) result.push({ name: k, count: byCat[k].length, items: byCat[k], link: links[k] || null });
+          });
+          return result.sort((a, b) => {
+            const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
+            if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
+            return (b.count || 0) - (a.count || 0);
+          });
+        }
+
+        // Back-compat: if features aren't included in dashboard.json, fall back to counts only
+        const src = safeGet(data, 'source_breakdown.sources', []);
+        const pa = safeGet(data, 'product_area_breakdown.product_areas', []);
+        const totals = {};
+
+        if (Array.isArray(src)) {
+          src.forEach(s => {
+            const key = (s.name || '').toLowerCase();
+            const cat = srcMap[key] || 'Foundational Knowledge';
+            totals[cat] = (totals[cat] || 0) + (s.count || 0);
+          });
+        }
+        if (Array.isArray(pa)) {
+          pa.forEach(p => {
+            const key = (p.name || '').toLowerCase();
+            const cat = paMap[key] || 'Foundational Knowledge';
+            totals[cat] = (totals[cat] || 0) + (p.count || 0);
+          });
+        }
+
+        const result = categories.map(cat => ({
+          name: cat,
+          count: totals[cat] || 0,
+          items: null,
+          link: links[cat] || null
+        }));
+        Object.keys(totals).forEach(k => {
+          if (!categories.includes(k)) result.push({ name: k, count: totals[k], items: null, link: links[k] || null });
+        });
+        return result.sort((a, b) => {
+          const ai = categories.indexOf(a.name); const bi = categories.indexOf(b.name);
+          if (ai !== -1 && bi !== -1 && ai !== bi) return ai - bi;
+          return (b.count || 0) - (a.count || 0);
+        });
+      }
+
+      function renderSourceBreakdownWithLinks(tbodyEl, sources, map) {
+        tbodyEl.innerHTML = '';
+        if (!Array.isArray(sources) || !sources.length) return;
+
+        const srcMap = (map && map.source_to_category) || {};
+        const links = (map && map.category_links) || {};
+
+        const rowsHtml = sources.map(s => {
+          const name = s.name || '';
+          const count = s.count || 0;
+          const cat = srcMap[name.toLowerCase()];
+          const href = cat ? links[cat] : null;
+          const countCell = href
+            ? `<a href="${href}" target="_blank" rel="noopener" title="Open recommended learning path for ${cat}">${count}</a>`
+            : String(count);
+          return `<tr><td>${name}</td><td>${countCell}</td></tr>`;
+        }).join('');
+
+        tbodyEl.innerHTML = rowsHtml;
+      }
+
+      function renderContentChecks(tbodyEl, checks) {
+        tbodyEl.innerHTML = '';
+        if (!Array.isArray(checks) || !checks.length) return;
+
+        const contentCheckNameMap = {
+          'github_blog': 'GitHub blog',
+          'github_blog_product_news': 'GitHub product news',
+          'github_blog_changelog': 'GitHub changelog',
+          'github_newsroom_press_releases': 'GitHub press releases',
+          'github_roadmap_homepage': 'GitHub roadmap',
+          'github_resources_enterprise_content_roundup_september': 'GitHub September roundup'
+        };
+
+        const rowsHtml = checks.map(c => {
+          const rawName = (c && c.name) ? String(c.name) : '';
+          const rawKey = (c && c.key) ? String(c.key) : '';
+          const friendly = rawName || contentCheckNameMap[rawKey] || contentCheckNameMap[rawName] || rawKey;
+          const name = escapeHtml(friendly || '');
+          const url = (c && c.url) ? String(c.url) : '';
+          const ok = !!(c && c.ok);
+          const statusCode = (c && (c.status_code !== undefined && c.status_code !== null)) ? String(c.status_code) : '';
+          const statusText = ok ? `OK${statusCode ? ' (' + statusCode + ')' : ''}` : `ERROR${statusCode ? ' (' + statusCode + ')' : ''}`;
+          const statusClass = ok ? 'ok' : 'error';
+
+          const changed = (c && c.changed !== undefined && c.changed !== null) ? (c.changed ? 'yes' : 'no') : 'n/a';
+          const checkedAt = escapeHtml((c && c.checked_at) ? String(c.checked_at) : '');
+
+          const urlCell = url
+            ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(url)}</a>`
+            : '';
+
+          return `<tr>`
+            + `<td>${name}</td>`
+            + `<td>${urlCell}</td>`
+            + `<td class="${statusClass}">${escapeHtml(statusText)}</td>`
+            + `<td>${escapeHtml(changed)}</td>`
+            + `<td>${checkedAt}</td>`
+            + `</tr>`;
+        }).join('');
+
+        tbodyEl.innerHTML = rowsHtml;
+      }
+
+      function formatLocalTime(d) {
+        try {
+          return new Intl.DateTimeFormat(undefined, {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+          }).format(d);
+        } catch {
+          return d.toISOString();
+        }
+      }
+
+      async function loadDashboard({ cacheBust = false } = {}) {
+        const statusEl = document.getElementById('status');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const lastRefreshEl = document.getElementById('lastRefresh');
+        const featuresTagEl = document.getElementById('featuresTag');
+        const contentChecksTagsEl = document.getElementById('contentChecksTags');
+        if (refreshBtn) refreshBtn.disabled = true;
+        if (lastRefreshEl) lastRefreshEl.textContent = '';
+        if (featuresTagEl) featuresTagEl.hidden = true;
+        if (contentChecksTagsEl) {
+          contentChecksTagsEl.innerHTML = '';
+          contentChecksTagsEl.hidden = true;
+        }
+
+        const kpisEl = document.getElementById('kpis');
+        const kpiGridEl = document.getElementById('kpiGrid');
+
+        const summaryEl = document.getElementById('summary');
+        const summaryContentEl = document.getElementById('summaryContent');
+
+        const timeSeriesEl = document.getElementById('timeSeries');
+        const timeSeriesBodyEl = document.querySelector('#timeSeriesTable tbody');
+
+        const sourceBreakdownEl = document.getElementById('sourceBreakdown');
+        const sourceBreakdownBodyEl = document.querySelector('#sourceBreakdownTable tbody');
+
+        const productAreaBreakdownEl = document.getElementById('productAreaBreakdown');
+        const productAreaBreakdownBodyEl = document.querySelector('#productAreaBreakdownTable tbody');
+
+        const contentChecksEl = document.getElementById('contentChecks');
+        const contentChecksBodyEl = document.querySelector('#contentChecksTable tbody');
+
+        const executiveEl = document.getElementById('executive');
+        const executiveContentEl = document.getElementById('executiveContent');
+        const gapsSectionEl = document.getElementById('gapsSection');
+        const gapsBodyEl = document.querySelector('#gapsTable tbody');
+        const immediateStepsEl = document.getElementById('immediateSteps');
+
+        const learnAlignmentEl = document.getElementById('learnAlignment');
+        const learnGridEl = document.getElementById('learnGrid');
+
+        const learnAlignmentPublicPreviewEl = document.getElementById('learnAlignmentPublicPreview');
+        const learnGridPublicPreviewEl = document.getElementById('learnGridPublicPreview');
+
+        const rawEl = document.getElementById('raw');
+        const rawJsonEl = document.getElementById('rawJson');
+        const toggleRawEl = document.getElementById('toggleRaw');
+
+        try {
+          const [data, map] = await Promise.all([
+            loadJSON('reports/dashboard.json', { cacheBust }),
+            loadJSON('reports/learn_alignment_map.json', { cacheBust })
+          ]);
+
+          if (!data) {
+            statusEl.innerHTML = `<strong class="error">dashboard.json not found</strong>. Once your pipeline runs, it will copy reports/dashboard.json into docs/reports/dashboard.json.`;
+            if (refreshBtn) refreshBtn.disabled = false;
+            return;
+          }
+          statusEl.innerHTML = `<strong class="ok">dashboard.json loaded</strong>`;
+          if (lastRefreshEl) lastRefreshEl.textContent = `Last refreshed: ${formatLocalTime(new Date())}`;
+
+          rawJsonEl.textContent = JSON.stringify(data, null, 2);
+          if (toggleRawEl) {
+            toggleRawEl.onclick = (e) => {
+              e.preventDefault();
+              rawEl.hidden = !rawEl.hidden;
+              toggleRawEl.textContent = rawEl.hidden ? 'Show raw dashboard.json' : 'Hide raw dashboard.json';
+            };
+          }
+
+          // Summary
+          const generatedAt = safeGet(data, 'generated_at', null);
+          const totalFeatures = safeGet(data, 'summary.total_features', null);
+          const tsTotal = safeGet(data, 'time_series.total', null);
+          const sources = safeGet(data, 'source_breakdown.sources', []);
+          const productAreas = safeGet(data, 'product_area_breakdown.product_areas', []);
+          const gaps = Array.isArray(data.gaps) ? data.gaps : []; // ensure array
+
+          // KPI strip (exec-friendly)
+          const now = new Date();
+          const hasFeaturesPayload = Array.isArray(data.features);
+          const features = hasFeaturesPayload ? data.features : null;
+
+          // Feature window counts (7d / 30d) + deltas vs prior window
+          // If dashboard.json doesn't include data.features, show n/a (not 0).
+          const new7 = hasFeaturesPayload
+            ? countItemsInWindow(features, { now, days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
+            : null;
+          const prev7 = hasFeaturesPayload
+            ? countItemsInWindow(features, { now: daysAgo(now, 7), days: 7, dateKeys: ['date_discovered', 'date', 'created_at'] })
+            : null;
+          const delta7 = (Number.isFinite(new7) && Number.isFinite(prev7)) ? (new7 - prev7) : null;
+
+          const new30 = hasFeaturesPayload
+            ? countItemsInWindow(features, { now, days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
+            : null;
+          const prev30 = hasFeaturesPayload
+            ? countItemsInWindow(features, { now: daysAgo(now, 30), days: 30, dateKeys: ['date_discovered', 'date', 'created_at'] })
+            : null;
+          const delta30 = (Number.isFinite(new30) && Number.isFinite(prev30)) ? (new30 - prev30) : null;
+
+          // Gap counts (no delta unless timestamps exist)
+          const gapCounts = gaps.reduce((acc, g) => {
+            const level = String((g && g.impact) || 'unknown').toLowerCase();
+            acc[level] = (acc[level] || 0) + 1;
+            return acc;
+          }, {});
+          const highGaps = gapCounts.high || 0;
+          const medGaps = gapCounts.medium || 0;
+          const lowGaps = gapCounts.low || 0;
+          const totalGaps = gaps.length;
+
+          // Data freshness + overall status
+          const genDate = parseDateSafe(generatedAt);
+          const freshnessHours = genDate ? Math.max(0, (now.getTime() - genDate.getTime()) / 36e5) : null;
+          const stale = freshnessHours !== null ? freshnessHours > 72 : false; // 3 days
+          const status = statusFromSignals({ highGaps, totalGaps, stale });
+
+          const freshnessText = (freshnessHours === null)
+            ? 'Unknown'
+            : (freshnessHours < 48
+                ? `${Math.round(freshnessHours)}h ago`
+                : `${Math.round(freshnessHours / 24)}d ago`);
+
+          const kpiCards = [
+            {
+              title: 'New items (7d)',
+              value: hasFeaturesPayload ? `${new7} (Δ ${formatDelta(delta7)})` : 'n/a',
+              subtitle: hasFeaturesPayload ? 'Change vs previous 7 days' : 'Requires data.features in dashboard.json',
+            },
+            {
+              title: 'New items (30d)',
+              value: hasFeaturesPayload ? `${new30} (Δ ${formatDelta(delta30)})` : 'n/a',
+              subtitle: hasFeaturesPayload ? 'Change vs previous 30 days' : 'Requires data.features in dashboard.json',
+            },
+            {
+              title: 'Gaps (H / M / L)',
+              value: `${highGaps} / ${medGaps} / ${lowGaps}`,
+              subtitle: `Total gaps: ${totalGaps}`,
+              valueClassName: highGaps > 0 ? 'error' : (totalGaps > 0 ? '' : 'ok'),
+            },
+            {
+              title: 'Data freshness',
+              value: freshnessText,
+              subtitle: generatedAt ? `Generated at: ${formatISO(generatedAt)}` : 'generated_at not provided',
+              valueClassName: stale ? 'error' : 'ok',
+            },
+            {
+              title: 'Overall status',
+              value: status.label,
+              subtitle: status.reason,
+              valueClassName: status.className,
+            }
+          ];
+          renderKpiCards(kpiGridEl, kpiCards);
+          if (kpisEl) kpisEl.hidden = false;
+
+          const contentChecks = safeGet(data, 'content_checks', []);
+
+          const displayTotal = (totalFeatures !== null || tsTotal !== null)
+            ? (totalFeatures !== null ? totalFeatures : tsTotal)
+            : null;
+
+          const topSrc = (Array.isArray(sources) && sources.length)
+            ? [...sources].sort((a, b) => (b.count || 0) - (a.count || 0))[0]
+            : null;
+
+          const topArea = (Array.isArray(productAreas) && productAreas.length)
+            ? [...productAreas].sort((a, b) => (b.count || 0) - (a.count || 0))[0]
+            : null;
+
+          const gapCount = gaps.length;
+          const highImpact = gapCount > 0
+            ? gaps.filter(g => (g.impact || '').toLowerCase() === 'high').length
+            : 0;
+
+          const summaryCards = [
+            {
+              title: 'Overview',
+              value: 'Real-time monitoring of feature coverage and documentation gaps across Microsoft products.',
+            },
+            {
+              title: 'Total Features',
+              value: displayTotal === null ? 'n/a' : `${displayTotal} items monitored across all sources`,
+            },
+            {
+              title: 'Primary Source',
+              value: topSrc ? `${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0} items), largest contributor` : 'n/a',
+            },
+            {
+              title: 'Coverage Breadth',
+              value: (Array.isArray(sources) && sources.length) ? `${sources.length} distinct sources monitored` : 'n/a',
+            },
+            {
+              title: 'Focus Area',
+              value: topArea ? `${topArea?.name || 'n/a'} (${topArea?.count ?? 0} items), highest concentration` : 'n/a',
+            },
+            {
+              title: 'Product Coverage',
+              value: (Array.isArray(productAreas) && productAreas.length) ? `${productAreas.length} product areas under active monitoring` : 'n/a',
+            },
+            {
+              title: 'Status',
+              value: gapCount > 0
+                ? `${gapCount} gap(s) identified${highImpact > 0 ? ` (${highImpact} high-impact)` : ''}, requires attention`
+                : 'No critical gaps detected, coverage comprehensive',
+            },
+          ];
+
+          const summaryHtml = buildExecutiveSummaryHtml(summaryCards);
+
+          summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
+          summaryEl.hidden = false;
+
+          // Features tag in Learn Alignment header
+          const featuresForTags = Array.isArray(data.features) ? data.features : null;
+          if (featuresTagEl && featuresForTags) {
+            featuresTagEl.textContent = `Features: ${featuresForTags.length}`;
+            featuresTagEl.hidden = false;
+          }
+
+          // Executive summary
+          let execHtml = '';
+          if (tsTotal !== null) execHtml += `<p><strong>Total detected items (time series):</strong> ${tsTotal}</p>`;
+          if (Array.isArray(sources) && sources.length) {
+            const topSrc = [...sources].sort((a,b) => (b.count||0)-(a.count||0))[0];
+            execHtml += `<p><strong>Top source:</strong> ${topSrc?.name || 'n/a'} (${topSrc?.count ?? 0})</p>`;
+          }
+          if (Array.isArray(productAreas) && productAreas.length) {
+            const topArea = [...productAreas].sort((a,b) => (b.count||0)-(a.count||0))[0];
+            execHtml += `<p><strong>Top product area:</strong> ${topArea?.name || 'n/a'} (${topArea?.count ?? 0})</p>`;
+          }
+          executiveContentEl.innerHTML = execHtml || '<p class="muted">No executive summary fields available.</p>';
+          executiveEl.hidden = false;
+
+          // Gaps section: always visible with empty state
+          gapsSectionEl.hidden = false;
+          if (gaps.length > 0) {
+            renderTableRows(gapsBodyEl, gaps, ['name', 'impact', 'area']);
+          } else {
+            gapsBodyEl.innerHTML = '<tr><td colspan="3" class="muted">No gaps to display</td></tr>';
+          }
+          immediateStepsEl.innerHTML = buildImmediateSteps(gaps);
+
+          // Time series table
+          const tsRows = safeGet(data, 'time_series.time_series', []);
+          if (Array.isArray(tsRows) && tsRows.length) {
+            renderTableRows(timeSeriesBodyEl, tsRows, ['date', 'count', 'cumulative']);
+            timeSeriesEl.hidden = false;
+          }
+
+          // Source breakdown table (counts link to Learn paths when available)
+          if (Array.isArray(sources) && sources.length) {
+            renderSourceBreakdownWithLinks(sourceBreakdownBodyEl, sources, map);
+            sourceBreakdownEl.hidden = false;
+          }
+
+          // Product area breakdown table
+          if (Array.isArray(productAreas) && productAreas.length) {
+            renderTableRows(productAreaBreakdownBodyEl, productAreas, ['name', 'count']);
+            productAreaBreakdownEl.hidden = false;
+          }
+
+          // Content checks table
+          if (Array.isArray(contentChecks) && contentChecks.length) {
+            renderContentChecks(contentChecksBodyEl, contentChecks);
+            contentChecksEl.hidden = false;
+          }
+
+          // Learn Alignment cards
+          if (map) {
+            const nonPreviewCards = computeLearnAlignmentFiltered(data, map, (title) => !isPublicPreviewTitle(title))
+              || computeLearnAlignment(data, map);
+            learnGridEl.innerHTML = nonPreviewCards.map(c => `
+              <div class="card">
+                <h3>${c.name}</h3>
+                <p><strong>Items:</strong> ${c.count}</p>
+                ${Array.isArray(c.items)
+                  ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
+                      const title = (item && typeof item === 'object') ? item.title : item;
+                      const href = (item && typeof item === 'object') ? item.url : null;
+                      const safeTitle = escapeHtml(title);
+                      const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
+                      return href
+                        ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a></li>`
+                        : `<li>${safeTitle}</li>`;
+                    }).join('')}</ul>`
+                  : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
+                ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
+              </div>
+            `).join('');
+            learnAlignmentEl.hidden = false;
+
+            const previewCards = computeLearnAlignmentFiltered(data, map, (title) => isPublicPreviewTitle(title));
+            if (previewCards) {
+              const anyPreviewItems = previewCards.some(c => (c.count || 0) > 0);
+              learnGridPublicPreviewEl.innerHTML = previewCards
+                .filter(c => (c.count || 0) > 0)
+                .map(c => `
+                  <div class="card">
+                    <h3>${c.name}</h3>
+                    <p><strong>Items:</strong> ${c.count}</p>
+                    ${Array.isArray(c.items)
+                      ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
+                          const title = (item && typeof item === 'object') ? item.title : item;
+                          const href = (item && typeof item === 'object') ? item.url : null;
+                          const safeTitle = escapeHtml(title);
+                          const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
+                          return href
+                            ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a></li>`
+                            : `<li>${safeTitle}</li>`;
+                        }).join('')}</ul>`
+                      : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
+                    ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
+                  </div>
+                `).join('');
+
+              learnAlignmentPublicPreviewEl.hidden = !anyPreviewItems;
+            } else {
+              // If dashboard.json doesn't include features titles, we can't split by '[Public Preview]'.
+              learnGridPublicPreviewEl.innerHTML = '<p class="muted small">Public Preview split requires item titles in the dashboard payload (data.features). Run the pipeline to regenerate docs/reports/dashboard.json.</p>';
+              learnAlignmentPublicPreviewEl.hidden = false;
+            }
+
+            // Consistency check: Learn Alignment totals vs features count
+            try {
+              const featuresCount = Array.isArray(data.features) ? data.features.length : null;
+              const nonPreviewTotal = Array.isArray(nonPreviewCards)
+                ? nonPreviewCards.reduce((acc, c) => acc + (Array.isArray(c && c.items) ? c.items.length : 0), 0)
+                : null;
+              const previewTotal = Array.isArray(previewCards)
+                ? previewCards.reduce((acc, c) => acc + (Array.isArray(c && c.items) ? c.items.length : 0), 0)
+                : 0;
+              const learnTotal = (nonPreviewTotal === null) ? null : (nonPreviewTotal + previewTotal);
+              if (featuresCount !== null && learnTotal !== null && featuresCount !== learnTotal) {
+                console.warn('[automatic-barnacle] Learn Alignment totals mismatch', { featuresCount, learnTotal, nonPreviewTotal, previewTotal });
+              }
+            } catch {
+              // ignore
+            }
+          }
+
+          // Content checks bubbles next to Learn Alignment heading (non-overlapping)
+          if (contentChecksTagsEl && Array.isArray(contentChecks)) {
+            const checks = contentChecks.map(c => ({
+              name: (c && c.name) ? String(c.name) : String((c && c.key) || 'Content check'),
+              url: c && c.url,
+              parsed: parseContentCheckUrl(c && c.url),
+            }));
+
+            if (checks.length) {
+              const featuresForCounts = Array.isArray(data.features) ? data.features : [];
+              const allocation = allocateFeaturesToContentChecks(featuresForCounts, checks);
+
+              contentChecksTagsEl.innerHTML = checks.map((ch, idx) => {
+                const n = ch.name;
+                const count = allocation.counts[idx] || 0;
+                return `<span class="tag">${escapeHtml(n)}: ${count}</span>`;
+              }).join('');
+              contentChecksTagsEl.hidden = false;
+
+              // Consistency check: Content Checks totals vs features count
+              try {
+                const featuresCount = Array.isArray(data.features) ? data.features.length : null;
+                if (featuresCount !== null && featuresCount !== allocation.matchedTotal) {
+                  console.warn('[automatic-barnacle] Content Checks total mismatch', {
+                    featuresCount,
+                    contentChecksTotal: allocation.matchedTotal,
+                    unmatchedTotal: allocation.unmatchedTotal,
+                  });
+                }
+              } catch {
+                // ignore
+              }
+            }
+          }
+
+          if (refreshBtn) refreshBtn.disabled = false;
+        } catch (e) {
+          statusEl.innerHTML = `<strong class="error">Error loading dashboard.json:</strong> ${e}`;
+          const refreshBtn = document.getElementById('refreshBtn');
+          if (refreshBtn) refreshBtn.disabled = false;
+        }
+      }
+
+      (function wireRefresh() {
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (!refreshBtn) return;
+        refreshBtn.addEventListener('click', () => {
+          loadDashboard({ cacheBust: true });
+        });
+      })();
+
+      loadDashboard();
+    </script>
+  </body>
+  </html>
