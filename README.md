@@ -311,10 +311,13 @@ Live preview (auto-reload on changes to `docs/index.html` and `docs/reports/*.js
 
 ```bash
 pip install -r requirements-dev.txt
-python scripts/serve_dashboard.py
+python scripts/serve_dashboard.py --host 0.0.0.0 --port 8000
 ```
 
 You can also run the VS Code task: `Dashboard: Live Preview`.
+
+If you're using Codespaces / Remote Containers and want to share the preview,
+set port 8000 visibility to **Public** in the Ports panel and use the forwarded URL.
 
 Populate `docs/reports/dashboard.json` to preview the data rendering.
 
