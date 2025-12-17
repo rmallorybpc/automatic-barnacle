@@ -99,7 +99,7 @@ class ContentChecks:
             raise RuntimeError(
                 f"Failed to load ContentChecks configuration from {config_path}"
             ) from exc
-        self.checks = (self.config.get("content_checks") or {})
+        self.checks = self.config.get("content_checks") or {}
 
     def run_all(self) -> List[ContentCheckResult]:
         results: List[ContentCheckResult] = []
@@ -184,10 +184,6 @@ class ContentChecks:
             changed = (prev_fp is not None) and (prev_fp != fp)
 
             # Persist state only on a successful check.
-            # Ensure the state directory exists before writing
-            state_dir = os.path.dirname(state_path)
-            os.makedirs(state_dir, exist_ok=True)
-            
             success = safe_write_file(
                 state_path,
                 json.dumps(
