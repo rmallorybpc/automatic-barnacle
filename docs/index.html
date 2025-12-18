@@ -211,7 +211,8 @@
         }).join('');
         html += '</div>';
 
-        // Strategic recommendation (retain existing italics + highlighting)
+        // Scan block + strategic recommendation (retain existing italics + highlighting)
+        html += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>What changed:</strong> New feature signals were ingested since the last update.<br><strong>Why it matters:</strong> Coverage and Learn alignment may drift as GitHub ships quickly.<br><strong>What we need:</strong> Confirm owners for the top gaps and prioritize updates this cycle.</em></p>';
         html += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>Recommendation:</strong> Review the gaps section below for prioritized action items. Monitor learn alignment to ensure documentation resources match feature distribution.</em></p>';
         html += '</div>';
         return html;
