@@ -25,6 +25,8 @@
       .small { font-size: 0.9rem; }
       .btn { display:inline-block; padding:0.4rem 0.65rem; border:1px solid #d0d7de; border-radius:6px; background:#f6f8fa; color:#24292f; cursor:pointer; font-size:0.9rem; }
       .btn:disabled { opacity:0.6; cursor:not-allowed; }
+      .itemStatus { display:inline-flex; gap:0.6rem; align-items:center; flex-wrap:wrap; margin-left:0.5rem; }
+      .itemStatus label { display:inline-flex; gap:0.25rem; align-items:center; }
     </style>
   </head>
   <body>
@@ -63,7 +65,32 @@
     <section id="learnAlignmentPublicPreview" hidden>
       <h2>Learn Alignment - Public Preview</h2>
       <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
+      <p style="margin:0.25rem 0 0;">
+        <button id="clearLearnAlignmentStatusesPreview" class="btn" type="button">Clear statuses</button>
+      </p>
       <div id="learnGridPublicPreview" class="grid"></div>
+    </section>
+
+    <section id="learnAlignmentCompleted" hidden>
+      <h2>Learn Alignment - Completed</h2>
+      <p class="muted small">Per-user status stored in this browser via <code>localStorage</code>.</p>
+      <p style="margin:0.25rem 0 0;">
+        <button id="clearLearnAlignmentStatuses" class="btn" type="button">Clear statuses</button>
+      </p>
+      <table id="learnAlignmentCompletedTable">
+        <thead>
+          <tr>
+            <th>Completed</th>
+            <th>Not needed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="learnAlignmentCompletedCount">0</td>
+            <td id="learnAlignmentNotNeededCount">0</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="timeSeries" hidden>
@@ -159,6 +186,71 @@
       function escapeAttr(s) {
         // Keep attributes safe; HTML escaping is sufficient for our simple href usage.
         return escapeHtml(s);
+      }
+
+      const LEARN_ALIGNMENT_STATUS_STORAGE_KEY = 'learnAlignmentItemStatusV1';
+      let learnAlignmentStatusHandlerInstalled = false;
+      let learnAlignmentClearButtonInstalled = false;
+
+      function fnv1a32Hex(input) {
+        // Simple deterministic hash for stable DOM names/keys.
+        let h = 0x811c9dc5;
+        const s = String(input);
+        for (let i = 0; i < s.length; i++) {
+          h ^= s.charCodeAt(i);
+          // h *= 16777619 (with overflow)
+          h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+        }
+        return ('00000000' + h.toString(16)).slice(-8);
+      }
+
+      function loadLearnAlignmentStatusMap() {
+        try {
+          const raw = window.localStorage.getItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY);
+          if (!raw) return {};
+          const parsed = JSON.parse(raw);
+          return (parsed && typeof parsed === 'object') ? parsed : {};
+        } catch {
+          return {};
+        }
+      }
+
+      function saveLearnAlignmentStatusMap(map) {
+        try {
+          window.localStorage.setItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY, JSON.stringify(map || {}));
+        } catch {
+          // ignore
+        }
+      }
+
+      function learnAlignmentItemKey({ sectionKey, cardName, itemTitle, itemUrl }) {
+        const raw = `${String(sectionKey || '')}::${String(cardName || '')}::${String(itemUrl || itemTitle || '')}`;
+        return fnv1a32Hex(raw);
+      }
+
+      function computeLearnAlignmentStatusCounts(cardsBySection, statusMap) {
+        let completed = 0;
+        let notNeeded = 0;
+
+        const map = statusMap && typeof statusMap === 'object' ? statusMap : {};
+        const sections = Array.isArray(cardsBySection) ? cardsBySection : [];
+        for (const entry of sections) {
+          const sectionKey = entry && entry.sectionKey;
+          const cards = Array.isArray(entry && entry.cards) ? entry.cards : [];
+          for (const c of cards) {
+            const cardName = c && c.name;
+            if (!Array.isArray(c && c.items)) continue;
+            for (const item of c.items) {
+              const title = (item && typeof item === 'object') ? item.title : item;
+              const url = (item && typeof item === 'object') ? item.url : null;
+              const key = learnAlignmentItemKey({ sectionKey, cardName, itemTitle: title, itemUrl: url });
+              const status = map[key];
+              if (status === 'completed') completed += 1;
+              if (status === 'not_needed') notNeeded += 1;
+            }
+          }
+        }
+        return { completed, notNeeded };
       }
 
       function getLearnAlignmentLinkSuffix(href) {
@@ -698,6 +790,12 @@
         const learnAlignmentPublicPreviewEl = document.getElementById('learnAlignmentPublicPreview');
         const learnGridPublicPreviewEl = document.getElementById('learnGridPublicPreview');
 
+        const learnAlignmentCompletedEl = document.getElementById('learnAlignmentCompleted');
+        const learnAlignmentCompletedCountEl = document.getElementById('learnAlignmentCompletedCount');
+        const learnAlignmentNotNeededCountEl = document.getElementById('learnAlignmentNotNeededCount');
+        const clearLearnAlignmentStatusesBtn = document.getElementById('clearLearnAlignmentStatuses');
+        const clearLearnAlignmentStatusesPreviewBtn = document.getElementById('clearLearnAlignmentStatusesPreview');
+
         const rawEl = document.getElementById('raw');
         const rawJsonEl = document.getElementById('rawJson');
         const toggleRawEl = document.getElementById('toggleRaw');
@@ -919,51 +1017,111 @@
 
           // Learn Alignment cards
           if (map) {
+            const statusMap = loadLearnAlignmentStatusMap();
+
             const nonPreviewCards = computeLearnAlignmentFiltered(data, map, (title) => !isPublicPreviewTitle(title))
               || computeLearnAlignment(data, map);
-            learnGridEl.innerHTML = nonPreviewCards.map(c => `
-              <div class="card">
-                <h3>${c.name}</h3>
-                <p><strong>Items:</strong> ${c.count}</p>
-                ${Array.isArray(c.items)
+
+            function renderLearnCardsWithItemStatus(cards, sectionKey) {
+              return (Array.isArray(cards) ? cards : []).map(c => {
+                const safeCardName = escapeHtml(c && c.name);
+
+                const itemsHtml = Array.isArray(c && c.items)
                   ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
                       const title = (item && typeof item === 'object') ? item.title : item;
                       const href = (item && typeof item === 'object') ? item.url : null;
                       const safeTitle = escapeHtml(title);
                       const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
-                      return href
-                        ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a></li>`
-                        : `<li>${safeTitle}</li>`;
+                      const itemKey = learnAlignmentItemKey({ sectionKey, cardName: c && c.name, itemTitle: title, itemUrl: href });
+                      const name = `learn_status_${itemKey}`;
+                      const current = statusMap[itemKey] || 'unset';
+
+                      const itemLink = href
+                        ? `<a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a>`
+                        : `${safeTitle}`;
+
+                      const radios = `
+                        <span class="itemStatus">
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="unset" ${current === 'unset' ? 'checked' : ''}/> Unset</label>
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="completed" ${current === 'completed' ? 'checked' : ''}/> Completed</label>
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="not_needed" ${current === 'not_needed' ? 'checked' : ''}/> Not needed</label>
+                        </span>
+                      `;
+
+                      return `<li>${itemLink}${radios}</li>`;
                     }).join('')}</ul>`
-                  : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
-                ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
-              </div>
-            `).join('');
-            learnAlignmentEl.hidden = false;
+                  : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`;
+
+                return `
+                  <div class="card">
+                    <h3>${safeCardName}</h3>
+                    <p><strong>Items:</strong> ${c && c.count}</p>
+                    ${itemsHtml}
+                    ${c && c.link ? `<p class="small"><a href="${escapeAttr(c.link)}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
+                  </div>
+                `;
+              }).join('');
+            }
+
+            function updateLearnAlignmentCompletedCounts() {
+              const counts = computeLearnAlignmentStatusCounts([
+                { sectionKey: 'non_preview', cards: nonPreviewCards },
+                { sectionKey: 'public_preview', cards: previewCards || [] },
+              ], statusMap);
+
+              if (learnAlignmentCompletedCountEl) learnAlignmentCompletedCountEl.textContent = String(counts.completed);
+              if (learnAlignmentNotNeededCountEl) learnAlignmentNotNeededCountEl.textContent = String(counts.notNeeded);
+              if (learnAlignmentCompletedEl) learnAlignmentCompletedEl.hidden = false;
+            }
+
+            function installLearnAlignmentStatusHandlerOnce() {
+              if (learnAlignmentStatusHandlerInstalled) return;
+              learnAlignmentStatusHandlerInstalled = true;
+              document.addEventListener('change', (e) => {
+                const el = e && e.target;
+                if (!el || !el.classList || !el.classList.contains('learnItemStatus')) return;
+                const itemKey = el.getAttribute('data-item-key');
+                const value = el.value;
+                if (!itemKey) return;
+
+                if (value === 'unset') {
+                  delete statusMap[itemKey];
+                } else if (value === 'completed' || value === 'not_needed') {
+                  statusMap[itemKey] = value;
+                }
+                saveLearnAlignmentStatusMap(statusMap);
+
+                // Update counts only; no need to re-render everything.
+                try { updateLearnAlignmentCompletedCounts(); } catch { /* ignore */ }
+              });
+            }
+
+            function installLearnAlignmentClearButtonOnce() {
+              if (learnAlignmentClearButtonInstalled) return;
+              if (!clearLearnAlignmentStatusesBtn && !clearLearnAlignmentStatusesPreviewBtn) return;
+              learnAlignmentClearButtonInstalled = true;
+
+              const handler = () => {
+                try {
+                  window.localStorage.removeItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY);
+                } catch {
+                  // ignore
+                }
+                window.location.reload();
+              };
+
+              if (clearLearnAlignmentStatusesBtn) clearLearnAlignmentStatusesBtn.onclick = handler;
+              if (clearLearnAlignmentStatusesPreviewBtn) clearLearnAlignmentStatusesPreviewBtn.onclick = handler;
+            }
 
             const previewCards = computeLearnAlignmentFiltered(data, map, (title) => isPublicPreviewTitle(title));
+
+            learnGridEl.innerHTML = renderLearnCardsWithItemStatus(nonPreviewCards, 'non_preview');
+            learnAlignmentEl.hidden = false;
+
             if (previewCards) {
               const anyPreviewItems = previewCards.some(c => (c.count || 0) > 0);
-              learnGridPublicPreviewEl.innerHTML = previewCards
-                .filter(c => (c.count || 0) > 0)
-                .map(c => `
-                  <div class="card">
-                    <h3>${c.name}</h3>
-                    <p><strong>Items:</strong> ${c.count}</p>
-                    ${Array.isArray(c.items)
-                      ? `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${c.items.map(item => {
-                          const title = (item && typeof item === 'object') ? item.title : item;
-                          const href = (item && typeof item === 'object') ? item.url : null;
-                          const safeTitle = escapeHtml(title);
-                          const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
-                          return href
-                            ? `<li><a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a></li>`
-                            : `<li>${safeTitle}</li>`;
-                        }).join('')}</ul>`
-                      : `<p class="muted small">Item titles are not available in this dashboard payload.</p>`}
-                    ${c.link ? `<p class="small"><a href="${c.link}" target="_blank" rel="noopener">Recommended learning path</a></p>` : ''}
-                  </div>
-                `).join('');
+              learnGridPublicPreviewEl.innerHTML = renderLearnCardsWithItemStatus(previewCards.filter(c => (c.count || 0) > 0), 'public_preview');
 
               learnAlignmentPublicPreviewEl.hidden = !anyPreviewItems;
             } else {
@@ -971,6 +1129,10 @@
               learnGridPublicPreviewEl.innerHTML = '<p class="muted small">Public Preview split requires item titles in the dashboard payload (data.features). Run the pipeline to regenerate docs/reports/dashboard.json.</p>';
               learnAlignmentPublicPreviewEl.hidden = false;
             }
+
+            installLearnAlignmentStatusHandlerOnce();
+            installLearnAlignmentClearButtonOnce();
+            updateLearnAlignmentCompletedCounts();
 
             // Consistency check: Learn Alignment totals vs features count
             try {
