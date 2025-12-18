@@ -1,0 +1,120 @@
+name: Apply Learn Alignment status updates
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  apply:
+    # Only run when the issue body contains our marker.
+    if: contains(github.event.issue.body, 'LEARN_ALIGNMENT_STATUS_V1')
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Guard: require collaborator"
+        run: |
+          set -euo pipefail
+          assoc="${{ github.event.issue.author_association }}"
+          echo "author_association=$assoc"
+          case "$assoc" in
+            OWNER|MEMBER|COLLABORATOR) exit 0 ;;
+            *) echo "Not authorized; skipping."; exit 1 ;;
+          esac
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply status update
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          event_path = os.environ.get('GITHUB_EVENT_PATH')
+          with open(event_path, 'r', encoding='utf-8') as f:
+            event = json.load(f)
+
+          issue = event.get('issue') or {}
+          body = issue.get('body') or ''
+
+          # Find the first JSON object inside a fenced ```json block.
+          m = re.search(r"```json\s*(\{.*?\})\s*```", body, flags=re.S)
+          if not m:
+            raise SystemExit('No ```json {..} ``` block found in issue body')
+
+          payload = json.loads(m.group(1))
+          item_key = str(payload.get('item_key') or '').strip()
+          status = str(payload.get('status') or '').strip().lower()
+
+          if not item_key:
+            raise SystemExit('Missing item_key')
+          if status not in {'completed', 'not_needed', 'unset'}:
+            raise SystemExit(f'Invalid status: {status!r}')
+
+          path = Path('docs/reports/learn_alignment_status.json')
+          path.parent.mkdir(parents=True, exist_ok=True)
+
+          if path.exists():
+            try:
+              status_map = json.loads(path.read_text(encoding='utf-8') or '{}')
+            except json.JSONDecodeError:
+              status_map = {}
+          else:
+            status_map = {}
+
+          if not isinstance(status_map, dict):
+            status_map = {}
+
+          if status == 'unset':
+            status_map.pop(item_key, None)
+          else:
+            status_map[item_key] = status
+
+          path.write_text(json.dumps(status_map, indent=2, sort_keys=True) + "\n", encoding='utf-8')
+          print(f'Updated {path} for {item_key} -> {status}')
+          PY
+
+      - name: Commit and push
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/reports/learn_alignment_status.json
+          git commit -m "Apply Learn Alignment status update" || echo "No changes"
+          git push
+
+      - name: Comment and close issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ok = '${{ job.status }}' === 'success';
+            const body = ok
+              ? 'Applied status update to `docs/reports/learn_alignment_status.json` and pushed to `main`. The Pages deploy will publish it shortly.'
+              : 'Could not apply status update (not authorized or invalid payload).';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+            if (ok) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+            }

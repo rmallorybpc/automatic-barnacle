@@ -65,18 +65,12 @@
     <section id="learnAlignmentPublicPreview" hidden>
       <h2>Learn Alignment - Public Preview</h2>
       <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
-      <p style="margin:0.25rem 0 0;">
-        <button id="clearLearnAlignmentStatusesPreview" class="btn" type="button">Clear statuses</button>
-      </p>
       <div id="learnGridPublicPreview" class="grid"></div>
     </section>
 
     <section id="learnAlignmentCompleted" hidden>
       <h2>Learn Alignment - Completed</h2>
-      <p class="muted small">Per-user status stored in this browser via <code>localStorage</code>.</p>
-      <p style="margin:0.25rem 0 0;">
-        <button id="clearLearnAlignmentStatuses" class="btn" type="button">Clear statuses</button>
-      </p>
+      <p class="muted small">Shared status loaded from <code>docs/reports/learn_alignment_status.json</code>. To change a status, selecting a radio opens a GitHub Issue which an Action applies to <code>main</code>.</p>
       <table id="learnAlignmentCompletedTable">
         <thead>
           <tr>
@@ -188,9 +182,8 @@
         return escapeHtml(s);
       }
 
-      const LEARN_ALIGNMENT_STATUS_STORAGE_KEY = 'learnAlignmentItemStatusV1';
+      const LEARN_ALIGNMENT_STATUS_REPO = 'rmallorybpc/automatic-barnacle';
       let learnAlignmentStatusHandlerInstalled = false;
-      let learnAlignmentClearButtonInstalled = false;
 
       function fnv1a32Hex(input) {
         // Simple deterministic hash for stable DOM names/keys.
@@ -204,28 +197,41 @@
         return ('00000000' + h.toString(16)).slice(-8);
       }
 
-      function loadLearnAlignmentStatusMap() {
-        try {
-          const raw = window.localStorage.getItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY);
-          if (!raw) return {};
-          const parsed = JSON.parse(raw);
-          return (parsed && typeof parsed === 'object') ? parsed : {};
-        } catch {
-          return {};
-        }
-      }
-
-      function saveLearnAlignmentStatusMap(map) {
-        try {
-          window.localStorage.setItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY, JSON.stringify(map || {}));
-        } catch {
-          // ignore
-        }
-      }
-
       function learnAlignmentItemKey({ sectionKey, cardName, itemTitle, itemUrl }) {
         const raw = `${String(sectionKey || '')}::${String(cardName || '')}::${String(itemUrl || itemTitle || '')}`;
         return fnv1a32Hex(raw);
+      }
+
+      function buildLearnAlignmentStatusIssueUrl({ itemKey, status, title, url, sectionKey, cardName }) {
+        const safeStatus = String(status || '').toLowerCase();
+        const payload = {
+          item_key: String(itemKey || ''),
+          status: safeStatus,
+          title: title ? String(title) : null,
+          url: url ? String(url) : null,
+          section: sectionKey ? String(sectionKey) : null,
+          category: cardName ? String(cardName) : null,
+        };
+
+        const issueTitle = `[Learn Alignment Status] ${payload.title || payload.item_key}`;
+        const issueBody = [
+          'LEARN_ALIGNMENT_STATUS_V1',
+          '',
+          '```json',
+          JSON.stringify(payload, null, 2),
+          '```',
+          '',
+          'Notes:',
+          '- This issue is intended to be auto-applied by a GitHub Action.',
+        ].join('\n');
+
+        const base = `https://github.com/${LEARN_ALIGNMENT_STATUS_REPO}/issues/new`;
+        const params = new URLSearchParams({
+          title: issueTitle,
+          body: issueBody,
+          labels: 'learn-alignment-status',
+        });
+        return `${base}?${params.toString()}`;
       }
 
       function computeLearnAlignmentStatusCounts(cardsBySection, statusMap) {
@@ -793,17 +799,16 @@
         const learnAlignmentCompletedEl = document.getElementById('learnAlignmentCompleted');
         const learnAlignmentCompletedCountEl = document.getElementById('learnAlignmentCompletedCount');
         const learnAlignmentNotNeededCountEl = document.getElementById('learnAlignmentNotNeededCount');
-        const clearLearnAlignmentStatusesBtn = document.getElementById('clearLearnAlignmentStatuses');
-        const clearLearnAlignmentStatusesPreviewBtn = document.getElementById('clearLearnAlignmentStatusesPreview');
 
         const rawEl = document.getElementById('raw');
         const rawJsonEl = document.getElementById('rawJson');
         const toggleRawEl = document.getElementById('toggleRaw');
 
         try {
-          const [data, map] = await Promise.all([
+          const [data, map, sharedStatus] = await Promise.all([
             loadJSON('reports/dashboard.json', { cacheBust }),
-            loadJSON('reports/learn_alignment_map.json', { cacheBust })
+            loadJSON('reports/learn_alignment_map.json', { cacheBust }),
+            loadJSON('reports/learn_alignment_status.json', { cacheBust })
           ]);
 
           if (!data) {
@@ -1017,7 +1022,7 @@
 
           // Learn Alignment cards
           if (map) {
-            const statusMap = loadLearnAlignmentStatusMap();
+            const sharedStatusMap = (sharedStatus && typeof sharedStatus === 'object') ? sharedStatus : {};
 
             const nonPreviewCards = computeLearnAlignmentFiltered(data, map, (title) => !isPublicPreviewTitle(title))
               || computeLearnAlignment(data, map);
@@ -1034,7 +1039,7 @@
                       const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
                       const itemKey = learnAlignmentItemKey({ sectionKey, cardName: c && c.name, itemTitle: title, itemUrl: href });
                       const name = `learn_status_${itemKey}`;
-                      const current = statusMap[itemKey] || 'unset';
+                      const current = sharedStatusMap[itemKey] || 'unset';
 
                       const itemLink = href
                         ? `<a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a>`
@@ -1042,9 +1047,9 @@
 
                       const radios = `
                         <span class="itemStatus">
-                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="unset" ${current === 'unset' ? 'checked' : ''}/> Unset</label>
-                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="completed" ${current === 'completed' ? 'checked' : ''}/> Completed</label>
-                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" value="not_needed" ${current === 'not_needed' ? 'checked' : ''}/> Not needed</label>
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" data-item-title="${escapeAttr(String(title))}" data-item-url="${href ? escapeAttr(href) : ''}" data-section="${escapeAttr(sectionKey)}" data-card="${escapeAttr(String(c && c.name))}" value="unset" ${current === 'unset' ? 'checked' : ''}/> Unset</label>
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" data-item-title="${escapeAttr(String(title))}" data-item-url="${href ? escapeAttr(href) : ''}" data-section="${escapeAttr(sectionKey)}" data-card="${escapeAttr(String(c && c.name))}" value="completed" ${current === 'completed' ? 'checked' : ''}/> Completed</label>
+                          <label><input class="learnItemStatus" type="radio" name="${escapeAttr(name)}" data-item-key="${escapeAttr(itemKey)}" data-item-title="${escapeAttr(String(title))}" data-item-url="${href ? escapeAttr(href) : ''}" data-section="${escapeAttr(sectionKey)}" data-card="${escapeAttr(String(c && c.name))}" value="not_needed" ${current === 'not_needed' ? 'checked' : ''}/> Not needed</label>
                         </span>
                       `;
 
@@ -1067,7 +1072,7 @@
               const counts = computeLearnAlignmentStatusCounts([
                 { sectionKey: 'non_preview', cards: nonPreviewCards },
                 { sectionKey: 'public_preview', cards: previewCards || [] },
-              ], statusMap);
+              ], sharedStatusMap);
 
               if (learnAlignmentCompletedCountEl) learnAlignmentCompletedCountEl.textContent = String(counts.completed);
               if (learnAlignmentNotNeededCountEl) learnAlignmentNotNeededCountEl.textContent = String(counts.notNeeded);
@@ -1084,34 +1089,32 @@
                 const value = el.value;
                 if (!itemKey) return;
 
-                if (value === 'unset') {
-                  delete statusMap[itemKey];
-                } else if (value === 'completed' || value === 'not_needed') {
-                  statusMap[itemKey] = value;
-                }
-                saveLearnAlignmentStatusMap(statusMap);
+                const current = sharedStatusMap[itemKey] || 'unset';
+                if (value === current) return;
 
-                // Update counts only; no need to re-render everything.
-                try { updateLearnAlignmentCompletedCounts(); } catch { /* ignore */ }
-              });
-            }
+                // Open a pre-filled GitHub issue so Actions can apply the change.
+                const issueUrl = buildLearnAlignmentStatusIssueUrl({
+                  itemKey,
+                  status: value,
+                  title: el.getAttribute('data-item-title') || null,
+                  url: el.getAttribute('data-item-url') || null,
+                  sectionKey: el.getAttribute('data-section') || null,
+                  cardName: el.getAttribute('data-card') || null,
+                });
+                try { window.open(issueUrl, '_blank', 'noopener'); } catch { window.location.href = issueUrl; }
 
-            function installLearnAlignmentClearButtonOnce() {
-              if (learnAlignmentClearButtonInstalled) return;
-              if (!clearLearnAlignmentStatusesBtn && !clearLearnAlignmentStatusesPreviewBtn) return;
-              learnAlignmentClearButtonInstalled = true;
-
-              const handler = () => {
+                // Revert UI to shared state (change is not applied until workflow runs).
                 try {
-                  window.localStorage.removeItem(LEARN_ALIGNMENT_STATUS_STORAGE_KEY);
+                  const groupName = el.getAttribute('name');
+                  if (groupName) {
+                    document.querySelectorAll(`input.learnItemStatus[name="${groupName}"]`).forEach(r => {
+                      r.checked = (r.value === current);
+                    });
+                  }
                 } catch {
                   // ignore
                 }
-                window.location.reload();
-              };
-
-              if (clearLearnAlignmentStatusesBtn) clearLearnAlignmentStatusesBtn.onclick = handler;
-              if (clearLearnAlignmentStatusesPreviewBtn) clearLearnAlignmentStatusesPreviewBtn.onclick = handler;
+              });
             }
 
             const previewCards = computeLearnAlignmentFiltered(data, map, (title) => isPublicPreviewTitle(title));
@@ -1131,7 +1134,6 @@
             }
 
             installLearnAlignmentStatusHandlerOnce();
-            installLearnAlignmentClearButtonOnce();
             updateLearnAlignmentCompletedCounts();
 
             // Consistency check: Learn Alignment totals vs features count
