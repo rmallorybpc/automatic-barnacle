@@ -57,19 +57,19 @@
         <span id="featuresTag" class="tag" hidden></span>
         <span id="contentChecksTags" hidden></span>
       </div>
-      <h2>Learn Alignment</h2>
+      <h2>GitHub Learn Alignment</h2>
       <p class="muted small">Grouped by Microsoft Learn categories based on sources and product areas. Use links to recommended learning paths.</p>
       <div id="learnGrid" class="grid"></div>
     </section>
 
     <section id="learnAlignmentPublicPreview" hidden>
-      <h2>Learn Alignment - Public Preview</h2>
+      <h2>GitHub Learn Alignment - Public Preview</h2>
       <p class="muted small">Items whose titles include <strong>[Public Preview]</strong>.</p>
       <div id="learnGridPublicPreview" class="grid"></div>
     </section>
 
     <section id="learnAlignmentCompleted" hidden>
-      <h2>Learn Alignment - Completed</h2>
+      <h2>GitHub Learn Alignment - Completed</h2>
       <p class="muted small">Shared status loaded from <code>docs/reports/learn_alignment_status.json</code>. To change a status, selecting a radio opens a GitHub Issue which an Action applies to <code>main</code>.</p>
       <table id="learnAlignmentCompletedTable">
         <thead>
@@ -181,6 +181,39 @@
       function escapeAttr(s) {
         // Keep attributes safe; HTML escaping is sufficient for our simple href usage.
         return escapeHtml(s);
+      }
+
+      function shortenTitleWordsKeepBracketSuffix(title, maxWords) {
+        const raw = String(title || '').trim();
+        if (!raw) return '';
+
+        const limit = Number.isFinite(maxWords) ? Math.max(0, Math.floor(maxWords)) : 0;
+        if (!limit) return raw;
+
+        // Preserve a trailing location-style suffix like "[roadmap - repo]".
+        const m = raw.match(/^(.*?)(\s*\[[^\]]+\]\s*)$/);
+        const main = (m ? m[1] : raw).trim();
+        const bracketSuffix = m ? m[2].trim() : '';
+
+        const words = main.split(/\s+/).filter(Boolean);
+        const shortened = words.slice(0, limit).join(' ');
+
+        if (!bracketSuffix) return shortened;
+        if (!shortened) return bracketSuffix;
+        return `${shortened} ${bracketSuffix}`;
+      }
+
+      function buildLearnAlignmentDisplayTitle(title, href) {
+        const shortened = shortenTitleWordsKeepBracketSuffix(title, 4);
+        const suffix = href ? getLearnAlignmentLinkSuffix(href) : '';
+        const safeSuffix = String(suffix || '');
+
+        // Avoid duplicate suffix if it's already present in the title.
+        if (safeSuffix && String(title || '').trim().endsWith(safeSuffix.trim())) {
+          return shortened;
+        }
+
+        return `${shortened}${safeSuffix}`;
       }
 
       const LEARN_ALIGNMENT_STATUS_REPO = 'rmallorybpc/automatic-barnacle';
@@ -1046,15 +1079,14 @@
                       return `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${visibleItems.map(item => {
                       const title = (item && typeof item === 'object') ? item.title : item;
                       const href = (item && typeof item === 'object') ? item.url : null;
-                      const safeTitle = escapeHtml(title);
-                      const safeSuffix = href ? escapeHtml(getLearnAlignmentLinkSuffix(href)) : '';
+                      const safeDisplayTitle = escapeHtml(buildLearnAlignmentDisplayTitle(title, href));
                       const itemKey = learnAlignmentItemKey({ sectionKey, cardName: c && c.name, itemTitle: title, itemUrl: href });
                       const name = `learn_status_${itemKey}`;
                       const current = sharedStatusMap[itemKey] || 'unset';
 
                       const itemLink = href
-                        ? `<a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeTitle}${safeSuffix}</a>`
-                        : `${safeTitle}`;
+                        ? `<a href="${escapeAttr(href)}" target="_blank" rel="noopener">${safeDisplayTitle}</a>`
+                        : `${safeDisplayTitle}`;
 
                       const radios = `
                         <span class="itemStatus">
@@ -1128,10 +1160,10 @@
                 const listHtml = (items.length === 0)
                   ? `<p class="muted small" style="margin:0;">None</p>`
                   : `<ul class="small" style="margin:0.25rem 0 0 1.25rem; padding:0;">${items.map(it => {
-                      const suffix = it.href ? escapeHtml(getLearnAlignmentLinkSuffix(it.href)) : '';
+                      const displayTitle = escapeHtml(buildLearnAlignmentDisplayTitle(it.title, it.href));
                       const itemLink = it.href
-                        ? `<a href="${escapeAttr(it.href)}" target="_blank" rel="noopener">${escapeHtml(it.title)}${suffix}</a>`
-                        : `${escapeHtml(it.title)}`;
+                        ? `<a href="${escapeAttr(it.href)}" target="_blank" rel="noopener">${displayTitle}</a>`
+                        : `${displayTitle}`;
 
                       const restoreUrl = buildLearnAlignmentStatusIssueUrl({
                         itemKey: it.itemKey,
