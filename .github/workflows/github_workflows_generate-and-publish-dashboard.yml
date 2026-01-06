@@ -38,6 +38,15 @@ jobs:
           # Dashboard should produce data/dashboard/dashboard_latest.json
           python -m src.feature_monitor.dashboard
 
+      - name: Generate dashboard delta (exec summary)
+        run: |
+          set -euxo pipefail
+          python -m src.feature_monitor.dashboard_delta \
+            --old docs/reports/dashboard.json \
+            --new data/dashboard/dashboard_latest.json \
+            --out-json docs/reports/dashboard_delta.json \
+            --out-md docs/reports/dashboard_delta.md
+
       - name: Publish dashboard.json to docs/reports
         run: |
           set -euxo pipefail
@@ -59,6 +68,6 @@ jobs:
           # Ensure we’re tracking main
           git fetch origin main
           git checkout -B main origin/main
-          git add docs/reports/dashboard.json
+          git add docs/reports/dashboard.json docs/reports/dashboard_delta.json docs/reports/dashboard_delta.md
           git commit -m "Publish first pipeline-generated dashboard.json via one-off workflow" || echo "No changes to commit"
           git push origin HEAD:main

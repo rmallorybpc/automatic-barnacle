@@ -56,6 +56,7 @@ This repository implements an automated monitoring stack for tracking GitHub pro
 
 - A static dashboard site published at: https://rmallorybpc.github.io/automatic-barnacle
 - Dashboard data JSON served from `docs/reports/dashboard.json`, consumed by `docs/index.html`
+- Executive-friendly change summary served from `docs/reports/dashboard_delta.json` (and `docs/reports/dashboard_delta.md`)
 - Feature coverage metrics and gap detection; gaps can automatically create GitHub issues
 - Monthly summary reports (JSON and Markdown)
 - Notifications to Slack and Microsoft Teams for key events

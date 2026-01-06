@@ -57,7 +57,7 @@
             <li>Go back to the same workflow: <a href="https://github.com/rmallorybpc/automatic-barnacle/actions/workflows/run-now.yml" target="_blank" rel="noopener noreferrer">Run Now - Full Monitoring Pipeline</a>.</li>
             <li>Select <strong>Run workflow</strong> again and wait for completion.</li>
             <li>Reload this dashboard.</li>
-            <li>To compare changes over time, view the file history for <code>docs/reports/dashboard.json</code> in GitHub and compare the baseline commit to the new commit.</li>
+            <li>To see what changed since the previous run, review the <strong>Since last publish</strong> summary on this page (powered by <code>docs/reports/dashboard_delta.json</code>).</li>
           </ol>
 
           <h3>Monthly reporting check</h3>
@@ -348,6 +348,7 @@
 
       const EXEC_SUMMARY_CARD_COLORS = {
         Overview: '#DDE9F0',
+        'Since last publish': '#D1E6FB',
         'Total Features': '#D1E6FB',
         'Primary Source': '#DCE9FB',
         'Coverage Breadth': '#D1E6FB',
@@ -356,7 +357,7 @@
         Status: '#DDE9F0',
       };
 
-      function buildExecutiveSummaryHtml(summaryCards) {
+      function buildExecutiveSummaryHtml(summaryCards, delta) {
         let html = '<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:6px; padding:1rem; margin-bottom:1rem;">';
 
         html += '<div class="grid">';
@@ -372,6 +373,28 @@
           `;
         }).join('');
         html += '</div>';
+
+        // Optional: exec-friendly snapshot of the newest items.
+        const topAdded = (delta && Array.isArray(delta.top_added)) ? delta.top_added : [];
+        if (topAdded.length) {
+          const items = topAdded.slice(0, 5).map(item => {
+            if (!item || typeof item !== 'object') return '';
+            const title = escapeHtml(String(item.title || item.id || '').trim());
+            const url = (item.source_url || item.url) ? String(item.source_url || item.url) : '';
+            if (!title) return '';
+            if (url) {
+              return `<li><a href="${escapeAttr(url)}" target="_blank" rel="noopener">${title}</a></li>`;
+            }
+            return `<li>${title}</li>`;
+          }).filter(Boolean).join('');
+
+          if (items) {
+            html += '<div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;">';
+            html += '<strong>Top 5 newly added</strong>';
+            html += `<ul style="margin:0.5rem 0 0 1.25rem;">${items}</ul>`;
+            html += '</div>';
+          }
+        }
 
         // Scan block + strategic recommendation (retain existing italics + highlighting)
         html += '<p style="margin-bottom:0; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #ffc107;"><em><strong>What changed:</strong> New feature signals were ingested since the last update.<br><strong>Why it matters:</strong> Coverage and Learn alignment may drift as GitHub ships quickly.<br><strong>What we need:</strong> Confirm owners for the top gaps and prioritize updates this cycle.</em></p>';
@@ -870,10 +893,11 @@
         const toggleRawEl = document.getElementById('toggleRaw');
 
         try {
-          const [data, map, sharedStatus] = await Promise.all([
+          const [data, map, sharedStatus, delta] = await Promise.all([
             loadJSON('reports/dashboard.json', { cacheBust }),
             loadJSON('reports/learn_alignment_map.json', { cacheBust }),
-            loadJSON('reports/learn_alignment_status.json', { cacheBust })
+            loadJSON('reports/learn_alignment_status.json', { cacheBust }),
+            loadJSON('reports/dashboard_delta.json', { cacheBust })
           ]);
 
           if (!data) {
@@ -1005,6 +1029,12 @@
               value: 'Real-time monitoring of feature coverage and documentation gaps across Microsoft products.',
             },
             {
+              title: 'Since last publish',
+              value: (delta && delta.counts)
+                ? `${delta.counts.features_added || 0} added / ${delta.counts.features_removed || 0} removed / ${delta.counts.features_changed || 0} changed`
+                : 'n/a',
+            },
+            {
               title: 'Total Features',
               value: displayTotal === null ? 'n/a' : `${displayTotal} items monitored across all sources`,
             },
@@ -1032,7 +1062,7 @@
             },
           ];
 
-          const summaryHtml = buildExecutiveSummaryHtml(summaryCards);
+          const summaryHtml = buildExecutiveSummaryHtml(summaryCards, delta);
 
           summaryContentEl.innerHTML = summaryHtml || '<p class="muted">No summary fields present.</p>';
           summaryEl.hidden = false;
