@@ -39,6 +39,7 @@ jobs:
       - name: Create data directories
         run: |
           mkdir -p data/{graphql,embeddings,reports,issues,dashboard}
+          mkdir -p data/content_checks
           mkdir -p docs/reports
       
       - name: Run ingestion
@@ -66,6 +67,11 @@ jobs:
         run: |
           echo "=== Generating report ==="
           python -m src.feature_monitor.report
+
+      - name: Run content checks
+        run: |
+          echo "=== Running content checks ==="
+          python -m src.feature_monitor.content_checks
       
       - name: Manage issues
         run: |
