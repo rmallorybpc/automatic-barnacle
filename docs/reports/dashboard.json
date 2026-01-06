@@ -1,12 +1,12 @@
 {
-  "generated_at": "2025-12-17T17:01:38.791614",
+  "generated_at": "2026-01-06T15:28:45.123566",
   "summary": {
     "total_features": 51
   },
   "time_series": {
     "time_series": [
       {
-        "date": "2025-12-17",
+        "date": "2026-01-06",
         "count": 51,
         "cumulative": 51
       }
@@ -37,126 +37,22 @@
       }
     ]
   },
-  "content_checks": [
-    {
-      "key": "github_blog",
-      "name": "GitHub blog",
-      "url": "https://github.blog/",
-      "checked_at": "2025-12-17T15:55:59.650566",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    },
-    {
-      "key": "github_blog_product_news",
-      "name": "GitHub product news",
-      "url": "https://github.blog/news-insights/product-news/",
-      "checked_at": "2025-12-17T15:56:00.010818",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    },
-    {
-      "key": "github_blog_changelog",
-      "name": "GitHub changelog",
-      "url": "https://github.blog/changelog/",
-      "checked_at": "2025-12-17T15:56:00.231390",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    },
-    {
-      "key": "github_newsroom_press_releases",
-      "name": "GitHub press releases",
-      "url": "https://github.com/newsroom/press-releases",
-      "checked_at": "2025-12-17T15:56:00.300537",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    },
-    {
-      "key": "github_roadmap_homepage",
-      "name": "GitHub roadmap",
-      "url": "https://github.com/github/roadmap",
-      "checked_at": "2025-12-17T15:56:00.922192",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    },
-    {
-      "key": "github_resources_enterprise_content_roundup_september",
-      "name": "GitHub September roundup",
-      "url": "https://resources.github.com/enterprise-content-roundup/september/",
-      "checked_at": "2025-12-17T15:56:01.667916",
-      "status_code": 200,
-      "ok": true,
-      "changed": null
-    }
-  ],
   "features": [
     {
-      "id": "changelog_sample_20251217",
+      "id": "changelog_sample_20260106",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2025-12-17T17:01:36.846436"
+      "date_discovered": "2026-01-06T15:28:43.143149"
     },
     {
-      "id": "roadmap_1198",
-      "title": "A more intelligent Copilot auto model selection, optimizing for your task",
+      "id": "roadmap_1005",
+      "title": "Update README.md",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1198",
-      "date_discovered": "2025-12-17T17:01:37.662152"
-    },
-    {
-      "id": "roadmap_1197",
-      "title": "GitHub Actions new pricing - Self-hosted runner price increase",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1197",
-      "date_discovered": "2025-12-17T17:01:37.662167"
-    },
-    {
-      "id": "roadmap_1196",
-      "title": "GitHub Actions new pricing - Hosted runner price drop",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1196",
-      "date_discovered": "2025-12-17T17:01:37.662174"
-    },
-    {
-      "id": "roadmap_1195",
-      "title": "Multi-Label Support for Actions Runner Controller (ARC)",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1195",
-      "date_discovered": "2025-12-17T17:01:37.662179"
-    },
-    {
-      "id": "roadmap_1194",
-      "title": "Actions Runner Controller Release 0.14.0",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1194",
-      "date_discovered": "2025-12-17T17:01:37.662184"
-    },
-    {
-      "id": "roadmap_1193",
-      "title": "GitHub Actions Data stream",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1193",
-      "date_discovered": "2025-12-17T17:01:37.662189"
-    },
-    {
-      "id": "roadmap_1192",
-      "title": "Scale Set Client",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1192",
-      "date_discovered": "2025-12-17T17:01:37.662196"
+      "source_url": "https://github.com/github/roadmap/pull/1005",
+      "date_discovered": "2026-01-06T15:28:43.976400"
     },
     {
       "id": "roadmap_1081",
@@ -164,23 +60,111 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1081",
-      "date_discovered": "2025-12-17T17:01:37.662206"
+      "date_discovered": "2026-01-06T15:28:43.976412"
     },
     {
-      "id": "roadmap_959",
-      "title": "Custom Images [GA]",
+      "id": "roadmap_1199",
+      "title": "Remove access approval expiry from devcontainer config",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/959",
-      "date_discovered": "2025-12-17T17:01:37.662209"
+      "source_url": "https://github.com/github/roadmap/pull/1199",
+      "date_discovered": "2026-01-06T15:28:43.976418"
     },
     {
-      "id": "roadmap_983",
-      "title": "Actions: macOS runners are now available in runner groups [GA]",
+      "id": "roadmap_1116",
+      "title": "Fine-grained Personal Access Tokens [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/983",
-      "date_discovered": "2025-12-17T17:01:37.662212"
+      "source_url": "https://github.com/github/roadmap/issues/1116",
+      "date_discovered": "2026-01-06T15:28:43.976425"
+    },
+    {
+      "id": "roadmap_600",
+      "title": "Fine-grained PATs can access open source repos [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/600",
+      "date_discovered": "2026-01-06T15:28:43.976431"
+    },
+    {
+      "id": "roadmap_1146",
+      "title": "Copilot Now Supports Configuring Remote 3P MCP Servers",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1146",
+      "date_discovered": "2026-01-06T15:28:43.976437"
+    },
+    {
+      "id": "roadmap_1157",
+      "title": "Copilot Enterprise & Users Usage Metrics Dashboard/Export [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1157",
+      "date_discovered": "2026-01-06T15:28:43.976445"
+    },
+    {
+      "id": "roadmap_1156",
+      "title": "CodeQL supports Rust [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1156",
+      "date_discovered": "2026-01-06T15:28:43.976454"
+    },
+    {
+      "id": "roadmap_1155",
+      "title": "CodeQL can scan C/C++ without a working build [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1155",
+      "date_discovered": "2026-01-06T15:28:43.976459"
+    },
+    {
+      "id": "roadmap_1138",
+      "title": "Immutable Releases [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1138",
+      "date_discovered": "2026-01-06T15:28:43.976468"
+    },
+    {
+      "id": "roadmap_1059",
+      "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1059",
+      "date_discovered": "2026-01-06T15:28:43.976473"
+    },
+    {
+      "id": "roadmap_1019",
+      "title": "Custom Images [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1019",
+      "date_discovered": "2026-01-06T15:28:43.976477"
+    },
+    {
+      "id": "roadmap_1143",
+      "title": "Copilot Chat users can use the Gemini 2.5 Flash model",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1143",
+      "date_discovered": "2026-01-06T15:28:43.976482"
+    },
+    {
+      "id": "roadmap_1121",
+      "title": "Code scanning alerts can be assigned to individual users [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1121",
+      "date_discovered": "2026-01-06T15:28:43.976486"
+    },
+    {
+      "id": "roadmap_1197",
+      "title": "GitHub Actions new pricing - Self-hosted runner price increase",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1197",
+      "date_discovered": "2026-01-06T15:28:43.976490"
     },
     {
       "id": "roadmap_1103",
@@ -188,55 +172,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1103",
-      "date_discovered": "2025-12-17T17:01:37.662216"
-    },
-    {
-      "id": "roadmap_592",
-      "title": "Immutable Actions [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/592",
-      "date_discovered": "2025-12-17T17:01:37.662222"
-    },
-    {
-      "id": "roadmap_1191",
-      "title": "Parallel Steps in GitHub Actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1191",
-      "date_discovered": "2025-12-17T17:01:37.662227"
-    },
-    {
-      "id": "roadmap_1190",
-      "title": "Support over 300 jobs & filtering in the Actions UI",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1190",
-      "date_discovered": "2025-12-17T17:01:37.662232"
-    },
-    {
-      "id": "roadmap_1189",
-      "title": "Support new conditional operator in GitHub actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1189",
-      "date_discovered": "2025-12-17T17:01:37.662236"
-    },
-    {
-      "id": "roadmap_1187",
-      "title": "Actions supports timezones for scheduled workflows",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1187",
-      "date_discovered": "2025-12-17T17:01:37.662242"
-    },
-    {
-      "id": "roadmap_1188",
-      "title": "Return runID from workflow_dispatch",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1188",
-      "date_discovered": "2025-12-17T17:01:37.662246"
+      "date_discovered": "2026-01-06T15:28:43.976494"
     },
     {
       "id": "roadmap_1054",
@@ -244,7 +180,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1054",
-      "date_discovered": "2025-12-17T17:01:37.662253"
+      "date_discovered": "2026-01-06T15:28:43.976498"
     },
     {
       "id": "roadmap_1028",
@@ -252,7 +188,119 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1028",
-      "date_discovered": "2025-12-17T17:01:37.662255"
+      "date_discovered": "2026-01-06T15:28:43.976502"
+    },
+    {
+      "id": "roadmap_592",
+      "title": "Immutable Actions [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/592",
+      "date_discovered": "2026-01-06T15:28:43.976506"
+    },
+    {
+      "id": "roadmap_1198",
+      "title": "A more intelligent Copilot auto model selection, optimizing for your task",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1198",
+      "date_discovered": "2026-01-06T15:28:43.976510"
+    },
+    {
+      "id": "roadmap_1196",
+      "title": "GitHub Actions new pricing - Hosted runner price drop",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1196",
+      "date_discovered": "2026-01-06T15:28:43.976514"
+    },
+    {
+      "id": "roadmap_1195",
+      "title": "Multi-Label Support for Actions Runner Controller (ARC)",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1195",
+      "date_discovered": "2026-01-06T15:28:43.976518"
+    },
+    {
+      "id": "roadmap_1194",
+      "title": "Actions Runner Controller Release 0.14.0",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1194",
+      "date_discovered": "2026-01-06T15:28:43.976522"
+    },
+    {
+      "id": "roadmap_1193",
+      "title": "GitHub Actions Data stream",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1193",
+      "date_discovered": "2026-01-06T15:28:43.976527"
+    },
+    {
+      "id": "roadmap_1192",
+      "title": "Scale Set Client",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1192",
+      "date_discovered": "2026-01-06T15:28:43.976533"
+    },
+    {
+      "id": "roadmap_959",
+      "title": "Custom Images [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/959",
+      "date_discovered": "2026-01-06T15:28:43.976538"
+    },
+    {
+      "id": "roadmap_983",
+      "title": "Actions: macOS runners are now available in runner groups [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/983",
+      "date_discovered": "2026-01-06T15:28:43.976542"
+    },
+    {
+      "id": "roadmap_1191",
+      "title": "Parallel Steps in GitHub Actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1191",
+      "date_discovered": "2026-01-06T15:28:43.976546"
+    },
+    {
+      "id": "roadmap_1190",
+      "title": "Support over 300 jobs & filtering in the Actions UI",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1190",
+      "date_discovered": "2026-01-06T15:28:43.976550"
+    },
+    {
+      "id": "roadmap_1189",
+      "title": "Support new conditional operator in GitHub actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1189",
+      "date_discovered": "2026-01-06T15:28:43.976554"
+    },
+    {
+      "id": "roadmap_1187",
+      "title": "Actions supports timezones for scheduled workflows",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1187",
+      "date_discovered": "2026-01-06T15:28:43.976560"
+    },
+    {
+      "id": "roadmap_1188",
+      "title": "Return runID from workflow_dispatch",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1188",
+      "date_discovered": "2026-01-06T15:28:43.976564"
     },
     {
       "id": "roadmap_1029",
@@ -260,7 +308,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1029",
-      "date_discovered": "2025-12-17T17:01:37.662257"
+      "date_discovered": "2026-01-06T15:28:43.976568"
     },
     {
       "id": "roadmap_1061",
@@ -268,7 +316,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1061",
-      "date_discovered": "2025-12-17T17:01:37.662260"
+      "date_discovered": "2026-01-06T15:28:43.976572"
     },
     {
       "id": "roadmap_1084",
@@ -276,7 +324,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1084",
-      "date_discovered": "2025-12-17T17:01:37.662262"
+      "date_discovered": "2026-01-06T15:28:43.976576"
     },
     {
       "id": "roadmap_1093",
@@ -284,7 +332,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1093",
-      "date_discovered": "2025-12-17T17:01:37.662264"
+      "date_discovered": "2026-01-06T15:28:43.976580"
     },
     {
       "id": "roadmap_1040",
@@ -292,7 +340,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1040",
-      "date_discovered": "2025-12-17T17:01:37.662268"
+      "date_discovered": "2026-01-06T15:28:43.976584"
     },
     {
       "id": "roadmap_1142",
@@ -300,7 +348,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1142",
-      "date_discovered": "2025-12-17T17:01:37.662270"
+      "date_discovered": "2026-01-06T15:28:43.976588"
     },
     {
       "id": "roadmap_1125",
@@ -308,7 +356,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1125",
-      "date_discovered": "2025-12-17T17:01:37.662273"
+      "date_discovered": "2026-01-06T15:28:43.976592"
     },
     {
       "id": "roadmap_1123",
@@ -316,7 +364,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1123",
-      "date_discovered": "2025-12-17T17:01:37.662275"
+      "date_discovered": "2026-01-06T15:28:43.976596"
     },
     {
       "id": "roadmap_1105",
@@ -324,7 +372,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1105",
-      "date_discovered": "2025-12-17T17:01:37.662277"
+      "date_discovered": "2026-01-06T15:28:43.976600"
     },
     {
       "id": "roadmap_1095",
@@ -332,7 +380,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1095",
-      "date_discovered": "2025-12-17T17:01:37.662279"
+      "date_discovered": "2026-01-06T15:28:43.976604"
     },
     {
       "id": "roadmap_1063",
@@ -340,7 +388,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1063",
-      "date_discovered": "2025-12-17T17:01:37.662282"
+      "date_discovered": "2026-01-06T15:28:43.976608"
     },
     {
       "id": "roadmap_1047",
@@ -348,7 +396,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1047",
-      "date_discovered": "2025-12-17T17:01:37.662284"
+      "date_discovered": "2026-01-06T15:28:43.976612"
     },
     {
       "id": "roadmap_1036",
@@ -356,7 +404,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1036",
-      "date_discovered": "2025-12-17T17:01:37.662286"
+      "date_discovered": "2026-01-06T15:28:43.976617"
     },
     {
       "id": "roadmap_1096",
@@ -364,7 +412,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1096",
-      "date_discovered": "2025-12-17T17:01:37.662288"
+      "date_discovered": "2026-01-06T15:28:43.976622"
     },
     {
       "id": "roadmap_1092",
@@ -372,7 +420,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1092",
-      "date_discovered": "2025-12-17T17:01:37.662291"
+      "date_discovered": "2026-01-06T15:28:43.976627"
     },
     {
       "id": "roadmap_1186",
@@ -380,7 +428,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1186",
-      "date_discovered": "2025-12-17T17:01:37.662293"
+      "date_discovered": "2026-01-06T15:28:43.976630"
     },
     {
       "id": "roadmap_1185",
@@ -388,7 +436,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1185",
-      "date_discovered": "2025-12-17T17:01:37.662295"
+      "date_discovered": "2026-01-06T15:28:43.976634"
     },
     {
       "id": "roadmap_1184",
@@ -396,111 +444,63 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1184",
-      "date_discovered": "2025-12-17T17:01:37.662297"
+      "date_discovered": "2026-01-06T15:28:43.976636"
+    }
+  ],
+  "content_checks": [
+    {
+      "key": "github_blog",
+      "name": "GitHub blog",
+      "url": "https://github.blog/",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     },
     {
-      "id": "roadmap_1183",
-      "title": "Extended metadata checks for secret scanning [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1183",
-      "date_discovered": "2025-12-17T17:01:37.662301"
+      "key": "github_blog_product_news",
+      "name": "GitHub product news",
+      "url": "https://github.blog/product-news/",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     },
     {
-      "id": "roadmap_1182",
-      "title": "Assign code scanning alerts to Copilot for automated fixes [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1182",
-      "date_discovered": "2025-12-17T17:01:37.662304"
+      "key": "github_blog_changelog",
+      "name": "GitHub changelog",
+      "url": "https://github.blog/changelog/",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     },
     {
-      "id": "roadmap_1181",
-      "title": "Automated security and quality validation for Copilot coding agent [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1181",
-      "date_discovered": "2025-12-17T17:01:37.662306"
+      "key": "github_newsroom_press_releases",
+      "name": "GitHub press releases",
+      "url": "https://github.com/newsroom/press-releases",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     },
     {
-      "id": "roadmap_1180",
-      "title": "Enable premium request and feature-level budgeting for AI tools [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1180",
-      "date_discovered": "2025-12-17T17:01:37.662308"
+      "key": "github_roadmap_homepage",
+      "name": "GitHub roadmap",
+      "url": "https://github.com/github/roadmap",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     },
     {
-      "id": "roadmap_1179",
-      "title": "Security validation tools integration with Copilot Coding Agent [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1179",
-      "date_discovered": "2025-12-17T17:01:37.662311"
-    },
-    {
-      "id": "roadmap_1178",
-      "title": "Copilot coding agent integration in JetBrains IDEs",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1178",
-      "date_discovered": "2025-12-17T17:01:37.662313"
-    },
-    {
-      "id": "roadmap_1177",
-      "title": "Copilot Licensing in Enterprise for Direct user assignment & enterprise teams [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1177",
-      "date_discovered": "2025-12-17T17:01:37.662315"
-    },
-    {
-      "id": "roadmap_1176",
-      "title": "Copilot coding agent on self-hosted runners [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1176",
-      "date_discovered": "2025-12-17T17:01:37.662317"
-    },
-    {
-      "id": "roadmap_1175",
-      "title": "Enterprise AI Controls & Agent Control Plane [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1175",
-      "date_discovered": "2025-12-17T17:01:37.662319"
-    },
-    {
-      "id": "roadmap_1174",
-      "title": "GitHub Copilot coding agent (GA)",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1174",
-      "date_discovered": "2025-12-17T17:01:37.662324"
-    },
-    {
-      "id": "roadmap_1173",
-      "title": "Copilot usage metrics dashboard and API [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1173",
-      "date_discovered": "2025-12-17T17:01:37.662327"
-    },
-    {
-      "id": "roadmap_1172",
-      "title": "Copilot coding agent can work on existing human-created pull requests [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1172",
-      "date_discovered": "2025-12-17T17:01:37.662329"
-    },
-    {
-      "id": "roadmap_1171",
-      "title": "Copilot-generated commit messages on GitHub.com [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1171",
-      "date_discovered": "2025-12-17T17:01:37.662331"
+      "key": "github_resources_enterprise_content_roundup_september",
+      "name": "GitHub September roundup",
+      "url": "https://resources.github.com/enterprise-content-roundup-september",
+      "checked_at": null,
+      "status_code": null,
+      "ok": false,
+      "changed": null
     }
   ]
 }
