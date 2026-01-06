@@ -37,8 +37,38 @@
         <button id="refreshBtn" class="btn" type="button">Refresh dashboard</button>
         <span id="lastRefresh" class="muted small" style="margin-left:0.5rem;"></span>
         <span id="status" class="muted small" style="margin-left:0.5rem;">Loading dashboard data…</span>
+        <button id="manualStepsBtn" class="btn" type="button" style="margin-left:0.5rem;">Manual Update Steps - expand/collapse</button>
       </p>
     </header>
+
+    <section id="manualUpdateSteps">
+      <details>
+        <summary class="muted small" style="list-style:none;" hidden>Manual Update Steps - expand/collapse</summary>
+        <div class="steps" style="margin-top:0.75rem;">
+          <h3 style="margin-top:0;">Baseline (2026-01-06)</h3>
+          <ol>
+            <li>Go to the <a href="https://github.com/rmallorybpc/automatic-barnacle/actions/workflows/run-now.yml" target="_blank" rel="noopener noreferrer">Run Now - Full Monitoring Pipeline</a> workflow.</li>
+            <li>Select <strong>Run workflow</strong>, then wait for the workflow run to complete.</li>
+            <li>After it completes, reload this dashboard (it reads <code>docs/reports/dashboard.json</code>).</li>
+          </ol>
+
+          <h3>One week later check</h3>
+          <ol>
+            <li>Go back to the same workflow: <a href="https://github.com/rmallorybpc/automatic-barnacle/actions/workflows/run-now.yml" target="_blank" rel="noopener noreferrer">Run Now - Full Monitoring Pipeline</a>.</li>
+            <li>Select <strong>Run workflow</strong> again and wait for completion.</li>
+            <li>Reload this dashboard.</li>
+            <li>To compare changes over time, view the file history for <code>docs/reports/dashboard.json</code> in GitHub and compare the baseline commit to the new commit.</li>
+          </ol>
+
+          <h3>Monthly reporting check</h3>
+          <ol>
+            <li>Go to the <a href="https://github.com/rmallorybpc/automatic-barnacle/actions/workflows/monthly-issues-report.yml" target="_blank" rel="noopener noreferrer">Monthly Issues Report</a> workflow.</li>
+            <li>Select <strong>Run workflow</strong> (or let the scheduled run execute on the 1st of the month).</li>
+            <li>Compare month-over-month outputs by diffing the generated monthly report artifacts (or the committed reports, if your workflow publishes them).</li>
+          </ol>
+        </div>
+      </details>
+    </section>
 
     <section id="summary" hidden>
       <h2 style="display:flex; align-items:center; gap:0.5rem;">
@@ -1328,6 +1358,20 @@
         if (!refreshBtn) return;
         refreshBtn.addEventListener('click', () => {
           loadDashboard({ cacheBust: true });
+        });
+      })();
+
+      (function wireManualStepsToggle() {
+        const btn = document.getElementById('manualStepsBtn');
+        const details = document.querySelector('#manualUpdateSteps details');
+        const section = document.getElementById('manualUpdateSteps');
+        if (!btn || !details) return;
+
+        btn.addEventListener('click', () => {
+          details.open = !details.open;
+          if (details.open && section && typeof section.scrollIntoView === 'function') {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
       })();
 
