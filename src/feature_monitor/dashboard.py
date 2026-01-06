@@ -29,6 +29,17 @@ class DashboardGenerator:
         if not validate_file_exists(features_path, logger):
             return []
 
+        try:
+            with open(features_path, 'r') as f:
+                data = json.load(f)
+
+            features = [Feature.from_dict(item) for item in data]
+            logger.info(f"Loaded {len(features)} features for dashboard")
+            return features
+        except Exception as e:
+            logger.error(f"Failed to load features: {e}")
+            return []
+
     def load_content_checks(self) -> List[Dict]:
         """Load latest content check results (if configured and present on disk)."""
         checks_cfg = self.config.get("content_checks")
@@ -73,17 +84,6 @@ class DashboardGenerator:
             })
 
         return results
-        
-        try:
-            with open(features_path, 'r') as f:
-                data = json.load(f)
-            
-            features = [Feature.from_dict(item) for item in data]
-            logger.info(f"Loaded {len(features)} features for dashboard")
-            return features
-        except Exception as e:
-            logger.error(f"Failed to load features: {e}")
-            return []
     
     def generate_time_series_data(self, features: List[Feature]) -> Dict:
         """Generate time series data for dashboard.
@@ -278,10 +278,12 @@ def main():
     try:
         generator = DashboardGenerator()
         features = generator.load_features()
-        
+
         if not features:
-            logger.error("No features to generate dashboard from")
-            return 1
+            # In CI or on quiet days, ingestion may legitimately produce no features.
+            # Still emit a valid dashboard payload so downstream publish steps can run.
+            logger.warning("No features to generate dashboard from; generating empty dashboard")
+            features = []
         
         dashboard_data = generator.generate_dashboard_data(features)
         
