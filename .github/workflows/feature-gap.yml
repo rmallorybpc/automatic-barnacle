@@ -16,6 +16,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Print run context
+        run: |
+          set -euxo pipefail
+          echo "Commit: $(git rev-parse HEAD)"
+          python --version
+          python -m pip --version
+          pwd
+          ls -la
       
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -25,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml requests urllib3
+          python -m pip install -r requirements.txt
       
       - name: Create data directories
         run: |
@@ -99,6 +108,20 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         continue-on-error: true
+
+      - name: Debug outputs (on failure)
+        if: failure()
+        run: |
+          set -euxo pipefail
+          echo "Commit: $(git rev-parse HEAD)"
+          echo "Top-level dirs:"
+          ls -la
+          echo "Data tree (max depth 3):"
+          find data -maxdepth 3 -type f -print || true
+          echo "Expected key outputs:"
+          ls -la data/features.json || true
+          ls -la data/dashboard/dashboard_latest.json || true
+          ls -la docs/reports/dashboard.json || true
       
       - name: Upload artifacts
         if: always()
@@ -109,4 +132,5 @@ jobs:
             data/**/*.json
             data/**/*.md
             data/**/*.graphql
+            docs/reports/dashboard.json
           retention-days: 30
