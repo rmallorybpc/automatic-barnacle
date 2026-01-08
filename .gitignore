@@ -41,6 +41,9 @@ data/
 *.json
 !config.yaml
 
+# Allow dashboard report JSON files to be committed
+!docs/reports/*.json
+
 # Logs
 *.log
 
