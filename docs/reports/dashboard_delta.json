@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-09T09:24:38.228853",
-  "baseline_generated_at": "2026-01-06T15:17:02.101314",
-  "new_generated_at": "2026-01-09T09:24:38.097386",
+  "generated_at": "2026-01-10T09:16:45.400571",
+  "baseline_generated_at": "2026-01-09T09:24:38.097386",
+  "new_generated_at": "2026-01-10T09:16:45.273252",
   "counts": {
     "total_old": 51,
     "total_new": 51,
@@ -27,6 +27,16 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260110",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-10T09:16:41.622980"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260109",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
@@ -35,24 +45,14 @@
       "date_discovered": "2026-01-09T09:24:33.352126"
     }
   ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260106",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-06T15:17:00.376409"
-    }
-  ],
   "changed": [
     {
       "id": "roadmap_1005",
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339238",
-          "new": "2026-01-09T09:24:34.503084"
+          "old": "2026-01-09T09:24:34.503084",
+          "new": "2026-01-10T09:16:42.457554"
         }
       }
     },
@@ -61,8 +61,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339324",
-          "new": "2026-01-09T09:24:34.503162"
+          "old": "2026-01-09T09:24:34.503162",
+          "new": "2026-01-10T09:16:42.457615"
         }
       }
     },
@@ -71,8 +71,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339353",
-          "new": "2026-01-09T09:24:34.503188"
+          "old": "2026-01-09T09:24:34.503188",
+          "new": "2026-01-10T09:16:42.457643"
         }
       }
     },
@@ -81,8 +81,8 @@
       "title": "Increased Cache Size in Actions [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339408",
-          "new": "2026-01-09T09:24:34.503276"
+          "old": "2026-01-09T09:24:34.503276",
+          "new": "2026-01-10T09:16:42.457702"
         }
       }
     },
@@ -91,8 +91,8 @@
       "title": "Evolving GitHub Issues [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339438",
-          "new": "2026-01-09T09:24:34.503329"
+          "old": "2026-01-09T09:24:34.503329",
+          "new": "2026-01-10T09:16:42.457731"
         }
       }
     },
@@ -101,8 +101,8 @@
       "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339418",
-          "new": "2026-01-09T09:24:34.503294"
+          "old": "2026-01-09T09:24:34.503294",
+          "new": "2026-01-10T09:16:42.457713"
         }
       }
     },
@@ -111,8 +111,8 @@
       "title": "Delegated alert closures for secret scanning [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339436",
-          "new": "2026-01-09T09:24:34.503324"
+          "old": "2026-01-09T09:24:34.503324",
+          "new": "2026-01-10T09:16:42.457729"
         }
       }
     },
@@ -121,8 +121,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-06T15:17:01.339348",
-          "new": "2026-01-09T09:24:34.503183"
+          "old": "2026-01-09T09:24:34.503183",
+          "new": "2026-01-10T09:16:42.457640"
         }
       }
     }
