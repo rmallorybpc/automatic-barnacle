@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-14T09:25:31.538052",
-  "baseline_generated_at": "2026-01-13T09:25:02.480723",
-  "new_generated_at": "2026-01-14T09:25:31.405364",
+  "generated_at": "2026-01-15T09:24:58.862607",
+  "baseline_generated_at": "2026-01-14T09:25:31.405364",
+  "new_generated_at": "2026-01-15T09:24:58.729403",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 1,
-    "features_removed": 1,
-    "features_changed": 50
+    "features_added": 2,
+    "features_removed": 2,
+    "features_changed": 49
   },
   "gaps": {
     "old": {
@@ -27,22 +27,38 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260115",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-15T09:24:55.218703"
+    },
+    {
+      "id": "roadmap_951",
+      "title": "Updated the GHES Release Version Dates",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/951",
+      "date_discovered": "2026-01-15T09:24:56.152604"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260114",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-14T09:25:27.293565"
-    }
-  ],
-  "top_removed": [
+    },
     {
-      "id": "changelog_sample_20260113",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-13T09:24:58.806637"
+      "id": "roadmap_1184",
+      "title": "Unaffiliated users for GitHub Enterprise Cloud [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1184",
+      "date_discovered": "2026-01-14T09:25:28.343831"
     }
   ],
   "changed": [
@@ -51,8 +67,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784728",
-          "new": "2026-01-14T09:25:28.343621"
+          "old": "2026-01-14T09:25:28.343621",
+          "new": "2026-01-15T09:24:56.152614"
         }
       }
     },
@@ -61,8 +77,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784797",
-          "new": "2026-01-14T09:25:28.343668"
+          "old": "2026-01-14T09:25:28.343668",
+          "new": "2026-01-15T09:24:56.152672"
         }
       }
     },
@@ -71,8 +87,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784810",
-          "new": "2026-01-14T09:25:28.343697"
+          "old": "2026-01-14T09:25:28.343697",
+          "new": "2026-01-15T09:24:56.152705"
         }
       }
     },
@@ -81,8 +97,8 @@
       "title": "Increased Cache Size in Actions [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784848",
-          "new": "2026-01-14T09:25:28.343763"
+          "old": "2026-01-14T09:25:28.343763",
+          "new": "2026-01-15T09:24:56.152768"
         }
       }
     },
@@ -91,8 +107,8 @@
       "title": "Evolving GitHub Issues [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784874",
-          "new": "2026-01-14T09:25:28.343811"
+          "old": "2026-01-14T09:25:28.343811",
+          "new": "2026-01-15T09:24:56.152817"
         }
       }
     },
@@ -101,8 +117,8 @@
       "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784857",
-          "new": "2026-01-14T09:25:28.343779"
+          "old": "2026-01-14T09:25:28.343779",
+          "new": "2026-01-15T09:24:56.152785"
         }
       }
     },
@@ -111,8 +127,8 @@
       "title": "Delegated alert closures for secret scanning [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784872",
-          "new": "2026-01-14T09:25:28.343807"
+          "old": "2026-01-14T09:25:28.343807",
+          "new": "2026-01-15T09:24:56.152813"
         }
       }
     },
@@ -121,8 +137,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-13T09:24:59.784808",
-          "new": "2026-01-14T09:25:28.343693"
+          "old": "2026-01-14T09:25:28.343693",
+          "new": "2026-01-15T09:24:56.152701"
         }
       }
     }
