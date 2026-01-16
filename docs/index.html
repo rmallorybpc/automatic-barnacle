@@ -1225,16 +1225,7 @@
                         ? `<a href="${escapeAttr(it.href)}" target="_blank" rel="noopener">${displayTitle}</a>`
                         : `${displayTitle}`;
 
-                      const restoreUrl = buildLearnAlignmentStatusIssueUrl({
-                        itemKey: it.itemKey,
-                        status: 'unset',
-                        title: it.title,
-                        url: it.href,
-                        sectionKey: it.sectionKey,
-                        cardName: it.cardName,
-                      });
-
-                      return `<li>${itemLink} <span class="muted">(${escapeHtml(it.cardName)})</span> — <a href="${escapeAttr(restoreUrl)}" target="_blank" rel="noopener">Restore</a></li>`;
+                      return `<li>${itemLink} <span class="muted">(${escapeHtml(it.cardName)})</span> — <button class="btn learnRestoreStatus" type="button" data-item-key="${escapeAttr(it.itemKey)}">Restore</button></li>`;
                     }).join('')}</ul>`;
 
                 return `
@@ -1278,6 +1269,20 @@
                 const current = sharedStatusMap[itemKey] || 'unset';
                 if (value === current) return;
 
+                if (value === 'not_needed' || value === 'completed') {
+                  sharedStatusMap[itemKey] = value;
+                  try {
+                    learnGridEl.innerHTML = renderLearnCardsWithItemStatus(nonPreviewCards, 'non_preview');
+                    if (previewCards) {
+                      learnGridPublicPreviewEl.innerHTML = renderLearnCardsWithItemStatus(previewCards.filter(c => (c.count || 0) > 0), 'public_preview');
+                    }
+                    updateLearnAlignmentCompletedCounts();
+                  } catch {
+                    // ignore
+                  }
+                  return;
+                }
+
                 // Open a pre-filled GitHub issue so Actions can apply the change.
                 const issueUrl = buildLearnAlignmentStatusIssueUrl({
                   itemKey,
@@ -1297,6 +1302,24 @@
                       r.checked = (r.value === current);
                     });
                   }
+                } catch {
+                  // ignore
+                }
+              });
+
+              document.addEventListener('click', (e) => {
+                const el = e && e.target;
+                if (!el || !el.classList || !el.classList.contains('learnRestoreStatus')) return;
+                const itemKey = el.getAttribute('data-item-key');
+                if (!itemKey) return;
+
+                sharedStatusMap[itemKey] = 'unset';
+                try {
+                  learnGridEl.innerHTML = renderLearnCardsWithItemStatus(nonPreviewCards, 'non_preview');
+                  if (previewCards) {
+                    learnGridPublicPreviewEl.innerHTML = renderLearnCardsWithItemStatus(previewCards.filter(c => (c.count || 0) > 0), 'public_preview');
+                  }
+                  updateLearnAlignmentCompletedCounts();
                 } catch {
                   // ignore
                 }
