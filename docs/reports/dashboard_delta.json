@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-17T09:16:47.479790",
-  "baseline_generated_at": "2026-01-16T09:22:58.180487",
-  "new_generated_at": "2026-01-17T09:16:47.342602",
+  "generated_at": "2026-01-18T09:17:32.436887",
+  "baseline_generated_at": "2026-01-17T09:16:47.342602",
+  "new_generated_at": "2026-01-18T09:17:32.301375",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 1,
-    "features_removed": 1,
-    "features_changed": 50
+    "features_added": 4,
+    "features_removed": 4,
+    "features_changed": 47
   },
   "gaps": {
     "old": {
@@ -27,22 +27,70 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260118",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-18T09:17:28.739117"
+    },
+    {
+      "id": "roadmap_1004",
+      "title": "Main",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1004",
+      "date_discovered": "2026-01-18T09:17:29.582939"
+    },
+    {
+      "id": "roadmap_1200",
+      "title": "Create codeql.yml",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1200",
+      "date_discovered": "2026-01-18T09:17:29.582954"
+    },
+    {
+      "id": "roadmap_1201",
+      "title": "Main",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1201",
+      "date_discovered": "2026-01-18T09:17:29.582925"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260117",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-17T09:16:43.417958"
-    }
-  ],
-  "top_removed": [
+    },
     {
-      "id": "changelog_sample_20260116",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-16T09:22:54.195846"
+      "id": "roadmap_1092",
+      "title": "Enterprise Governance: Custom repo properties for enterprise [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1092",
+      "date_discovered": "2026-01-17T09:16:44.460959"
+    },
+    {
+      "id": "roadmap_1185",
+      "title": "Actions: New 1 vCPU standard hosted runner [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1185",
+      "date_discovered": "2026-01-17T09:16:44.460967"
+    },
+    {
+      "id": "roadmap_1186",
+      "title": "MCP registry and allowlist controls for Copilot in JetBrains, Eclipse, and Xcode [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1186",
+      "date_discovered": "2026-01-17T09:16:44.460963"
     }
   ],
   "changed": [
@@ -51,8 +99,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376264",
-          "new": "2026-01-17T09:16:44.460736"
+          "old": "2026-01-17T09:16:44.460736",
+          "new": "2026-01-18T09:17:29.582960"
         }
       }
     },
@@ -61,8 +109,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376299",
-          "new": "2026-01-17T09:16:44.460802"
+          "old": "2026-01-17T09:16:44.460802",
+          "new": "2026-01-18T09:17:29.583017"
         }
       }
     },
@@ -71,8 +119,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376335",
-          "new": "2026-01-17T09:16:44.460837"
+          "old": "2026-01-17T09:16:44.460837",
+          "new": "2026-01-18T09:17:29.583043"
         }
       }
     },
@@ -81,8 +129,8 @@
       "title": "Increased Cache Size in Actions [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376400",
-          "new": "2026-01-17T09:16:44.460902"
+          "old": "2026-01-17T09:16:44.460902",
+          "new": "2026-01-18T09:17:29.583096"
         }
       }
     },
@@ -91,8 +139,8 @@
       "title": "Evolving GitHub Issues [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376443",
-          "new": "2026-01-17T09:16:44.460951"
+          "old": "2026-01-17T09:16:44.460951",
+          "new": "2026-01-18T09:17:29.583124"
         }
       }
     },
@@ -101,8 +149,8 @@
       "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376417",
-          "new": "2026-01-17T09:16:44.460919"
+          "old": "2026-01-17T09:16:44.460919",
+          "new": "2026-01-18T09:17:29.583106"
         }
       }
     },
@@ -111,8 +159,8 @@
       "title": "Delegated alert closures for secret scanning [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376440",
-          "new": "2026-01-17T09:16:44.460947"
+          "old": "2026-01-17T09:16:44.460947",
+          "new": "2026-01-18T09:17:29.583122"
         }
       }
     },
@@ -121,8 +169,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-16T09:22:55.376330",
-          "new": "2026-01-17T09:16:44.460833"
+          "old": "2026-01-17T09:16:44.460833",
+          "new": "2026-01-18T09:17:29.583039"
         }
       }
     }
