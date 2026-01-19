@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-18T09:17:32.301375",
+  "generated_at": "2026-01-19T09:30:21.947211",
   "summary": {
     "total_features": 51
   },
   "time_series": {
     "time_series": [
       {
-        "date": "2026-01-18",
+        "date": "2026-01-19",
         "count": 51,
         "cumulative": 51
       }
@@ -39,12 +39,12 @@
   },
   "features": [
     {
-      "id": "changelog_sample_20260118",
+      "id": "changelog_sample_20260119",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-18T09:17:28.739117"
+      "date_discovered": "2026-01-19T09:30:17.563001"
     },
     {
       "id": "roadmap_1201",
@@ -52,7 +52,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1201",
-      "date_discovered": "2026-01-18T09:17:29.582925"
+      "date_discovered": "2026-01-19T09:30:18.730403"
     },
     {
       "id": "roadmap_1004",
@@ -60,7 +60,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1004",
-      "date_discovered": "2026-01-18T09:17:29.582939"
+      "date_discovered": "2026-01-19T09:30:18.730420"
     },
     {
       "id": "roadmap_951",
@@ -68,7 +68,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/951",
-      "date_discovered": "2026-01-18T09:17:29.582944"
+      "date_discovered": "2026-01-19T09:30:18.730425"
     },
     {
       "id": "roadmap_1199",
@@ -76,7 +76,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1199",
-      "date_discovered": "2026-01-18T09:17:29.582949"
+      "date_discovered": "2026-01-19T09:30:18.730430"
     },
     {
       "id": "roadmap_1200",
@@ -84,7 +84,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1200",
-      "date_discovered": "2026-01-18T09:17:29.582954"
+      "date_discovered": "2026-01-19T09:30:18.730435"
     },
     {
       "id": "roadmap_1005",
@@ -92,7 +92,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1005",
-      "date_discovered": "2026-01-18T09:17:29.582960"
+      "date_discovered": "2026-01-19T09:30:18.730440"
     },
     {
       "id": "roadmap_1081",
@@ -100,7 +100,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/pull/1081",
-      "date_discovered": "2026-01-18T09:17:29.582967"
+      "date_discovered": "2026-01-19T09:30:18.730448"
     },
     {
       "id": "roadmap_1116",
@@ -108,7 +108,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1116",
-      "date_discovered": "2026-01-18T09:17:29.582977"
+      "date_discovered": "2026-01-19T09:30:18.730455"
     },
     {
       "id": "roadmap_600",
@@ -116,7 +116,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/600",
-      "date_discovered": "2026-01-18T09:17:29.582983"
+      "date_discovered": "2026-01-19T09:30:18.730462"
     },
     {
       "id": "roadmap_1146",
@@ -124,7 +124,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1146",
-      "date_discovered": "2026-01-18T09:17:29.582987"
+      "date_discovered": "2026-01-19T09:30:18.730465"
     },
     {
       "id": "roadmap_1157",
@@ -132,7 +132,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1157",
-      "date_discovered": "2026-01-18T09:17:29.582996"
+      "date_discovered": "2026-01-19T09:30:18.730467"
     },
     {
       "id": "roadmap_1156",
@@ -140,7 +140,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1156",
-      "date_discovered": "2026-01-18T09:17:29.583000"
+      "date_discovered": "2026-01-19T09:30:18.730470"
     },
     {
       "id": "roadmap_1155",
@@ -148,7 +148,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1155",
-      "date_discovered": "2026-01-18T09:17:29.583004"
+      "date_discovered": "2026-01-19T09:30:18.730472"
     },
     {
       "id": "roadmap_1138",
@@ -156,7 +156,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1138",
-      "date_discovered": "2026-01-18T09:17:29.583009"
+      "date_discovered": "2026-01-19T09:30:18.730474"
     },
     {
       "id": "roadmap_1059",
@@ -164,7 +164,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1059",
-      "date_discovered": "2026-01-18T09:17:29.583013"
+      "date_discovered": "2026-01-19T09:30:18.730477"
     },
     {
       "id": "roadmap_1019",
@@ -172,7 +172,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1019",
-      "date_discovered": "2026-01-18T09:17:29.583017"
+      "date_discovered": "2026-01-19T09:30:18.730479"
     },
     {
       "id": "roadmap_1143",
@@ -180,7 +180,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1143",
-      "date_discovered": "2026-01-18T09:17:29.583023"
+      "date_discovered": "2026-01-19T09:30:18.730481"
     },
     {
       "id": "roadmap_1121",
@@ -188,7 +188,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1121",
-      "date_discovered": "2026-01-18T09:17:29.583027"
+      "date_discovered": "2026-01-19T09:30:18.730484"
     },
     {
       "id": "roadmap_1197",
@@ -196,7 +196,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1197",
-      "date_discovered": "2026-01-18T09:17:29.583031"
+      "date_discovered": "2026-01-19T09:30:18.730486"
     },
     {
       "id": "roadmap_1103",
@@ -204,7 +204,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1103",
-      "date_discovered": "2026-01-18T09:17:29.583035"
+      "date_discovered": "2026-01-19T09:30:18.730488"
     },
     {
       "id": "roadmap_1054",
@@ -212,7 +212,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1054",
-      "date_discovered": "2026-01-18T09:17:29.583039"
+      "date_discovered": "2026-01-19T09:30:18.730490"
     },
     {
       "id": "roadmap_1028",
@@ -220,7 +220,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1028",
-      "date_discovered": "2026-01-18T09:17:29.583043"
+      "date_discovered": "2026-01-19T09:30:18.730494"
     },
     {
       "id": "roadmap_592",
@@ -228,7 +228,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/592",
-      "date_discovered": "2026-01-18T09:17:29.583047"
+      "date_discovered": "2026-01-19T09:30:18.730497"
     },
     {
       "id": "roadmap_1198",
@@ -236,7 +236,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1198",
-      "date_discovered": "2026-01-18T09:17:29.583051"
+      "date_discovered": "2026-01-19T09:30:18.730499"
     },
     {
       "id": "roadmap_1196",
@@ -244,7 +244,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1196",
-      "date_discovered": "2026-01-18T09:17:29.583055"
+      "date_discovered": "2026-01-19T09:30:18.730501"
     },
     {
       "id": "roadmap_1195",
@@ -252,7 +252,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1195",
-      "date_discovered": "2026-01-18T09:17:29.583061"
+      "date_discovered": "2026-01-19T09:30:18.730505"
     },
     {
       "id": "roadmap_1194",
@@ -260,7 +260,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1194",
-      "date_discovered": "2026-01-18T09:17:29.583066"
+      "date_discovered": "2026-01-19T09:30:18.730507"
     },
     {
       "id": "roadmap_1193",
@@ -268,7 +268,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1193",
-      "date_discovered": "2026-01-18T09:17:29.583071"
+      "date_discovered": "2026-01-19T09:30:18.730510"
     },
     {
       "id": "roadmap_1192",
@@ -276,7 +276,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1192",
-      "date_discovered": "2026-01-18T09:17:29.583076"
+      "date_discovered": "2026-01-19T09:30:18.730512"
     },
     {
       "id": "roadmap_959",
@@ -284,7 +284,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/959",
-      "date_discovered": "2026-01-18T09:17:29.583080"
+      "date_discovered": "2026-01-19T09:30:18.730514"
     },
     {
       "id": "roadmap_983",
@@ -292,7 +292,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/983",
-      "date_discovered": "2026-01-18T09:17:29.583082"
+      "date_discovered": "2026-01-19T09:30:18.730516"
     },
     {
       "id": "roadmap_1191",
@@ -300,7 +300,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1191",
-      "date_discovered": "2026-01-18T09:17:29.583084"
+      "date_discovered": "2026-01-19T09:30:18.730518"
     },
     {
       "id": "roadmap_1190",
@@ -308,7 +308,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1190",
-      "date_discovered": "2026-01-18T09:17:29.583086"
+      "date_discovered": "2026-01-19T09:30:18.730521"
     },
     {
       "id": "roadmap_1189",
@@ -316,7 +316,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1189",
-      "date_discovered": "2026-01-18T09:17:29.583089"
+      "date_discovered": "2026-01-19T09:30:18.730523"
     },
     {
       "id": "roadmap_1187",
@@ -324,7 +324,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1187",
-      "date_discovered": "2026-01-18T09:17:29.583091"
+      "date_discovered": "2026-01-19T09:30:18.730525"
     },
     {
       "id": "roadmap_1188",
@@ -332,7 +332,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1188",
-      "date_discovered": "2026-01-18T09:17:29.583093"
+      "date_discovered": "2026-01-19T09:30:18.730528"
     },
     {
       "id": "roadmap_1029",
@@ -340,7 +340,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1029",
-      "date_discovered": "2026-01-18T09:17:29.583096"
+      "date_discovered": "2026-01-19T09:30:18.730530"
     },
     {
       "id": "roadmap_1061",
@@ -348,7 +348,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1061",
-      "date_discovered": "2026-01-18T09:17:29.583100"
+      "date_discovered": "2026-01-19T09:30:18.730532"
     },
     {
       "id": "roadmap_1084",
@@ -356,7 +356,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1084",
-      "date_discovered": "2026-01-18T09:17:29.583102"
+      "date_discovered": "2026-01-19T09:30:18.730534"
     },
     {
       "id": "roadmap_1093",
@@ -364,7 +364,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1093",
-      "date_discovered": "2026-01-18T09:17:29.583104"
+      "date_discovered": "2026-01-19T09:30:18.730536"
     },
     {
       "id": "roadmap_1040",
@@ -372,7 +372,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1040",
-      "date_discovered": "2026-01-18T09:17:29.583106"
+      "date_discovered": "2026-01-19T09:30:18.730538"
     },
     {
       "id": "roadmap_1142",
@@ -380,7 +380,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1142",
-      "date_discovered": "2026-01-18T09:17:29.583109"
+      "date_discovered": "2026-01-19T09:30:18.730541"
     },
     {
       "id": "roadmap_1125",
@@ -388,7 +388,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1125",
-      "date_discovered": "2026-01-18T09:17:29.583111"
+      "date_discovered": "2026-01-19T09:30:18.730545"
     },
     {
       "id": "roadmap_1123",
@@ -396,7 +396,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1123",
-      "date_discovered": "2026-01-18T09:17:29.583113"
+      "date_discovered": "2026-01-19T09:30:18.730547"
     },
     {
       "id": "roadmap_1105",
@@ -404,7 +404,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1105",
-      "date_discovered": "2026-01-18T09:17:29.583116"
+      "date_discovered": "2026-01-19T09:30:18.730549"
     },
     {
       "id": "roadmap_1095",
@@ -412,7 +412,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1095",
-      "date_discovered": "2026-01-18T09:17:29.583118"
+      "date_discovered": "2026-01-19T09:30:18.730551"
     },
     {
       "id": "roadmap_1063",
@@ -420,7 +420,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1063",
-      "date_discovered": "2026-01-18T09:17:29.583120"
+      "date_discovered": "2026-01-19T09:30:18.730553"
     },
     {
       "id": "roadmap_1047",
@@ -428,7 +428,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1047",
-      "date_discovered": "2026-01-18T09:17:29.583122"
+      "date_discovered": "2026-01-19T09:30:18.730555"
     },
     {
       "id": "roadmap_1036",
@@ -436,7 +436,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1036",
-      "date_discovered": "2026-01-18T09:17:29.583124"
+      "date_discovered": "2026-01-19T09:30:18.730558"
     },
     {
       "id": "roadmap_1096",
@@ -444,7 +444,7 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1096",
-      "date_discovered": "2026-01-18T09:17:29.583127"
+      "date_discovered": "2026-01-19T09:30:18.730560"
     }
   ],
   "content_checks": [
@@ -452,7 +452,7 @@
       "key": "github_blog",
       "name": "GitHub blog",
       "url": "https://github.blog/",
-      "checked_at": "2026-01-18T09:17:30.552836",
+      "checked_at": "2026-01-19T09:30:20.017808",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -461,7 +461,7 @@
       "key": "github_blog_product_news",
       "name": "GitHub product news",
       "url": "https://github.blog/product-news/",
-      "checked_at": "2026-01-18T09:17:30.604528",
+      "checked_at": "2026-01-19T09:30:20.137626",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -470,7 +470,7 @@
       "key": "github_blog_changelog",
       "name": "GitHub changelog",
       "url": "https://github.blog/changelog/",
-      "checked_at": "2026-01-18T09:17:30.982814",
+      "checked_at": "2026-01-19T09:30:20.519028",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -479,7 +479,7 @@
       "key": "github_newsroom_press_releases",
       "name": "GitHub press releases",
       "url": "https://github.com/newsroom/press-releases",
-      "checked_at": "2026-01-18T09:17:30.987675",
+      "checked_at": "2026-01-19T09:30:20.535946",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -488,7 +488,7 @@
       "key": "github_roadmap_homepage",
       "name": "GitHub roadmap",
       "url": "https://github.com/github/roadmap",
-      "checked_at": "2026-01-18T09:17:31.295447",
+      "checked_at": "2026-01-19T09:30:20.960859",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -497,7 +497,7 @@
       "key": "github_resources_enterprise_content_roundup_september",
       "name": "GitHub September roundup",
       "url": "https://resources.github.com/enterprise-content-roundup-september",
-      "checked_at": "2026-01-18T09:17:31.809352",
+      "checked_at": "2026-01-19T09:30:21.380144",
       "status_code": 404,
       "ok": false,
       "changed": null
