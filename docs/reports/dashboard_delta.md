@@ -1,14 +1,14 @@
 # Dashboard Delta (Executive Summary)
 
-**Generated:** 2026-01-19T09:30:22.085016
-**Baseline:** 2026-01-18T09:17:32.301375
-**New snapshot:** 2026-01-19T09:30:21.947211
+**Generated:** 2026-01-20T09:29:28.353660
+**Baseline:** 2026-01-19T09:30:21.947211
+**New snapshot:** 2026-01-20T09:29:28.221668
 
 ## Key changes
 
-- **Features added:** 1
-- **Features removed:** 1
-- **Features changed:** 50
+- **Features added:** 2
+- **Features removed:** 2
+- **Features changed:** 49
 
 ## Gaps
 
@@ -18,7 +18,9 @@
 ## Newly added (sample)
 
 - GitHub Changelog Update (https://github.blog/changelog/)
+- Update (https://github.com/github/roadmap/pull/1202)
 
 ## Removed (sample)
 
 - GitHub Changelog Update
+- Enable Cron Expression Support for Dependabot Scheduling [GA]

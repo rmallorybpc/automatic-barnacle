@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-19T09:30:22.085016",
-  "baseline_generated_at": "2026-01-18T09:17:32.301375",
-  "new_generated_at": "2026-01-19T09:30:21.947211",
+  "generated_at": "2026-01-20T09:29:28.353660",
+  "baseline_generated_at": "2026-01-19T09:30:21.947211",
+  "new_generated_at": "2026-01-20T09:29:28.221668",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 1,
-    "features_removed": 1,
-    "features_changed": 50
+    "features_added": 2,
+    "features_removed": 2,
+    "features_changed": 49
   },
   "gaps": {
     "old": {
@@ -27,22 +27,38 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260120",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-20T09:29:24.295689"
+    },
+    {
+      "id": "roadmap_1202",
+      "title": "Update",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1202",
+      "date_discovered": "2026-01-20T09:29:25.330902"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260119",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-19T09:30:17.563001"
-    }
-  ],
-  "top_removed": [
+    },
     {
-      "id": "changelog_sample_20260118",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-18T09:17:28.739117"
+      "id": "roadmap_1096",
+      "title": "Enable Cron Expression Support for Dependabot Scheduling [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1096",
+      "date_discovered": "2026-01-19T09:30:18.730560"
     }
   ],
   "changed": [
@@ -51,8 +67,8 @@
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.582939",
-          "new": "2026-01-19T09:30:18.730420"
+          "old": "2026-01-19T09:30:18.730420",
+          "new": "2026-01-20T09:29:25.330927"
         }
       }
     },
@@ -61,8 +77,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.582960",
-          "new": "2026-01-19T09:30:18.730440"
+          "old": "2026-01-19T09:30:18.730440",
+          "new": "2026-01-20T09:29:25.330950"
         }
       }
     },
@@ -71,8 +87,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583017",
-          "new": "2026-01-19T09:30:18.730479"
+          "old": "2026-01-19T09:30:18.730479",
+          "new": "2026-01-20T09:29:25.331006"
         }
       }
     },
@@ -81,8 +97,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583043",
-          "new": "2026-01-19T09:30:18.730494"
+          "old": "2026-01-19T09:30:18.730494",
+          "new": "2026-01-20T09:29:25.331033"
         }
       }
     },
@@ -91,8 +107,8 @@
       "title": "Increased Cache Size in Actions [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583096",
-          "new": "2026-01-19T09:30:18.730530"
+          "old": "2026-01-19T09:30:18.730530",
+          "new": "2026-01-20T09:29:25.331090"
         }
       }
     },
@@ -101,8 +117,8 @@
       "title": "Evolving GitHub Issues [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583124",
-          "new": "2026-01-19T09:30:18.730558"
+          "old": "2026-01-19T09:30:18.730558",
+          "new": "2026-01-20T09:29:25.331120"
         }
       }
     },
@@ -111,8 +127,8 @@
       "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583106",
-          "new": "2026-01-19T09:30:18.730538"
+          "old": "2026-01-19T09:30:18.730538",
+          "new": "2026-01-20T09:29:25.331099"
         }
       }
     },
@@ -121,8 +137,8 @@
       "title": "Delegated alert closures for secret scanning [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-18T09:17:29.583122",
-          "new": "2026-01-19T09:30:18.730555"
+          "old": "2026-01-19T09:30:18.730555",
+          "new": "2026-01-20T09:29:25.331117"
         }
       }
     }
