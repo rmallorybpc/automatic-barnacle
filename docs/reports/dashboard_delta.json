@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-21T09:29:18.260236",
-  "baseline_generated_at": "2026-01-20T09:29:28.221668",
-  "new_generated_at": "2026-01-21T09:29:18.142486",
+  "generated_at": "2026-01-22T09:29:12.531969",
+  "baseline_generated_at": "2026-01-21T09:29:18.142486",
+  "new_generated_at": "2026-01-22T09:29:12.402497",
   "counts": {
     "total_old": 51,
     "total_new": 51,
@@ -27,6 +27,16 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260122",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-22T09:29:07.478701"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260121",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
@@ -35,24 +45,14 @@
       "date_discovered": "2026-01-21T09:29:14.197974"
     }
   ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260120",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-20T09:29:24.295689"
-    }
-  ],
   "changed": [
     {
       "id": "roadmap_1004",
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.330927",
-          "new": "2026-01-21T09:29:15.255993"
+          "old": "2026-01-21T09:29:15.255993",
+          "new": "2026-01-22T09:29:08.731164"
         }
       }
     },
@@ -61,8 +61,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.330950",
-          "new": "2026-01-21T09:29:15.256020"
+          "old": "2026-01-21T09:29:15.256020",
+          "new": "2026-01-22T09:29:08.731190"
         }
       }
     },
@@ -71,8 +71,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331006",
-          "new": "2026-01-21T09:29:15.256058"
+          "old": "2026-01-21T09:29:15.256058",
+          "new": "2026-01-22T09:29:08.731246"
         }
       }
     },
@@ -81,8 +81,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331033",
-          "new": "2026-01-21T09:29:15.256074"
+          "old": "2026-01-21T09:29:15.256074",
+          "new": "2026-01-22T09:29:08.731271"
         }
       }
     },
@@ -91,8 +91,8 @@
       "title": "Increased Cache Size in Actions [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331090",
-          "new": "2026-01-21T09:29:15.256114"
+          "old": "2026-01-21T09:29:15.256114",
+          "new": "2026-01-22T09:29:08.731337"
         }
       }
     },
@@ -101,8 +101,8 @@
       "title": "Evolving GitHub Issues [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331120",
-          "new": "2026-01-21T09:29:15.256142"
+          "old": "2026-01-21T09:29:15.256142",
+          "new": "2026-01-22T09:29:08.731387"
         }
       }
     },
@@ -111,8 +111,8 @@
       "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331099",
-          "new": "2026-01-21T09:29:15.256123"
+          "old": "2026-01-21T09:29:15.256123",
+          "new": "2026-01-22T09:29:08.731353"
         }
       }
     },
@@ -121,8 +121,8 @@
       "title": "Delegated alert closures for secret scanning [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-20T09:29:25.331117",
-          "new": "2026-01-21T09:29:15.256139"
+          "old": "2026-01-21T09:29:15.256139",
+          "new": "2026-01-22T09:29:08.731382"
         }
       }
     }
