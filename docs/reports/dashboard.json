@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-22T09:29:12.402497",
+  "generated_at": "2026-01-23T09:26:22.848140",
   "summary": {
     "total_features": 51
   },
   "time_series": {
     "time_series": [
       {
-        "date": "2026-01-22",
+        "date": "2026-01-23",
         "count": 51,
         "cumulative": 51
       }
@@ -39,348 +39,92 @@
   },
   "features": [
     {
-      "id": "changelog_sample_20260122",
+      "id": "changelog_sample_20260123",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-22T09:29:07.478701"
+      "date_discovered": "2026-01-23T09:26:19.049507"
     },
     {
-      "id": "roadmap_1202",
-      "title": "Update",
+      "id": "roadmap_1145",
+      "title": "Copilot Issue Creation Now Supports Issue Forms",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1202",
-      "date_discovered": "2026-01-22T09:29:08.731151"
+      "source_url": "https://github.com/github/roadmap/issues/1145",
+      "date_discovered": "2026-01-23T09:26:20.092270"
     },
     {
-      "id": "roadmap_1201",
-      "title": "Main",
+      "id": "roadmap_994",
+      "title": "Assign organization roles to a team across multiple organizations - [Public Preview]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1201",
-      "date_discovered": "2026-01-22T09:29:08.731161"
+      "source_url": "https://github.com/github/roadmap/issues/994",
+      "date_discovered": "2026-01-23T09:26:20.092286"
     },
     {
-      "id": "roadmap_1004",
-      "title": "Main",
+      "id": "roadmap_1104",
+      "title": "Audit history for Projects [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1004",
-      "date_discovered": "2026-01-22T09:29:08.731164"
+      "source_url": "https://github.com/github/roadmap/issues/1104",
+      "date_discovered": "2026-01-23T09:26:20.092291"
     },
     {
-      "id": "roadmap_951",
-      "title": "Updated the GHES Release Version Dates",
+      "id": "roadmap_1088",
+      "title": "Issue fields across Projects [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/951",
-      "date_discovered": "2026-01-22T09:29:08.731167"
+      "source_url": "https://github.com/github/roadmap/issues/1088",
+      "date_discovered": "2026-01-23T09:26:20.092294"
     },
     {
-      "id": "roadmap_1199",
-      "title": "Remove access approval expiry from devcontainer config",
+      "id": "roadmap_1140",
+      "title": "Support VSS bundles for metered GHE",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1199",
-      "date_discovered": "2026-01-22T09:29:08.731172"
+      "source_url": "https://github.com/github/roadmap/issues/1140",
+      "date_discovered": "2026-01-23T09:26:20.092300"
     },
     {
-      "id": "roadmap_1200",
-      "title": "Create codeql.yml",
+      "id": "roadmap_1131",
+      "title": "Security Configurations include \"Default or Advanced Setup\" option for Code Scanning [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1200",
-      "date_discovered": "2026-01-22T09:29:08.731178"
+      "source_url": "https://github.com/github/roadmap/issues/1131",
+      "date_discovered": "2026-01-23T09:26:20.092311"
     },
     {
-      "id": "roadmap_1005",
-      "title": "Update README.md",
+      "id": "roadmap_1124",
+      "title": "Org-level centralized private registry configuration for Dependabot [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1005",
-      "date_discovered": "2026-01-22T09:29:08.731190"
+      "source_url": "https://github.com/github/roadmap/issues/1124",
+      "date_discovered": "2026-01-23T09:26:20.092317"
     },
     {
-      "id": "roadmap_1081",
-      "title": "Create codeql.yml",
+      "id": "roadmap_1083",
+      "title": "GitHub Models (Registry/Catalog/Playground) [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1081",
-      "date_discovered": "2026-01-22T09:29:08.731200"
+      "source_url": "https://github.com/github/roadmap/issues/1083",
+      "date_discovered": "2026-01-23T09:26:20.092327"
     },
     {
-      "id": "roadmap_1116",
-      "title": "Fine-grained Personal Access Tokens [GA]",
+      "id": "roadmap_1117",
+      "title": "Repository creation Form Refresh [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1116",
-      "date_discovered": "2026-01-22T09:29:08.731205"
+      "source_url": "https://github.com/github/roadmap/issues/1117",
+      "date_discovered": "2026-01-23T09:26:20.092333"
     },
     {
-      "id": "roadmap_600",
-      "title": "Fine-grained PATs can access open source repos [GA]",
+      "id": "roadmap_1141",
+      "title": "Enterprise-owned Apps can be managed individually by users [Preview]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/600",
-      "date_discovered": "2026-01-22T09:29:08.731210"
-    },
-    {
-      "id": "roadmap_1146",
-      "title": "Copilot Now Supports Configuring Remote 3P MCP Servers",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1146",
-      "date_discovered": "2026-01-22T09:29:08.731217"
-    },
-    {
-      "id": "roadmap_1157",
-      "title": "Copilot Enterprise & Users Usage Metrics Dashboard/Export [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1157",
-      "date_discovered": "2026-01-22T09:29:08.731221"
-    },
-    {
-      "id": "roadmap_1156",
-      "title": "CodeQL supports Rust [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1156",
-      "date_discovered": "2026-01-22T09:29:08.731226"
-    },
-    {
-      "id": "roadmap_1155",
-      "title": "CodeQL can scan C/C++ without a working build [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1155",
-      "date_discovered": "2026-01-22T09:29:08.731231"
-    },
-    {
-      "id": "roadmap_1138",
-      "title": "Immutable Releases [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1138",
-      "date_discovered": "2026-01-22T09:29:08.731235"
-    },
-    {
-      "id": "roadmap_1059",
-      "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1059",
-      "date_discovered": "2026-01-22T09:29:08.731241"
-    },
-    {
-      "id": "roadmap_1019",
-      "title": "Custom Images [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1019",
-      "date_discovered": "2026-01-22T09:29:08.731246"
-    },
-    {
-      "id": "roadmap_1143",
-      "title": "Copilot Chat users can use the Gemini 2.5 Flash model",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1143",
-      "date_discovered": "2026-01-22T09:29:08.731250"
-    },
-    {
-      "id": "roadmap_1121",
-      "title": "Code scanning alerts can be assigned to individual users [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1121",
-      "date_discovered": "2026-01-22T09:29:08.731254"
-    },
-    {
-      "id": "roadmap_1197",
-      "title": "GitHub Actions new pricing - Self-hosted runner price increase",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1197",
-      "date_discovered": "2026-01-22T09:29:08.731259"
-    },
-    {
-      "id": "roadmap_1103",
-      "title": "GitHub Actions: Immutable Actions Publishing [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1103",
-      "date_discovered": "2026-01-22T09:29:08.731263"
-    },
-    {
-      "id": "roadmap_1054",
-      "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1054",
-      "date_discovered": "2026-01-22T09:29:08.731267"
-    },
-    {
-      "id": "roadmap_1028",
-      "title": "Specialty Runners for GitHub Actions [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1028",
-      "date_discovered": "2026-01-22T09:29:08.731271"
-    },
-    {
-      "id": "roadmap_592",
-      "title": "Immutable Actions [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/592",
-      "date_discovered": "2026-01-22T09:29:08.731275"
-    },
-    {
-      "id": "roadmap_1198",
-      "title": "A more intelligent Copilot auto model selection, optimizing for your task",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1198",
-      "date_discovered": "2026-01-22T09:29:08.731279"
-    },
-    {
-      "id": "roadmap_1196",
-      "title": "GitHub Actions new pricing - Hosted runner price drop",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1196",
-      "date_discovered": "2026-01-22T09:29:08.731283"
-    },
-    {
-      "id": "roadmap_1195",
-      "title": "Multi-Label Support for Actions Runner Controller (ARC)",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1195",
-      "date_discovered": "2026-01-22T09:29:08.731287"
-    },
-    {
-      "id": "roadmap_1194",
-      "title": "Actions Runner Controller Release 0.14.0",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1194",
-      "date_discovered": "2026-01-22T09:29:08.731294"
-    },
-    {
-      "id": "roadmap_1193",
-      "title": "GitHub Actions Data stream",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1193",
-      "date_discovered": "2026-01-22T09:29:08.731298"
-    },
-    {
-      "id": "roadmap_1192",
-      "title": "Scale Set Client",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1192",
-      "date_discovered": "2026-01-22T09:29:08.731304"
-    },
-    {
-      "id": "roadmap_959",
-      "title": "Custom Images [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/959",
-      "date_discovered": "2026-01-22T09:29:08.731308"
-    },
-    {
-      "id": "roadmap_983",
-      "title": "Actions: macOS runners are now available in runner groups [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/983",
-      "date_discovered": "2026-01-22T09:29:08.731312"
-    },
-    {
-      "id": "roadmap_1191",
-      "title": "Parallel Steps in GitHub Actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1191",
-      "date_discovered": "2026-01-22T09:29:08.731316"
-    },
-    {
-      "id": "roadmap_1190",
-      "title": "Support over 300 jobs & filtering in the Actions UI",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1190",
-      "date_discovered": "2026-01-22T09:29:08.731321"
-    },
-    {
-      "id": "roadmap_1189",
-      "title": "Support new conditional operator in GitHub actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1189",
-      "date_discovered": "2026-01-22T09:29:08.731325"
-    },
-    {
-      "id": "roadmap_1187",
-      "title": "Actions supports timezones for scheduled workflows",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1187",
-      "date_discovered": "2026-01-22T09:29:08.731329"
-    },
-    {
-      "id": "roadmap_1188",
-      "title": "Return runID from workflow_dispatch",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1188",
-      "date_discovered": "2026-01-22T09:29:08.731333"
-    },
-    {
-      "id": "roadmap_1029",
-      "title": "Increased Cache Size in Actions [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1029",
-      "date_discovered": "2026-01-22T09:29:08.731337"
-    },
-    {
-      "id": "roadmap_1061",
-      "title": "Enterprise security manager [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1061",
-      "date_discovered": "2026-01-22T09:29:08.731341"
-    },
-    {
-      "id": "roadmap_1084",
-      "title": "CodeQL supports C# Blazor [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1084",
-      "date_discovered": "2026-01-22T09:29:08.731345"
-    },
-    {
-      "id": "roadmap_1093",
-      "title": "Code scanning: Status information at the organization level [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1093",
-      "date_discovered": "2026-01-22T09:29:08.731349"
-    },
-    {
-      "id": "roadmap_1040",
-      "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1040",
-      "date_discovered": "2026-01-22T09:29:08.731353"
+      "source_url": "https://github.com/github/roadmap/issues/1141",
+      "date_discovered": "2026-01-23T09:26:20.092346"
     },
     {
       "id": "roadmap_1142",
@@ -388,23 +132,23 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1142",
-      "date_discovered": "2026-01-22T09:29:08.731357"
+      "date_discovered": "2026-01-23T09:26:20.092351"
     },
     {
-      "id": "roadmap_1125",
-      "title": "Dependabot version updates support Helm package manager [GA]",
+      "id": "roadmap_1127",
+      "title": "Configuration for push protected patterns in secret scanning [Preview]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1125",
-      "date_discovered": "2026-01-22T09:29:08.731361"
+      "source_url": "https://github.com/github/roadmap/issues/1127",
+      "date_discovered": "2026-01-23T09:26:20.092357"
     },
     {
-      "id": "roadmap_1123",
-      "title": "Dependabot can mass-enable access for internal repos from the Organization settings page [GA]",
+      "id": "roadmap_1122",
+      "title": "Org-level Dependabot metrics security page [GA]",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1123",
-      "date_discovered": "2026-01-22T09:29:08.731365"
+      "source_url": "https://github.com/github/roadmap/issues/1122",
+      "date_discovered": "2026-01-23T09:26:20.092361"
     },
     {
       "id": "roadmap_1105",
@@ -412,39 +156,295 @@
       "source_type": "roadmap",
       "product_area": "GitHub",
       "source_url": "https://github.com/github/roadmap/issues/1105",
-      "date_discovered": "2026-01-22T09:29:08.731369"
+      "date_discovered": "2026-01-23T09:26:20.092365"
     },
     {
-      "id": "roadmap_1095",
-      "title": "Private Registry Org-Level Configuration for Java & C# for CodeQL [GA]",
+      "id": "roadmap_1201",
+      "title": "Main",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1095",
-      "date_discovered": "2026-01-22T09:29:08.731372"
+      "source_url": "https://github.com/github/roadmap/pull/1201",
+      "date_discovered": "2026-01-23T09:26:20.092369"
     },
     {
-      "id": "roadmap_1063",
-      "title": "Delegated alert dismissal for Code Scanning [GA]",
+      "id": "roadmap_1200",
+      "title": "Create codeql.yml",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1063",
-      "date_discovered": "2026-01-22T09:29:08.731376"
+      "source_url": "https://github.com/github/roadmap/pull/1200",
+      "date_discovered": "2026-01-23T09:26:20.092372"
     },
     {
-      "id": "roadmap_1047",
-      "title": "Delegated alert closures for secret scanning [GA]",
+      "id": "roadmap_1202",
+      "title": "Update",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1047",
-      "date_discovered": "2026-01-22T09:29:08.731382"
+      "source_url": "https://github.com/github/roadmap/pull/1202",
+      "date_discovered": "2026-01-23T09:26:20.092376"
     },
     {
-      "id": "roadmap_1036",
-      "title": "Evolving GitHub Issues [GA]",
+      "id": "roadmap_1004",
+      "title": "Main",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1036",
-      "date_discovered": "2026-01-22T09:29:08.731387"
+      "source_url": "https://github.com/github/roadmap/pull/1004",
+      "date_discovered": "2026-01-23T09:26:20.092379"
+    },
+    {
+      "id": "roadmap_951",
+      "title": "Updated the GHES Release Version Dates",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/951",
+      "date_discovered": "2026-01-23T09:26:20.092383"
+    },
+    {
+      "id": "roadmap_1199",
+      "title": "Remove access approval expiry from devcontainer config",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1199",
+      "date_discovered": "2026-01-23T09:26:20.092387"
+    },
+    {
+      "id": "roadmap_1005",
+      "title": "Update README.md",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1005",
+      "date_discovered": "2026-01-23T09:26:20.092390"
+    },
+    {
+      "id": "roadmap_1081",
+      "title": "Create codeql.yml",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/pull/1081",
+      "date_discovered": "2026-01-23T09:26:20.092394"
+    },
+    {
+      "id": "roadmap_1116",
+      "title": "Fine-grained Personal Access Tokens [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1116",
+      "date_discovered": "2026-01-23T09:26:20.092397"
+    },
+    {
+      "id": "roadmap_600",
+      "title": "Fine-grained PATs can access open source repos [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/600",
+      "date_discovered": "2026-01-23T09:26:20.092401"
+    },
+    {
+      "id": "roadmap_1146",
+      "title": "Copilot Now Supports Configuring Remote 3P MCP Servers",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1146",
+      "date_discovered": "2026-01-23T09:26:20.092405"
+    },
+    {
+      "id": "roadmap_1157",
+      "title": "Copilot Enterprise & Users Usage Metrics Dashboard/Export [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1157",
+      "date_discovered": "2026-01-23T09:26:20.092409"
+    },
+    {
+      "id": "roadmap_1156",
+      "title": "CodeQL supports Rust [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1156",
+      "date_discovered": "2026-01-23T09:26:20.092412"
+    },
+    {
+      "id": "roadmap_1155",
+      "title": "CodeQL can scan C/C++ without a working build [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1155",
+      "date_discovered": "2026-01-23T09:26:20.092416"
+    },
+    {
+      "id": "roadmap_1138",
+      "title": "Immutable Releases [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1138",
+      "date_discovered": "2026-01-23T09:26:20.092420"
+    },
+    {
+      "id": "roadmap_1059",
+      "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1059",
+      "date_discovered": "2026-01-23T09:26:20.092427"
+    },
+    {
+      "id": "roadmap_1019",
+      "title": "Custom Images [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1019",
+      "date_discovered": "2026-01-23T09:26:20.092431"
+    },
+    {
+      "id": "roadmap_1143",
+      "title": "Copilot Chat users can use the Gemini 2.5 Flash model",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1143",
+      "date_discovered": "2026-01-23T09:26:20.092434"
+    },
+    {
+      "id": "roadmap_1121",
+      "title": "Code scanning alerts can be assigned to individual users [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1121",
+      "date_discovered": "2026-01-23T09:26:20.092438"
+    },
+    {
+      "id": "roadmap_1197",
+      "title": "GitHub Actions new pricing - Self-hosted runner price increase",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1197",
+      "date_discovered": "2026-01-23T09:26:20.092442"
+    },
+    {
+      "id": "roadmap_1103",
+      "title": "GitHub Actions: Immutable Actions Publishing [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1103",
+      "date_discovered": "2026-01-23T09:26:20.092446"
+    },
+    {
+      "id": "roadmap_1054",
+      "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1054",
+      "date_discovered": "2026-01-23T09:26:20.092450"
+    },
+    {
+      "id": "roadmap_1028",
+      "title": "Specialty Runners for GitHub Actions [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1028",
+      "date_discovered": "2026-01-23T09:26:20.092454"
+    },
+    {
+      "id": "roadmap_592",
+      "title": "Immutable Actions [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/592",
+      "date_discovered": "2026-01-23T09:26:20.092458"
+    },
+    {
+      "id": "roadmap_1198",
+      "title": "A more intelligent Copilot auto model selection, optimizing for your task",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1198",
+      "date_discovered": "2026-01-23T09:26:20.092461"
+    },
+    {
+      "id": "roadmap_1196",
+      "title": "GitHub Actions new pricing - Hosted runner price drop",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1196",
+      "date_discovered": "2026-01-23T09:26:20.092465"
+    },
+    {
+      "id": "roadmap_1195",
+      "title": "Multi-Label Support for Actions Runner Controller (ARC)",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1195",
+      "date_discovered": "2026-01-23T09:26:20.092469"
+    },
+    {
+      "id": "roadmap_1194",
+      "title": "Actions Runner Controller Release 0.14.0",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1194",
+      "date_discovered": "2026-01-23T09:26:20.092476"
+    },
+    {
+      "id": "roadmap_1193",
+      "title": "GitHub Actions Data stream",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1193",
+      "date_discovered": "2026-01-23T09:26:20.092480"
+    },
+    {
+      "id": "roadmap_1192",
+      "title": "Scale Set Client",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1192",
+      "date_discovered": "2026-01-23T09:26:20.092483"
+    },
+    {
+      "id": "roadmap_959",
+      "title": "Custom Images [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/959",
+      "date_discovered": "2026-01-23T09:26:20.092487"
+    },
+    {
+      "id": "roadmap_983",
+      "title": "Actions: macOS runners are now available in runner groups [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/983",
+      "date_discovered": "2026-01-23T09:26:20.092491"
+    },
+    {
+      "id": "roadmap_1191",
+      "title": "Parallel Steps in GitHub Actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1191",
+      "date_discovered": "2026-01-23T09:26:20.092494"
+    },
+    {
+      "id": "roadmap_1190",
+      "title": "Support over 300 jobs & filtering in the Actions UI",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1190",
+      "date_discovered": "2026-01-23T09:26:20.092498"
+    },
+    {
+      "id": "roadmap_1189",
+      "title": "Support new conditional operator in GitHub actions",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1189",
+      "date_discovered": "2026-01-23T09:26:20.092501"
+    },
+    {
+      "id": "roadmap_1187",
+      "title": "Actions supports timezones for scheduled workflows",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1187",
+      "date_discovered": "2026-01-23T09:26:20.092505"
     }
   ],
   "content_checks": [
@@ -452,7 +452,7 @@
       "key": "github_blog",
       "name": "GitHub blog",
       "url": "https://github.blog/",
-      "checked_at": "2026-01-22T09:29:09.874813",
+      "checked_at": "2026-01-23T09:26:21.216433",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -461,7 +461,7 @@
       "key": "github_blog_product_news",
       "name": "GitHub product news",
       "url": "https://github.blog/product-news/",
-      "checked_at": "2026-01-22T09:29:10.544840",
+      "checked_at": "2026-01-23T09:26:21.361314",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -470,7 +470,7 @@
       "key": "github_blog_changelog",
       "name": "GitHub changelog",
       "url": "https://github.blog/changelog/",
-      "checked_at": "2026-01-22T09:29:10.871043",
+      "checked_at": "2026-01-23T09:26:21.690196",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -479,7 +479,7 @@
       "key": "github_newsroom_press_releases",
       "name": "GitHub press releases",
       "url": "https://github.com/newsroom/press-releases",
-      "checked_at": "2026-01-22T09:29:10.883184",
+      "checked_at": "2026-01-23T09:26:21.699045",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -488,7 +488,7 @@
       "key": "github_roadmap_homepage",
       "name": "GitHub roadmap",
       "url": "https://github.com/github/roadmap",
-      "checked_at": "2026-01-22T09:29:11.309526",
+      "checked_at": "2026-01-23T09:26:21.968242",
       "status_code": 200,
       "ok": true,
       "changed": null
@@ -497,7 +497,7 @@
       "key": "github_resources_enterprise_content_roundup_september",
       "name": "GitHub September roundup",
       "url": "https://resources.github.com/enterprise-content-roundup-september",
-      "checked_at": "2026-01-22T09:29:11.748593",
+      "checked_at": "2026-01-23T09:26:22.377684",
       "status_code": 404,
       "ok": false,
       "changed": null
