@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-23T09:26:22.988386",
-  "baseline_generated_at": "2026-01-22T09:29:12.402497",
-  "new_generated_at": "2026-01-23T09:26:22.848140",
+  "generated_at": "2026-01-24T09:17:21.060811",
+  "baseline_generated_at": "2026-01-23T09:26:22.848140",
+  "new_generated_at": "2026-01-24T09:17:20.916824",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 13,
-    "features_removed": 13,
-    "features_changed": 38
+    "features_added": 4,
+    "features_removed": 4,
+    "features_changed": 47
   },
   "gaps": {
     "old": {
@@ -27,6 +27,40 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260124",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-24T09:17:17.058606"
+    },
+    {
+      "id": "roadmap_1041",
+      "title": "Copilot Workspace in GitHub.com [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1041",
+      "date_discovered": "2026-01-24T09:17:18.041623"
+    },
+    {
+      "id": "roadmap_1087",
+      "title": "Hierarchy view in projects [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1087",
+      "date_discovered": "2026-01-24T09:17:18.041644"
+    },
+    {
+      "id": "roadmap_1113",
+      "title": "Incremental CodeQL analysis reduces scan times during Pull Requests [GA]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1113",
+      "date_discovered": "2026-01-24T09:17:18.041639"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260123",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
@@ -35,126 +69,28 @@
       "date_discovered": "2026-01-23T09:26:19.049507"
     },
     {
-      "id": "roadmap_1083",
-      "title": "GitHub Models (Registry/Catalog/Playground) [GA]",
+      "id": "roadmap_1187",
+      "title": "Actions supports timezones for scheduled workflows",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1083",
-      "date_discovered": "2026-01-23T09:26:20.092327"
+      "source_url": "https://github.com/github/roadmap/issues/1187",
+      "date_discovered": "2026-01-23T09:26:20.092505"
     },
     {
-      "id": "roadmap_1088",
-      "title": "Issue fields across Projects [GA]",
+      "id": "roadmap_1189",
+      "title": "Support new conditional operator in GitHub actions",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1088",
-      "date_discovered": "2026-01-23T09:26:20.092294"
+      "source_url": "https://github.com/github/roadmap/issues/1189",
+      "date_discovered": "2026-01-23T09:26:20.092501"
     },
     {
-      "id": "roadmap_1104",
-      "title": "Audit history for Projects [GA]",
+      "id": "roadmap_1190",
+      "title": "Support over 300 jobs & filtering in the Actions UI",
       "source_type": "roadmap",
       "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1104",
-      "date_discovered": "2026-01-23T09:26:20.092291"
-    },
-    {
-      "id": "roadmap_1117",
-      "title": "Repository creation Form Refresh [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1117",
-      "date_discovered": "2026-01-23T09:26:20.092333"
-    },
-    {
-      "id": "roadmap_1122",
-      "title": "Org-level Dependabot metrics security page [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1122",
-      "date_discovered": "2026-01-23T09:26:20.092361"
-    },
-    {
-      "id": "roadmap_1124",
-      "title": "Org-level centralized private registry configuration for Dependabot [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1124",
-      "date_discovered": "2026-01-23T09:26:20.092317"
-    },
-    {
-      "id": "roadmap_1127",
-      "title": "Configuration for push protected patterns in secret scanning [Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1127",
-      "date_discovered": "2026-01-23T09:26:20.092357"
-    }
-  ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260122",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-22T09:29:07.478701"
-    },
-    {
-      "id": "roadmap_1029",
-      "title": "Increased Cache Size in Actions [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1029",
-      "date_discovered": "2026-01-22T09:29:08.731337"
-    },
-    {
-      "id": "roadmap_1036",
-      "title": "Evolving GitHub Issues [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1036",
-      "date_discovered": "2026-01-22T09:29:08.731387"
-    },
-    {
-      "id": "roadmap_1040",
-      "title": "Secret scanning: `public leak` (high priority) and `multi-repo` (deduping) indicators for alerts [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1040",
-      "date_discovered": "2026-01-22T09:29:08.731353"
-    },
-    {
-      "id": "roadmap_1047",
-      "title": "Delegated alert closures for secret scanning [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1047",
-      "date_discovered": "2026-01-22T09:29:08.731382"
-    },
-    {
-      "id": "roadmap_1061",
-      "title": "Enterprise security manager [Public Preview]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1061",
-      "date_discovered": "2026-01-22T09:29:08.731341"
-    },
-    {
-      "id": "roadmap_1063",
-      "title": "Delegated alert dismissal for Code Scanning [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1063",
-      "date_discovered": "2026-01-22T09:29:08.731376"
-    },
-    {
-      "id": "roadmap_1084",
-      "title": "CodeQL supports C# Blazor [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1084",
-      "date_discovered": "2026-01-22T09:29:08.731345"
+      "source_url": "https://github.com/github/roadmap/issues/1190",
+      "date_discovered": "2026-01-23T09:26:20.092498"
     }
   ],
   "changed": [
@@ -163,8 +99,8 @@
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731164",
-          "new": "2026-01-23T09:26:20.092379"
+          "old": "2026-01-23T09:26:20.092379",
+          "new": "2026-01-24T09:17:18.041737"
         }
       }
     },
@@ -173,8 +109,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731190",
-          "new": "2026-01-23T09:26:20.092390"
+          "old": "2026-01-23T09:26:20.092390",
+          "new": "2026-01-24T09:17:18.041748"
         }
       }
     },
@@ -183,8 +119,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731246",
-          "new": "2026-01-23T09:26:20.092431"
+          "old": "2026-01-23T09:26:20.092431",
+          "new": "2026-01-24T09:17:18.041794"
         }
       }
     },
@@ -193,8 +129,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731271",
-          "new": "2026-01-23T09:26:20.092454"
+          "old": "2026-01-23T09:26:20.092454",
+          "new": "2026-01-24T09:17:18.041820"
         }
       }
     },
@@ -203,8 +139,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731267",
-          "new": "2026-01-23T09:26:20.092450"
+          "old": "2026-01-23T09:26:20.092450",
+          "new": "2026-01-24T09:17:18.041813"
         }
       }
     },
@@ -213,8 +149,8 @@
       "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731241",
-          "new": "2026-01-23T09:26:20.092427"
+          "old": "2026-01-23T09:26:20.092427",
+          "new": "2026-01-24T09:17:18.041790"
         }
       }
     },
@@ -223,18 +159,18 @@
       "title": "Create codeql.yml",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731200",
-          "new": "2026-01-23T09:26:20.092394"
+          "old": "2026-01-23T09:26:20.092394",
+          "new": "2026-01-24T09:17:18.041751"
         }
       }
     },
     {
-      "id": "roadmap_1103",
-      "title": "GitHub Actions: Immutable Actions Publishing [Public Preview]",
+      "id": "roadmap_1083",
+      "title": "GitHub Models (Registry/Catalog/Playground) [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-22T09:29:08.731263",
-          "new": "2026-01-23T09:26:20.092446"
+          "old": "2026-01-23T09:26:20.092327",
+          "new": "2026-01-24T09:17:18.041691"
         }
       }
     }
