@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-24T09:17:21.060811",
-  "baseline_generated_at": "2026-01-23T09:26:22.848140",
-  "new_generated_at": "2026-01-24T09:17:20.916824",
+  "generated_at": "2026-01-25T09:18:04.620202",
+  "baseline_generated_at": "2026-01-24T09:17:20.916824",
+  "new_generated_at": "2026-01-25T09:18:04.491804",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 4,
-    "features_removed": 4,
-    "features_changed": 47
+    "features_added": 1,
+    "features_removed": 1,
+    "features_changed": 50
   },
   "gaps": {
     "old": {
@@ -27,70 +27,22 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260125",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-25T09:18:00.437659"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260124",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-24T09:17:17.058606"
-    },
-    {
-      "id": "roadmap_1041",
-      "title": "Copilot Workspace in GitHub.com [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1041",
-      "date_discovered": "2026-01-24T09:17:18.041623"
-    },
-    {
-      "id": "roadmap_1087",
-      "title": "Hierarchy view in projects [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1087",
-      "date_discovered": "2026-01-24T09:17:18.041644"
-    },
-    {
-      "id": "roadmap_1113",
-      "title": "Incremental CodeQL analysis reduces scan times during Pull Requests [GA]",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1113",
-      "date_discovered": "2026-01-24T09:17:18.041639"
-    }
-  ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260123",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-23T09:26:19.049507"
-    },
-    {
-      "id": "roadmap_1187",
-      "title": "Actions supports timezones for scheduled workflows",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1187",
-      "date_discovered": "2026-01-23T09:26:20.092505"
-    },
-    {
-      "id": "roadmap_1189",
-      "title": "Support new conditional operator in GitHub actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1189",
-      "date_discovered": "2026-01-23T09:26:20.092501"
-    },
-    {
-      "id": "roadmap_1190",
-      "title": "Support over 300 jobs & filtering in the Actions UI",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1190",
-      "date_discovered": "2026-01-23T09:26:20.092498"
     }
   ],
   "changed": [
@@ -99,8 +51,8 @@
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092379",
-          "new": "2026-01-24T09:17:18.041737"
+          "old": "2026-01-24T09:17:18.041737",
+          "new": "2026-01-25T09:18:01.369994"
         }
       }
     },
@@ -109,8 +61,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092390",
-          "new": "2026-01-24T09:17:18.041748"
+          "old": "2026-01-24T09:17:18.041748",
+          "new": "2026-01-25T09:18:01.370006"
         }
       }
     },
@@ -119,8 +71,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092431",
-          "new": "2026-01-24T09:17:18.041794"
+          "old": "2026-01-24T09:17:18.041794",
+          "new": "2026-01-25T09:18:01.370052"
         }
       }
     },
@@ -129,8 +81,18 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092454",
-          "new": "2026-01-24T09:17:18.041820"
+          "old": "2026-01-24T09:17:18.041820",
+          "new": "2026-01-25T09:18:01.370078"
+        }
+      }
+    },
+    {
+      "id": "roadmap_1041",
+      "title": "Copilot Workspace in GitHub.com [GA]",
+      "fields": {
+        "date_discovered": {
+          "old": "2026-01-24T09:17:18.041623",
+          "new": "2026-01-25T09:18:01.369872"
         }
       }
     },
@@ -139,8 +101,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092450",
-          "new": "2026-01-24T09:17:18.041813"
+          "old": "2026-01-24T09:17:18.041813",
+          "new": "2026-01-25T09:18:01.370072"
         }
       }
     },
@@ -149,8 +111,8 @@
       "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092427",
-          "new": "2026-01-24T09:17:18.041790"
+          "old": "2026-01-24T09:17:18.041790",
+          "new": "2026-01-25T09:18:01.370047"
         }
       }
     },
@@ -159,18 +121,8 @@
       "title": "Create codeql.yml",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-23T09:26:20.092394",
-          "new": "2026-01-24T09:17:18.041751"
-        }
-      }
-    },
-    {
-      "id": "roadmap_1083",
-      "title": "GitHub Models (Registry/Catalog/Playground) [GA]",
-      "fields": {
-        "date_discovered": {
-          "old": "2026-01-23T09:26:20.092327",
-          "new": "2026-01-24T09:17:18.041691"
+          "old": "2026-01-24T09:17:18.041751",
+          "new": "2026-01-25T09:18:01.370010"
         }
       }
     }
