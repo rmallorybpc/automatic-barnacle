@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-27T09:28:55.569014",
-  "baseline_generated_at": "2026-01-26T09:30:32.505610",
-  "new_generated_at": "2026-01-27T09:28:55.446136",
+  "generated_at": "2026-01-28T09:30:34.272963",
+  "baseline_generated_at": "2026-01-27T09:28:55.446136",
+  "new_generated_at": "2026-01-28T09:30:34.138731",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 2,
-    "features_removed": 2,
-    "features_changed": 49
+    "features_added": 1,
+    "features_removed": 1,
+    "features_changed": 50
   },
   "gaps": {
     "old": {
@@ -27,38 +27,22 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260128",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-28T09:30:29.439061"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260127",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-27T09:28:51.118485"
-    },
-    {
-      "id": "roadmap_1203",
-      "title": "feat: Initialize UoZo Living AI System - Core framework and project s\u2026",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/pull/1203",
-      "date_discovered": "2026-01-27T09:28:52.373935"
-    }
-  ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260126",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-26T09:30:28.808844"
-    },
-    {
-      "id": "roadmap_1191",
-      "title": "Parallel Steps in GitHub Actions",
-      "source_type": "roadmap",
-      "product_area": "GitHub",
-      "source_url": "https://github.com/github/roadmap/issues/1191",
-      "date_discovered": "2026-01-26T09:30:29.750735"
     }
   ],
   "changed": [
@@ -67,8 +51,8 @@
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750607",
-          "new": "2026-01-27T09:28:52.374076"
+          "old": "2026-01-27T09:28:52.374076",
+          "new": "2026-01-28T09:30:30.378237"
         }
       }
     },
@@ -77,8 +61,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750620",
-          "new": "2026-01-27T09:28:52.374090"
+          "old": "2026-01-27T09:28:52.374090",
+          "new": "2026-01-28T09:30:30.378248"
         }
       }
     },
@@ -87,8 +71,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750663",
-          "new": "2026-01-27T09:28:52.374143"
+          "old": "2026-01-27T09:28:52.374143",
+          "new": "2026-01-28T09:30:30.378295"
         }
       }
     },
@@ -97,8 +81,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750688",
-          "new": "2026-01-27T09:28:52.374170"
+          "old": "2026-01-27T09:28:52.374170",
+          "new": "2026-01-28T09:30:30.378321"
         }
       }
     },
@@ -107,8 +91,8 @@
       "title": "Copilot Workspace in GitHub.com [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750498",
-          "new": "2026-01-27T09:28:52.373952"
+          "old": "2026-01-27T09:28:52.373952",
+          "new": "2026-01-28T09:30:30.378118"
         }
       }
     },
@@ -117,8 +101,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750682",
-          "new": "2026-01-27T09:28:52.374166"
+          "old": "2026-01-27T09:28:52.374166",
+          "new": "2026-01-28T09:30:30.378315"
         }
       }
     },
@@ -127,8 +111,8 @@
       "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750659",
-          "new": "2026-01-27T09:28:52.374138"
+          "old": "2026-01-27T09:28:52.374138",
+          "new": "2026-01-28T09:30:30.378291"
         }
       }
     },
@@ -137,8 +121,8 @@
       "title": "Create codeql.yml",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-26T09:30:29.750624",
-          "new": "2026-01-27T09:28:52.374095"
+          "old": "2026-01-27T09:28:52.374095",
+          "new": "2026-01-28T09:30:30.378252"
         }
       }
     }
