@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-01-28T09:30:34.272963",
-  "baseline_generated_at": "2026-01-27T09:28:55.446136",
-  "new_generated_at": "2026-01-28T09:30:34.138731",
+  "generated_at": "2026-01-29T09:37:49.923090",
+  "baseline_generated_at": "2026-01-28T09:30:34.138731",
+  "new_generated_at": "2026-01-29T09:37:49.802903",
   "counts": {
     "total_old": 51,
     "total_new": 51,
@@ -27,6 +27,16 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260129",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-29T09:37:46.038481"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260128",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
@@ -35,24 +45,14 @@
       "date_discovered": "2026-01-28T09:30:29.439061"
     }
   ],
-  "top_removed": [
-    {
-      "id": "changelog_sample_20260127",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-27T09:28:51.118485"
-    }
-  ],
   "changed": [
     {
       "id": "roadmap_1004",
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374076",
-          "new": "2026-01-28T09:30:30.378237"
+          "old": "2026-01-28T09:30:30.378237",
+          "new": "2026-01-29T09:37:46.931294"
         }
       }
     },
@@ -61,8 +61,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374090",
-          "new": "2026-01-28T09:30:30.378248"
+          "old": "2026-01-28T09:30:30.378248",
+          "new": "2026-01-29T09:37:46.931303"
         }
       }
     },
@@ -71,8 +71,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374143",
-          "new": "2026-01-28T09:30:30.378295"
+          "old": "2026-01-28T09:30:30.378295",
+          "new": "2026-01-29T09:37:46.931328"
         }
       }
     },
@@ -81,8 +81,8 @@
       "title": "Specialty Runners for GitHub Actions [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374170",
-          "new": "2026-01-28T09:30:30.378321"
+          "old": "2026-01-28T09:30:30.378321",
+          "new": "2026-01-29T09:37:46.931343"
         }
       }
     },
@@ -91,8 +91,8 @@
       "title": "Copilot Workspace in GitHub.com [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.373952",
-          "new": "2026-01-28T09:30:30.378118"
+          "old": "2026-01-28T09:30:30.378118",
+          "new": "2026-01-29T09:37:46.931206"
         }
       }
     },
@@ -101,8 +101,8 @@
       "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374166",
-          "new": "2026-01-28T09:30:30.378315"
+          "old": "2026-01-28T09:30:30.378315",
+          "new": "2026-01-29T09:37:46.931339"
         }
       }
     },
@@ -111,8 +111,8 @@
       "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374138",
-          "new": "2026-01-28T09:30:30.378291"
+          "old": "2026-01-28T09:30:30.378291",
+          "new": "2026-01-29T09:37:46.931325"
         }
       }
     },
@@ -121,8 +121,8 @@
       "title": "Create codeql.yml",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-27T09:28:52.374095",
-          "new": "2026-01-28T09:30:30.378252"
+          "old": "2026-01-28T09:30:30.378252",
+          "new": "2026-01-29T09:37:46.931305"
         }
       }
     }

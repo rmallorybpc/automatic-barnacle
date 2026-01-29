@@ -1,8 +1,8 @@
 # Dashboard Delta (Executive Summary)
 
-**Generated:** 2026-01-28T09:30:34.272963
-**Baseline:** 2026-01-27T09:28:55.446136
-**New snapshot:** 2026-01-28T09:30:34.138731
+**Generated:** 2026-01-29T09:37:49.923090
+**Baseline:** 2026-01-28T09:30:34.138731
+**New snapshot:** 2026-01-29T09:37:49.802903
 
 ## Key changes
 
