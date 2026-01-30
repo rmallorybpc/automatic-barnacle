@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-01-29T09:37:49.923090",
-  "baseline_generated_at": "2026-01-28T09:30:34.138731",
-  "new_generated_at": "2026-01-29T09:37:49.802903",
+  "generated_at": "2026-01-30T09:34:10.846285",
+  "baseline_generated_at": "2026-01-29T09:37:49.802903",
+  "new_generated_at": "2026-01-30T09:34:10.707722",
   "counts": {
     "total_old": 51,
     "total_new": 51,
-    "features_added": 1,
-    "features_removed": 1,
-    "features_changed": 50
+    "features_added": 16,
+    "features_removed": 16,
+    "features_changed": 35
   },
   "gaps": {
     "old": {
@@ -27,22 +27,134 @@
   },
   "top_added": [
     {
+      "id": "changelog_sample_20260130",
+      "title": "GitHub Changelog Update",
+      "source_type": "changelog",
+      "product_area": "Platform",
+      "source_url": "https://github.blog/changelog/",
+      "date_discovered": "2026-01-30T09:34:06.661116"
+    },
+    {
+      "id": "roadmap_1204",
+      "title": "GitHub Copilot for Jira: Pubic Preview",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1204",
+      "date_discovered": "2026-01-30T09:34:07.638461"
+    },
+    {
+      "id": "roadmap_1205",
+      "title": "Launch Copilot coding agent from Sentry Root Cause Analysis",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1205",
+      "date_discovered": "2026-01-30T09:34:07.638459"
+    },
+    {
+      "id": "roadmap_1206",
+      "title": "Agentic autofix generation for code scanning alerts [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1206",
+      "date_discovered": "2026-01-30T09:34:07.638457"
+    },
+    {
+      "id": "roadmap_1207",
+      "title": "GitHub Code Quality: Enterprise Policy [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1207",
+      "date_discovered": "2026-01-30T09:34:07.638454"
+    },
+    {
+      "id": "roadmap_1208",
+      "title": "GitHub Code Quality: REST APIs [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1208",
+      "date_discovered": "2026-01-30T09:34:07.638452"
+    },
+    {
+      "id": "roadmap_1209",
+      "title": "GitHub Code Quality: Organization-level Enablement",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1209",
+      "date_discovered": "2026-01-30T09:34:07.638449"
+    },
+    {
+      "id": "roadmap_1210",
+      "title": "GitHub Code Quality: Organization-level Quality Dashboard [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1210",
+      "date_discovered": "2026-01-30T09:34:07.638443"
+    }
+  ],
+  "top_removed": [
+    {
       "id": "changelog_sample_20260129",
       "title": "GitHub Changelog Update",
       "source_type": "changelog",
       "product_area": "Platform",
       "source_url": "https://github.blog/changelog/",
       "date_discovered": "2026-01-29T09:37:46.038481"
-    }
-  ],
-  "top_removed": [
+    },
     {
-      "id": "changelog_sample_20260128",
-      "title": "GitHub Changelog Update",
-      "source_type": "changelog",
-      "product_area": "Platform",
-      "source_url": "https://github.blog/changelog/",
-      "date_discovered": "2026-01-28T09:30:29.439061"
+      "id": "roadmap_1028",
+      "title": "Specialty Runners for GitHub Actions [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1028",
+      "date_discovered": "2026-01-29T09:37:46.931343"
+    },
+    {
+      "id": "roadmap_1054",
+      "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1054",
+      "date_discovered": "2026-01-29T09:37:46.931339"
+    },
+    {
+      "id": "roadmap_1103",
+      "title": "GitHub Actions: Immutable Actions Publishing [Public Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1103",
+      "date_discovered": "2026-01-29T09:37:46.931337"
+    },
+    {
+      "id": "roadmap_1121",
+      "title": "Code scanning alerts can be assigned to individual users [Preview]",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1121",
+      "date_discovered": "2026-01-29T09:37:46.931332"
+    },
+    {
+      "id": "roadmap_1143",
+      "title": "Copilot Chat users can use the Gemini 2.5 Flash model",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1143",
+      "date_discovered": "2026-01-29T09:37:46.931330"
+    },
+    {
+      "id": "roadmap_1192",
+      "title": "Scale Set Client",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1192",
+      "date_discovered": "2026-01-29T09:37:46.931359"
+    },
+    {
+      "id": "roadmap_1193",
+      "title": "GitHub Actions Data stream",
+      "source_type": "roadmap",
+      "product_area": "GitHub",
+      "source_url": "https://github.com/github/roadmap/issues/1193",
+      "date_discovered": "2026-01-29T09:37:46.931357"
     }
   ],
   "changed": [
@@ -51,8 +163,8 @@
       "title": "Main",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378237",
-          "new": "2026-01-29T09:37:46.931294"
+          "old": "2026-01-29T09:37:46.931294",
+          "new": "2026-01-30T09:34:07.638513"
         }
       }
     },
@@ -61,8 +173,8 @@
       "title": "Update README.md",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378248",
-          "new": "2026-01-29T09:37:46.931303"
+          "old": "2026-01-29T09:37:46.931303",
+          "new": "2026-01-30T09:34:07.638519"
         }
       }
     },
@@ -71,18 +183,8 @@
       "title": "Custom Images [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378295",
-          "new": "2026-01-29T09:37:46.931328"
-        }
-      }
-    },
-    {
-      "id": "roadmap_1028",
-      "title": "Specialty Runners for GitHub Actions [Public Preview]",
-      "fields": {
-        "date_discovered": {
-          "old": "2026-01-28T09:30:30.378321",
-          "new": "2026-01-29T09:37:46.931343"
+          "old": "2026-01-29T09:37:46.931328",
+          "new": "2026-01-30T09:34:07.638543"
         }
       }
     },
@@ -91,18 +193,8 @@
       "title": "Copilot Workspace in GitHub.com [GA]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378118",
-          "new": "2026-01-29T09:37:46.931206"
-        }
-      }
-    },
-    {
-      "id": "roadmap_1054",
-      "title": "Multi-gpu and larger vRAM GPU runners [Preview]",
-      "fields": {
-        "date_discovered": {
-          "old": "2026-01-28T09:30:30.378315",
-          "new": "2026-01-29T09:37:46.931339"
+          "old": "2026-01-29T09:37:46.931206",
+          "new": "2026-01-30T09:34:07.638468"
         }
       }
     },
@@ -111,8 +203,8 @@
       "title": "Enterprise Roles, Permissions, Apps, and Teams [Public Preview]",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378291",
-          "new": "2026-01-29T09:37:46.931325"
+          "old": "2026-01-29T09:37:46.931325",
+          "new": "2026-01-30T09:34:07.638541"
         }
       }
     },
@@ -121,8 +213,28 @@
       "title": "Create codeql.yml",
       "fields": {
         "date_discovered": {
-          "old": "2026-01-28T09:30:30.378252",
-          "new": "2026-01-29T09:37:46.931305"
+          "old": "2026-01-29T09:37:46.931305",
+          "new": "2026-01-30T09:34:07.638521"
+        }
+      }
+    },
+    {
+      "id": "roadmap_1083",
+      "title": "GitHub Models (Registry/Catalog/Playground) [GA]",
+      "fields": {
+        "date_discovered": {
+          "old": "2026-01-29T09:37:46.931257",
+          "new": "2026-01-30T09:34:07.638491"
+        }
+      }
+    },
+    {
+      "id": "roadmap_1087",
+      "title": "Hierarchy view in projects [GA]",
+      "fields": {
+        "date_discovered": {
+          "old": "2026-01-29T09:37:46.931221",
+          "new": "2026-01-30T09:34:07.638476"
         }
       }
     }
